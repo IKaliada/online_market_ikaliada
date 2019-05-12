@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <h2>Home page</h2>
+</head>
+<body>
+<div sec:authorize="hasAuthority('ADMINISTRATOR')"><h3><a th:href="@{/private/users/add_user}">Add User</a></h3></div>
+<div sec:authorize="hasAuthority('ADMINISTRATOR')"><h3><a th:href="@{/private/users}">Users</a></h3></div>
+<div sec:authorize="anonymous"><h3><a th:href="@{/login}">Sign in</a></h3></div>
+<h3><a th:href="@{/about}">Adout</a></h3>
+</body>
+<div th:replace="fragments/footer :: footer"></div>
+</html>

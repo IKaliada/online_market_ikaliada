@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <h1>Comments</h1>
+    <h3><a th:href="@{/home}">Home</a></h3>
+</head>
+<body>
+<form th:action='@{/private/users/review/changeStatus}'
+      method="POST"
+      th:object="${reviews}">
+
+    <table border="1" class='table table-sm responsive'>
+        <thead class='thead-default'>
+        <tr>
+            <th></th>
+            <th>NAME</th>
+            <th>LASTNAME</th>
+            <th>DATE</th>
+            <th>REVIEW</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="review : ${reviews}">
+
+            <td>
+                <input hidden type="checkbox" th:checked="${review.shown}" th:name="ids"
+                       th:value="0"/>
+                <input type="checkbox" id="ids" th:checked="${review.shown}" th:name="ids"
+                       th:value="${review.id}"/>
+            </td>
+            <td th:text="${review.userForReviewDTO.name}"></td>
+            <td th:text="${review.userForReviewDTO.lastname}"></td>
+            <td th:text="${review.date}"></td>
+            <td th:text="${review.text}"></td>
+            <td>
+            <form action="#" th:action="@{/private/users/review/{id}(id=${review.id})}" method="post">
+            <input type="submit" value="DELETE"/>
+            </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <input type="submit" value="SAVE"/>
+</form>
+<div class="pagination-div">
+            <span th:if="${currentPage>1}">
+                <a th:href="@{/private/users/review(size=${amountPage},page=${previousPage})}">Previous</a>
+            </span>
+    <span th:each="pageNumber:${pages}">
+                <a th:href="@{/private/users/review(size=${amountPage},page=${pageNumber})}"
+                   th:text="${pageNumber}"
+                   th:class="${pageNumber==pageNumber + 1}">1</a>
+            </span>
+    <span th:if="${currentPage<amountPage}">
+                <a th:href="@{/private/users/review(size=${amountPage},page=${nextPage})}">Next</a>
+            </span>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>
