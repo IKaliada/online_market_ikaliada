@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static com.gmail.iikaliada.onlinemarket.springbootmodule.constant.AuthoritiesConstants.ADMIN_AUTHORITY_CONSTANT;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -45,21 +46,21 @@ public class UserControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMINISTRATOR")
+    @WithMockUser(authorities = ADMIN_AUTHORITY_CONSTANT)
     public void shouldGetUsersPage() throws Exception {
         this.mockMvc.perform(get("/private/users"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(authorities = "ADMINISTRATOR")
+    @WithMockUser(authorities = ADMIN_AUTHORITY_CONSTANT)
     public void shouldGetAddUsersPage() throws Exception {
         this.mockMvc.perform(get("/private/users/add_user"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(authorities = "ADMINISTRATOR")
+    @WithMockUser(authorities = ADMIN_AUTHORITY_CONSTANT)
     public void shouldReturnRedirectedPageWhenDeleteUsers() throws Exception {
         this.mockMvc.perform(post("/private/users/delete"))
                 .andDo(print())

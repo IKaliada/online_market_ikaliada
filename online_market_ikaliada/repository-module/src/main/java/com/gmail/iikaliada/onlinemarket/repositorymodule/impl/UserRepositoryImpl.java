@@ -20,7 +20,7 @@ import java.util.List;
 @Repository
 public class UserRepositoryImpl extends ConnectionRepositoryImpl implements UserRepository {
 
-    private final static Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
     private static final String DATABASE_STATE_MESSAGE = "Database exception during getting user";
     private static final String STATEMENT_REPOSITORY_MESSAGE = "Cannot execute SQL query ";
     private static final int LIMIT = 10;
@@ -48,7 +48,7 @@ public class UserRepositoryImpl extends ConnectionRepositoryImpl implements User
         String userQuery = "SELECT u.*, r.name as role_name  FROM user u JOIN role r ON u.role_id = r.id ORDER BY u.email LIMIT ? OFFSET ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(userQuery)) {
             preparedStatement.setInt(1, LIMIT);
-            preparedStatement.setInt(2, (pageSize - 1) * LIMIT);
+            preparedStatement.setInt(2, getOffset(pageSize));
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 User user = getUser(resultSet);
@@ -194,5 +194,9 @@ public class UserRepositoryImpl extends ConnectionRepositoryImpl implements User
             logger.error(e.getMessage());
             throw new IllegalDatabaseStateException(DATABASE_STATE_MESSAGE);
         }
+    }
+
+    private int getOffset(int pageSize) {
+        return (pageSize - 1) * LIMIT;
     }
 }

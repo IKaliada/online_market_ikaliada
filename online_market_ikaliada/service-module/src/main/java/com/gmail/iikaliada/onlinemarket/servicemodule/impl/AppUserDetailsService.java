@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class AppUserDetailsService implements UserDetailsService {
 
-    private final UserService userService;
     private final static String USERNAME_EXCEPTION_MESSAGE = "User is not found";
+    private final UserService userService;
 
     public AppUserDetailsService(UserService userService) {
         this.userService = userService;

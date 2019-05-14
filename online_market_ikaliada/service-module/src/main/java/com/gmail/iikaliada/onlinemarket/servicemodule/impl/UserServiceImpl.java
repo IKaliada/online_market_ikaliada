@@ -2,7 +2,6 @@ package com.gmail.iikaliada.onlinemarket.servicemodule.impl;
 
 import com.gmail.iikaliada.onlinemarket.repositorymodule.UserRepository;
 import com.gmail.iikaliada.onlinemarket.repositorymodule.model.User;
-import com.gmail.iikaliada.onlinemarket.servicemodule.MailSender;
 import com.gmail.iikaliada.onlinemarket.servicemodule.UserService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.converter.UserConverter;
 import com.gmail.iikaliada.onlinemarket.servicemodule.exception.ConnectionServiceStateException;
@@ -23,16 +22,15 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private static final String CONNECTION_SERVICE_MESSAGE = "Cannot create connection";
 
-
-    private UserRepository userRepository;
-    private UserConverter userConverter;
-    private MailSender mailSender;
+    private final UserRepository userRepository;
+    private final UserConverter userConverter;
+    private final MailSenderImpl mailSender;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserConverter userConverter, MailSender mailSender) {
+    public UserServiceImpl(UserRepository userRepository, UserConverter userConverter, MailSenderImpl mailSender) {
         this.userRepository = userRepository;
         this.userConverter = userConverter;
         this.mailSender = mailSender;

@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import static com.gmail.iikaliada.onlinemarket.springbootmodule.constant.AuthoritiesConstants.ADMIN_AUTHORITY_CONSTANT;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -40,13 +41,13 @@ public class ReviewControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMINISTRATOR")
+    @WithMockUser(authorities = ADMIN_AUTHORITY_CONSTANT)
     public void shouldReturnCommentPage() throws Exception {
         ReviewDTO reviewDTO = new ReviewDTO(1L, "some text", new Date(), true, userForReviewDTO);
         List<ReviewDTO> reviews = Collections.singletonList(reviewDTO);
         int pageSize = 1;
         when(reviewService.getReviews(pageSize)).thenReturn(reviews);
-        this.mockMvc.perform(get("/private/users/review.html"))
+        this.mockMvc.perform(get("/private/review.html"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("reviews", reviews))

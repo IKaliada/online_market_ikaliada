@@ -12,6 +12,7 @@ import javax.validation.Valid;
 
 @Controller
 public class HomeController {
+
     @GetMapping("/home")
     public String getHomePage() {
         return "home";

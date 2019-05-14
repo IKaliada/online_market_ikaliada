@@ -14,23 +14,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
 public class ReviewController {
     private static final Logger logger = LoggerFactory.getLogger(ReviewController.class);
-    private ReviewService reviewService;
+
+    private final ReviewService reviewService;
 
     public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
     }
 
-    @GetMapping("/private/users/review")
+    @GetMapping("/private/review")
     public String getComments(
             Model model,
-            @RequestParam("page") Optional<Integer> page) {
-        int currentPage = page.orElse(1);
+            @RequestParam(name = "page", defaultValue = "1") Integer currentPage) {
         model.addAttribute("currentPage", currentPage);
         List<ReviewDTO> reviews = reviewService.getReviews(currentPage);
         int amountPage = reviewService.getTotalPagesForReview();
@@ -52,7 +51,7 @@ public class ReviewController {
         return "review";
     }
 
-    @PostMapping("/private/users/review/changeStatus")
+    @PostMapping("/private/review/changeStatus")
     public String changeStatus(@Nullable @RequestParam("ids") Long[] ids) {
         List<Long> collect = null;
         if (ids != null) {
@@ -61,15 +60,12 @@ public class ReviewController {
                 reviewService.changeStatus(id);
             }
         }
-        for (Long id : collect) {
-            reviewService.changeStatus1(id);
-        }
-        return "redirect:/private/users/review";
+        return "redirect:/private/review";
     }
 
-    @PostMapping("/private/users/review/{id}")
+    @PostMapping("/private/review/{id}")
     public String changePassword(@PathVariable("id") Long id) {
         reviewService.deleteReview(id);
-        return "redirect:/private/users/review";
+        return "redirect:/private/review";
     }
 }

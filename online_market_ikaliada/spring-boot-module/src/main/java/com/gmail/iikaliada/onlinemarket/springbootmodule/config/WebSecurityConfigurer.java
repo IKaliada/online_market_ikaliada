@@ -13,8 +13,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+import static com.gmail.iikaliada.onlinemarket.springbootmodule.constant.AuthoritiesConstants.ADMIN_AUTHORITY_CONSTANT;
+
 @Configuration
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
+
     private final UserDetailsService userDetailsService;
 
     public WebSecurityConfigurer(UserDetailsService userDetailsService) {
@@ -24,8 +27,8 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/private/users/**")
-                .hasAuthority("ADMINISTRATOR")
+                .antMatchers("/private/users/**", "/private/review/**")
+                .hasAuthority(ADMIN_AUTHORITY_CONSTANT)
                 .antMatchers("/", "/403", "/home", "/about", "/login", "/public/**")
                 .permitAll()
                 .and()

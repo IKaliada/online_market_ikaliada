@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Collections;
 import java.util.List;
 
+import static com.gmail.iikaliada.onlinemarket.springbootmodule.constant.AuthoritiesConstants.ADMIN_AUTHORITY_CONSTANT;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -36,11 +37,11 @@ public class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMINISTRATOR")
+    @WithMockUser(authorities = ADMIN_AUTHORITY_CONSTANT)
     public void shouldReturnRedirectedPageToUsers() throws Exception {
         RoleDTO roleDTO = new RoleDTO();
         roleDTO.setId(1L);
-        roleDTO.setName("ADMINISTRATOR");
+        roleDTO.setName(ADMIN_AUTHORITY_CONSTANT);
         List<UserDTO> users = Collections.singletonList(new UserDTO(1L,
                 "name",
                 "name1",

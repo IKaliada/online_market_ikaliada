@@ -13,7 +13,5 @@ public interface ReviewRepository extends ConnectionRepository {
 
     void changeStatus(Connection connection, Long ids);
 
-    void changeStatus1(Connection connection, Long collect);
-
     void deleteReview(Connection connection, Long id);
 }

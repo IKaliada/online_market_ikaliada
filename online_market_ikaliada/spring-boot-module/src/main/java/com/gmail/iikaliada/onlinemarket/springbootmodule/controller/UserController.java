@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -29,7 +28,7 @@ public class UserController {
 
     @Value("${not.allowed.message}")
     private String message;
-    @Value("${user.is.exists.message}")
+    @Value("${user.exists.message}")
     private String USER_EXISTS;
 
     public UserController(UserService userService) {
@@ -39,8 +38,7 @@ public class UserController {
     @GetMapping("/private/users")
     public String getUsers(
             Model model,
-            @RequestParam("page") Optional<Integer> page) {
-        int currentPage = page.orElse(1);
+            @RequestParam(name = "page", defaultValue = "1") Integer currentPage) {
         model.addAttribute("currentPage", currentPage);
         List<UserDTO> users = userService.getUsers(currentPage);
         int amountPage = userService.getTotalPages();

@@ -12,7 +12,5 @@ public interface ReviewService {
 
     void changeStatus(Long ids);
 
-    void changeStatus1(Long collect);
-
     void deleteReview(Long id);
 }

@@ -18,11 +18,11 @@ import java.util.stream.Collectors;
 @Service
 public class ReviewServiceImpl implements ReviewService {
 
-    private final static Logger logger = LoggerFactory.getLogger(ReviewServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReviewServiceImpl.class);
     private static final String CONNECTION_SERVICE_MESSAGE = "Cannot create connection";
 
-    private ReviewRepository reviewRepository;
-    private ReviewConverter reviewConverter;
+    private final ReviewRepository reviewRepository;
+    private final ReviewConverter reviewConverter;
 
     public ReviewServiceImpl(ReviewRepository reviewRepository, ReviewConverter reviewConverter) {
         this.reviewRepository = reviewRepository;
@@ -75,24 +75,6 @@ public class ReviewServiceImpl implements ReviewService {
             connection.setAutoCommit(false);
             try {
                 reviewRepository.changeStatus(connection, ids);
-                connection.commit();
-            } catch (SQLException e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new ConnectionServiceStateException(CONNECTION_SERVICE_MESSAGE);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ConnectionServiceStateException(CONNECTION_SERVICE_MESSAGE);
-        }
-    }
-
-    @Override
-    public void changeStatus1(Long collect) {
-        try (Connection connection = reviewRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                reviewRepository.changeStatus1(connection, collect);
                 connection.commit();
             } catch (SQLException e) {
                 connection.rollback();

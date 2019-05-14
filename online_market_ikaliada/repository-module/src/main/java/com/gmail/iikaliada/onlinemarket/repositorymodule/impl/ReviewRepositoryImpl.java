@@ -19,7 +19,7 @@ import java.util.List;
 @Repository
 public class ReviewRepositoryImpl extends ConnectionRepositoryImpl implements ReviewRepository {
 
-    private final static Logger logger = LoggerFactory.getLogger(ReviewRepositoryImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReviewRepositoryImpl.class);
     private static final String DATABASE_STATE_MESSAGE = "Database exception during getting user";
     private static final String STATEMENT_REPOSITORY_MESSAGE = "Cannot execute SQL query ";
     private static final int LIMIT = 10;
@@ -30,7 +30,7 @@ public class ReviewRepositoryImpl extends ConnectionRepositoryImpl implements Re
         String userQuery = "SELECT c.*, u.name, u.lastname FROM reviews c JOIN user u ON c.user_id = u.id LIMIT ? OFFSET ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(userQuery)) {
             preparedStatement.setInt(1, LIMIT);
-            preparedStatement.setInt(2, (pageSize - 1) * LIMIT);
+            preparedStatement.setInt(2, getOffset(pageSize));
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Review review = getReviewFromDB(resultSet);
@@ -40,25 +40,6 @@ public class ReviewRepositoryImpl extends ConnectionRepositoryImpl implements Re
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
             throw new IllegalFormatStatementRepositoryException(STATEMENT_REPOSITORY_MESSAGE + userQuery);
-        }
-    }
-
-    private Review getReviewFromDB(ResultSet resultSet) {
-        try {
-            Review comment = new Review();
-            comment.setId(resultSet.getLong("id"));
-            comment.setText(resultSet.getString("review"));
-            comment.setDate(resultSet.getTimestamp("date"));
-            comment.setShown(resultSet.getBoolean("shown"));
-            UserForReview userForComment = new UserForReview();
-            userForComment.setId(resultSet.getLong("user_id"));
-            userForComment.setName(resultSet.getString("name"));
-            userForComment.setLastname(resultSet.getString("lastname"));
-            comment.setUserForReview(userForComment);
-            return comment;
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-            throw new IllegalDatabaseStateException(DATABASE_STATE_MESSAGE);
         }
     }
 
@@ -96,19 +77,6 @@ public class ReviewRepositoryImpl extends ConnectionRepositoryImpl implements Re
     }
 
     @Override
-    public void changeStatus1(Connection connection, Long collect) {
-        String statusQuery = "UPDATE reviews SET shown = IF(shown = 1, 1, 0) where id in (?)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(statusQuery)) {
-            preparedStatement.setLong(1, collect);
-            preparedStatement.addBatch();
-            preparedStatement.executeBatch();
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new IllegalFormatStatementRepositoryException(STATEMENT_REPOSITORY_MESSAGE + statusQuery);
-        }
-    }
-
-    @Override
     public void deleteReview(Connection connection, Long id) {
         String deleteQuery = "DELETE FROM reviews WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
@@ -118,5 +86,28 @@ public class ReviewRepositoryImpl extends ConnectionRepositoryImpl implements Re
             logger.error(e.getMessage(), e);
             throw new IllegalFormatStatementRepositoryException(STATEMENT_REPOSITORY_MESSAGE + deleteQuery);
         }
+    }
+
+    private Review getReviewFromDB(ResultSet resultSet) {
+        try {
+            Review comment = new Review();
+            comment.setId(resultSet.getLong("id"));
+            comment.setText(resultSet.getString("review"));
+            comment.setDate(resultSet.getTimestamp("date"));
+            comment.setShown(resultSet.getBoolean("shown"));
+            UserForReview userForComment = new UserForReview();
+            userForComment.setId(resultSet.getLong("user_id"));
+            userForComment.setName(resultSet.getString("name"));
+            userForComment.setLastname(resultSet.getString("lastname"));
+            comment.setUserForReview(userForComment);
+            return comment;
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            throw new IllegalDatabaseStateException(DATABASE_STATE_MESSAGE);
+        }
+    }
+
+    private int getOffset(int pageSize) {
+        return (pageSize - 1) * LIMIT;
     }
 }

@@ -16,6 +16,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Set;
 
+import static com.gmail.iikaliada.onlinemarket.springbootmodule.constant.AuthoritiesConstants.ADMIN_AUTHORITY_CONSTANT;
+
 public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private static Logger logger = LoggerFactory.getLogger(AppUrlAuthenticationSuccessHandler.class);
 
@@ -41,13 +43,7 @@ public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccess
 
     protected String determineTargetUrl(final Authentication authentication) {
         Set<String> authorities = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-        if (authorities.contains("ADMINISTRATOR")) {
-            return "/home";
-        } else if (authorities.contains("CUSTOMER_USER")) {
-            return "/home";
-        } else if (authorities.contains("SALE_USER")) {
-            return "/home";
-        } else if (authorities.contains("SECURE_API_USER")) {
+        if (authorities.contains(ADMIN_AUTHORITY_CONSTANT)) {
             return "/home";
         } else {
             throw new IllegalStateException();

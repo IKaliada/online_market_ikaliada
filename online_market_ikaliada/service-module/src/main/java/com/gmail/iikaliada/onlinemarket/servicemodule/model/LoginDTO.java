@@ -9,16 +9,6 @@ public class LoginDTO {
     private String password;
     private Role role;
 
-    public LoginDTO(Long id, String email, String password, Role role) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
-
-    public LoginDTO() {
-    }
-
     public Long getId() {
         return id;
     }
