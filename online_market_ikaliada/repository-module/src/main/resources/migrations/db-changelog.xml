@@ -1,0 +1,154 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="market_0" author="iikaliada@gmail.com">
+        <createTable tableName="reviews">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="review" type="clob">
+                <constraints nullable="false"/>
+            </column>
+            <column name="shown" type="bit(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints foreignKeyName="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="market_1" author="iikaliada@gmail.com">
+        <createTable tableName="user">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(20)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="middlename" type="varchar(40)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="lastname" type="varchar(40)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="email" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="bigint">
+                <constraints foreignKeyName="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="market_2" author="iikaliada@gmail.com">
+        <createTable tableName="role">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints foreignKeyName="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="iikaliada@gmail.com" id="market_3">
+        <createIndex indexName="ROLE_ID" tableName="role">
+            <column name="id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="iikaliada@gmail.com" id="market_4">
+        <createIndex indexName="FK_USER" tableName="user">
+            <column name="role_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="iikaliada@gmail.com" id="market_5">
+        <createIndex indexName="FK_COMMENT" tableName="reviews">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="iikaliada@gmail.com" id="market_6">
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="reviews" onDelete="CASCADE" constraintName="FK_COMMENT"
+                                 referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+
+    <changeSet author="iikaliada@gmail.com" id="market_7">
+        <addForeignKeyConstraint baseColumnNames="role_id"
+                                 baseTableName="user" onDelete="CASCADE" constraintName="FK_ROLE"
+                                 referencedColumnNames="id" referencedTableName="role"/>
+    </changeSet>
+
+    <changeSet author="iikaliada@gmail.com" id="market_8">
+        <createIndex indexName="FK_ROLE" tableName="role">
+            <column name="id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="iikaliada@gmail.com" id="market_9">
+        <insert catalogName="online_market_iikaliada"
+                dbms="mysql"
+                schemaName="online_market_iikaliada"
+                tableName="role">
+            <column name="name" type="varchar(255)" value="ADMINISTRATOR"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="iikaliada@gmail.com" id="market_10">
+        <insert catalogName="online_market_iikaliada"
+                dbms="mysql"
+                schemaName="online_market_iikaliada"
+                tableName="role">
+            <column name="name" type="varchar(255)" value="CUSTOMER_USER"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="iikaliada@gmail.com" id="market_11">
+        <insert catalogName="online_market_iikaliada"
+                dbms="mysql"
+                schemaName="online_market_iikaliada"
+                tableName="role">
+            <column name="name" type="varchar(255)" value="SALE_USER"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="iikaliada@gmail.com" id="market_12">
+        <insert catalogName="online_market_iikaliada"
+                dbms="mysql"
+                schemaName="online_market_iikaliada"
+                tableName="role">
+            <column name="name" type="varchar(255)" value="SECURE_API_USER"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="iikaliada@gmail.com" id="market_13">
+        <sql>insert into user (email, password, role_id) values ('admin@admin.com',
+            '$2a$10$yOiWMdbf/yaOxx8eqs9XtObXTsb7iy8VTQdZpANPUvdJ8yvYKtH7K', (SELECT r.id FROM role r WHERE r.name =
+            ('ADMINISTRATOR')))
+        </sql>
+    </changeSet>
+
+    <changeSet author="iikaliada@gmail.com" id="market_14">
+        <sql>insert into user (name, middlename, lastname, email, password, role_id) values ('Ivan', 'Iosifavich', 'Kaliada', 'customer@customer.com',
+            '$2a$10$yOiWMdbf/yaOxx8eqs9XtObXTsb7iy8VTQdZpANPUvdJ8yvYKtH7K', (SELECT r.id FROM role r WHERE r.name =
+            ('CUSTOMER_USER')))
+        </sql>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_15">
+        <sql>insert into reviews (review, shown, date, user_id) values ('first review',
+            1, now(), (SELECT u.id FROM user u WHERE u.email = ('customer@customer.com')))
+        </sql>
+    </changeSet>
+</databaseChangeLog>

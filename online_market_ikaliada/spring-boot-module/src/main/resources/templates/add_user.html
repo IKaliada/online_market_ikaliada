@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <h1>Users</h1>
+</head>
+<body>
+<h3>Add</h3>
+<form action="#" th:action="@{/private/users/add_user}" th:object="${userDTO}" method="post">
+    <table>
+        <div th:if="${emailMessage}" th:utext="${emailMessage}">
+        </div>
+        <tr>
+            <td><label>
+                <input hidden type="text" th:field="*{id}"/>
+            </label></td>
+        </tr>
+        <tr>
+            <td>Name:</td>
+            <td><label>
+                <input type="text" th:field="*{name}"/>
+            </label></td>
+            <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</td>
+        </tr>
+        <tr>
+            <td>Middlename:</td>
+            <td><label>
+                <input type="text" th:field="*{middlename}"/>
+            </label></td>
+            <td th:if="${#fields.hasErrors('middlename')}" th:errors="*{middlename}">Middlename Error</td>
+        </tr>
+        <tr>
+            <td>Lastname:</td>
+            <td><label>
+                <input type="text" th:field="*{lastname}"/>
+            </label></td>
+            <td th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">Lastname Error</td>
+        </tr>
+
+        <tr>
+            <td>Email:</td>
+            <td><label>
+                <input type="email" th:field="*{email}"/>
+            </label></td>
+            <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</td>
+        </tr>
+        <tr>
+            <td>Role:</td>
+            <td>
+                <label>
+                    <select th:field="*{role.name}">
+                        <option th:value="'CUSTOMER_USER'" th:text="CUSTOMER_USER"></option>
+                        <option th:value="'SALE_USER'" th:text="SALE_USER"></option>
+                        <option th:value="'SECURE_API_USER'" th:text="SECURE_API_USER"></option>
+                        <option th:value="'ADMINISTRATOR'" th:text="ADMINISTRATOR"></option>
+                    </select>
+                </label>
+            </td>
+            <td th:if="${#fields.hasErrors('role.name')}" th:errors="*{role.name}">Status Error</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="submit">Add</button>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+<div th:replace="fragments/footer :: footer"></div>
+</html>
