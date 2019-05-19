@@ -15,11 +15,12 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.ServiceConstants.CONNECTION_SERVICE_MESSAGE;
+
 @Service
 public class ReviewServiceImpl implements ReviewService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ReviewServiceImpl.class);
-    private static final String CONNECTION_SERVICE_MESSAGE = "Cannot create connection";
+    private final static Logger logger = LoggerFactory.getLogger(ReviewServiceImpl.class);
 
     private final ReviewRepository reviewRepository;
     private final ReviewConverter reviewConverter;
@@ -70,11 +71,12 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public void changeStatus(Long ids) {
+    public void changeStatus(List<ReviewDTO> reviews) {
         try (Connection connection = reviewRepository.getConnection()) {
             connection.setAutoCommit(false);
             try {
-                reviewRepository.changeStatus(connection, ids);
+                List<Review> reviewList = getReview(reviews);
+                reviewRepository.changeStatus(connection, reviewList);
                 connection.commit();
             } catch (SQLException e) {
                 connection.rollback();
@@ -103,5 +105,11 @@ public class ReviewServiceImpl implements ReviewService {
             logger.error(e.getMessage(), e);
             throw new ConnectionServiceStateException(CONNECTION_SERVICE_MESSAGE);
         }
+    }
+
+    private List<Review> getReview(List<ReviewDTO> reviews) {
+        return reviews.stream()
+                .map(reviewConverter::fromReviewDTO)
+                .collect(Collectors.toList());
     }
 }

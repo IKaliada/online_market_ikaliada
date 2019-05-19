@@ -1,18 +1,18 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+>
 <head>
     <h1>Users</h1>
     <h3><a th:href="@{/private/users/add_user}">Add User</a>
-    </h3><h3><a th:href="@{/private/review}">Show Reviews</a></h3>
-    <div th:if="${userMessage}" th:utext="${userMessage}"></div>
+    </h3>
+    <h3><a th:href="@{/private/review}">Show Reviews</a></h3>
+    <div th:if="${emailError}" th:utext="${emailError}"></div>
 </head>
 <body>
 <form th:action='@{/private/users/delete}'
       method="POST"
       th:object="${users}">
-
-    <table  border="1" class='table table-sm responsive'>
+    <table border="1" class='table table-sm responsive'>
         <thead class='thead-default'>
         <tr>
             <th></th>
@@ -34,13 +34,15 @@
             <td th:text="${user.email}"></td>
             <td th:text="${user.role.name}"></td>
             <td>
-                <form action="#" th:action="@{/private/users/update/{id}(id=${user.id})}" method="post">
-                    <select name="role">
-                        <option th:value="'CUSTOMER_USER'" th:text="CUSTOMER_USER"></option>
-                        <option th:value="'SALE_USER'" th:text="SALE_USER"></option>
-                        <option th:value="'SECURE_API_USER'" th:text="SECURE_API_USER"></option>
-                        <option th:value="'ADMINISTRATOR'" th:text="ADMINISTRATOR"></option>
-                    </select>
+                <form action="#" th:action="@{/private/users/{id}/update(id=${user.id})}" method="post">
+                    <label>
+                        <select th:field="${user.role.id}">
+                            <option th:each="role : ${roles}"
+                                    th:value="${role.id}"
+                                    th:text="${role.name}">DefaultName
+                            </option>
+                        </select>
+                    </label>
                     <input type="submit" value="CHANGE ROLE"/>
                 </form>
             </td>
@@ -56,15 +58,15 @@
 </form>
 <div class="pagination-div">
             <span th:if="${currentPage>1}">
-                <a th:href="@{/private/users(size=${amountPage},page=${previousPage})}">Previous</a>
+                <a th:href="@{/private/users(size=${totalPage},page=${previousPage})}">Previous</a>
             </span>
     <span th:each="pageNumber:${pages}">
-                <a th:href="@{/private/users(size=${amountPage},page=${pageNumber})}"
+                <a th:href="@{/private/users(size=${totalPage},page=${pageNumber})}"
                    th:text="${pageNumber}"
                    th:class="${pageNumber==pageNumber + 1}">1</a>
             </span>
-    <span th:if="${currentPage<amountPage}">
-                <a th:href="@{/private/users(size=${amountPage},page=${nextPage})}">Next</a>
+    <span th:if="${currentPage<totalPage}">
+                <a th:href="@{/private/users(size=${totalPage},page=${nextPage})}">Next</a>
             </span>
 </div>
 <div th:replace="fragments/footer :: footer"></div>

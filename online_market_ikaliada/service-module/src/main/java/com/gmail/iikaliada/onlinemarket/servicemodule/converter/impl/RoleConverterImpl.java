@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RoleConverterImpl implements RoleConverter {
+
     @Override
     public RoleDTO toRoleDTO(Role role) {
         RoleDTO roleDTO = new RoleDTO();

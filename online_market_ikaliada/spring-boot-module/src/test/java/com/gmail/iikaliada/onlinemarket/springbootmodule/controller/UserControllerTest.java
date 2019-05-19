@@ -1,8 +1,10 @@
 package com.gmail.iikaliada.onlinemarket.springbootmodule.controller;
 
+import com.gmail.iikaliada.onlinemarket.servicemodule.RoleService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.UserService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.RoleDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserDTO;
+import com.gmail.iikaliada.onlinemarket.springbootmodule.validation.UserValidation;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,13 +29,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
     private MockMvc mockMvc;
 
-    @Mock
     private UserService userService;
+    private UserValidation userValidation;
+    private RoleService roleService;
 
     @Before
     public void init() {
-        UserController controller = new UserController(userService);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        UserController userController = new UserController(userService, userValidation, roleService);
+        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
     }
 
     @Test

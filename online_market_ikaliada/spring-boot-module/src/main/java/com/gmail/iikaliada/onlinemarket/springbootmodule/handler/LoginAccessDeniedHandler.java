@@ -14,15 +14,16 @@ import java.io.IOException;
 
 public class LoginAccessDeniedHandler implements AccessDeniedHandler {
     private static Logger logger = LoggerFactory.getLogger(LoginAccessDeniedHandler.class);
+    private static final String LOGGER_MESSAGE = "%s attempted to access the protected URL: %s";
 
     @Override
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                        AccessDeniedException e) throws IOException, ServletException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
-            logger.info(String.format("%s attempted to access the protected URL: %s", authentication.getName(),
+            logger.info(String.format(LOGGER_MESSAGE, authentication.getName(),
                     httpServletRequest.getRequestURI()));
         }
-        httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/403");
+        httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/denied");
     }
 }

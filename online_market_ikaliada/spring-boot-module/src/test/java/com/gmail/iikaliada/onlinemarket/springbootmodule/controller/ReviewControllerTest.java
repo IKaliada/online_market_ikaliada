@@ -2,7 +2,7 @@ package com.gmail.iikaliada.onlinemarket.springbootmodule.controller;
 
 import com.gmail.iikaliada.onlinemarket.servicemodule.ReviewService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ReviewDTO;
-import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForReviewDTO;
+import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForUiDTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +32,7 @@ public class ReviewControllerTest {
     private ReviewService reviewService;
 
     @MockBean
-    private UserForReviewDTO userForReviewDTO;
+    private UserForUiDTO userForUiDTO;
 
     @Before
     public void init() {
@@ -43,11 +43,11 @@ public class ReviewControllerTest {
     @Test
     @WithMockUser(authorities = ADMIN_AUTHORITY_CONSTANT)
     public void shouldReturnCommentPage() throws Exception {
-        ReviewDTO reviewDTO = new ReviewDTO(1L, "some text", new Date(), true, userForReviewDTO);
+        ReviewDTO reviewDTO = new ReviewDTO(1L, "some text", new Date(), true, userForUiDTO);
         List<ReviewDTO> reviews = Collections.singletonList(reviewDTO);
         int pageSize = 1;
         when(reviewService.getReviews(pageSize)).thenReturn(reviews);
-        this.mockMvc.perform(get("/private/review.html"))
+        this.mockMvc.perform(get("/private/users/review.html"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("reviews", reviews))

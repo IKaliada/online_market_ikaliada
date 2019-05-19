@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ReviewConverterImpl implements ReviewConverter {
-    private UserConverter userConverter;
+
+    private final UserConverter userConverter;
 
     public ReviewConverterImpl(UserConverter userConverter) {
         this.userConverter = userConverter;
@@ -16,23 +17,20 @@ public class ReviewConverterImpl implements ReviewConverter {
 
     @Override
     public Review fromReviewDTO(ReviewDTO reviewDTO) {
-        Review comment = new Review();
-        comment.setId(reviewDTO.getId());
-        comment.setText(reviewDTO.getText());
-        comment.setDate(reviewDTO.getDate());
-        comment.setShown(reviewDTO.isShown());
-        comment.setUserForReview(userConverter.fromUserForCommentDTO(reviewDTO.getUserForReviewDTO()));
-        return comment;
+        Review review = new Review();
+        review.setId(reviewDTO.getId());
+        review.setShown(reviewDTO.getShown());
+        return review;
     }
 
     @Override
     public ReviewDTO toReviewDTO(Review review) {
-        ReviewDTO commentDTO = new ReviewDTO();
-        commentDTO.setId(review.getId());
-        commentDTO.setText(review.getText());
-        commentDTO.setDate(review.getDate());
-        commentDTO.setShown(review.isShown());
-        commentDTO.setUserForReviewDTO(userConverter.toUserForCommentDTO(review.getUserForReview()));
-        return commentDTO;
+        ReviewDTO reviewDTO = new ReviewDTO();
+        reviewDTO.setId(review.getId());
+        reviewDTO.setText(review.getText());
+        reviewDTO.setDate(review.getDate());
+        reviewDTO.setShown(review.isShown());
+        reviewDTO.setUserForUiDTO(userConverter.toUserForUiDTO(review.getUser()));
+        return reviewDTO;
     }
 }

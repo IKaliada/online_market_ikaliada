@@ -1,17 +1,17 @@
 package com.gmail.iikaliada.onlinemarket.servicemodule.converter.impl;
 
 import com.gmail.iikaliada.onlinemarket.repositorymodule.model.User;
-import com.gmail.iikaliada.onlinemarket.repositorymodule.model.UserForReview;
 import com.gmail.iikaliada.onlinemarket.servicemodule.converter.RoleConverter;
 import com.gmail.iikaliada.onlinemarket.servicemodule.converter.UserConverter;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.LoginDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserDTO;
-import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForReviewDTO;
+import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForUiDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserConverterImpl implements UserConverter {
+
     private final RoleConverter roleConverter;
 
     @Autowired
@@ -65,20 +65,18 @@ public class UserConverterImpl implements UserConverter {
     }
 
     @Override
-    public UserForReview fromUserForCommentDTO(UserForReviewDTO userForReviewDTO) {
-        UserForReview userForComment = new UserForReview();
-        userForComment.setId(userForReviewDTO.getId());
-        userForComment.setName(userForReviewDTO.getName());
-        userForComment.setLastname(userForReviewDTO.getLastname());
-        return userForComment;
+    public UserForUiDTO toUserForUiDTO(User user) {
+        UserForUiDTO userForUiDTO = new UserForUiDTO();
+        userForUiDTO.setId(user.getId());
+        userForUiDTO.setName(user.getName());
+        userForUiDTO.setLastname(user.getLastname());
+        return userForUiDTO;
     }
 
     @Override
-    public UserForReviewDTO toUserForCommentDTO(UserForReview userForComment) {
-        UserForReviewDTO userForReviewDTO = new UserForReviewDTO();
-        userForReviewDTO.setId(userForComment.getId());
-        userForReviewDTO.setName(userForComment.getName());
-        userForReviewDTO.setLastname(userForComment.getLastname());
-        return userForReviewDTO;
+    public User fromUserForUiDTO(UserForUiDTO userForUiDTO) {
+        User user = new User();
+        user.setId(userForUiDTO.getId());
+        return user;
     }
 }

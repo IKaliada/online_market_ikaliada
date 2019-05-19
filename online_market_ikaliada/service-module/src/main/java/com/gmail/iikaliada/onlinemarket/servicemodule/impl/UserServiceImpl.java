@@ -5,6 +5,7 @@ import com.gmail.iikaliada.onlinemarket.repositorymodule.model.User;
 import com.gmail.iikaliada.onlinemarket.servicemodule.UserService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.converter.UserConverter;
 import com.gmail.iikaliada.onlinemarket.servicemodule.exception.ConnectionServiceStateException;
+import com.gmail.iikaliada.onlinemarket.servicemodule.exception.UserServiceTransactionRollbackedException;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.LoginDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserDTO;
 import org.slf4j.Logger;
@@ -13,17 +14,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.gmail.iikaliada.onlinemarket.repositorymodule.constant.LimitConstants.LIMIT;
+import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.ServiceConstants.CONNECTION_SERVICE_MESSAGE;
+import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.ServiceConstants.TRANSACTION_ROLLBACK_MESSAGE;
+
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-    private static final String CONNECTION_SERVICE_MESSAGE = "Cannot create connection";
+    private final static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private final static String ROLE_ADMIN_CONSTANT = "Administrator";
+    private final static String SUCCESS_MESSAGE_AFTER_UPDATING = "Your password was updated to";
 
     private final UserRepository userRepository;
     private final UserConverter userConverter;
@@ -58,45 +65,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public List<UserDTO> getUsers(int pageSize) {
-        try (Connection connection = userRepository.getConnection()) {
-            List<UserDTO> userDTOS;
-            try {
-                connection.setAutoCommit(false);
-                List<User> users = userRepository.getUsers(connection, pageSize);
-                userDTOS = users.stream().map(userConverter::toUserDTO).collect(Collectors.toList());
-                connection.commit();
-            } catch (SQLException e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new ConnectionServiceStateException(CONNECTION_SERVICE_MESSAGE);
-            }
-            return userDTOS;
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ConnectionServiceStateException(CONNECTION_SERVICE_MESSAGE);
-        }
+        int offset = ((LIMIT * pageSize));
+        pageSize = pageSize - 1;
+        List<User> users = userRepository.findAll(pageSize, offset);
+        return users.stream()
+                .map(userConverter::toUserDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional
     public void add(UserDTO userDTO) {
-        try (Connection connection = userRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            String password = String.valueOf(UUID.randomUUID());
-            try {
-                User user = userConverter.fromUserDTO(userDTO);
-                user.setPassword(new BCryptPasswordEncoder().encode(password));
-                userRepository.addUser(connection, user);
-                connection.commit();
-            } catch (Exception e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new ConnectionServiceStateException(CONNECTION_SERVICE_MESSAGE);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ConnectionServiceStateException(CONNECTION_SERVICE_MESSAGE);
-        }
+        User user = userConverter.fromUserDTO(userDTO);
+        String password = String.valueOf(UUID.randomUUID());
+        user.setPassword(new BCryptPasswordEncoder().encode(password));
+        userRepository.persist(user);
     }
 
     @Override
@@ -118,15 +103,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String updateUsersRole(Long id, String roleName) {
+    public String updateUsersRole(Long id, Long roleId) {
         try (Connection connection = userRepository.getConnection()) {
             connection.setAutoCommit(false);
             try {
-                validateUser(id, roleName, connection);
+                userRepository.updateUsersRole(connection, id, roleId);
+                connection.commit();
             } catch (Exception e) {
                 connection.rollback();
                 logger.error(e.getMessage(), e);
-                throw new ConnectionServiceStateException(CONNECTION_SERVICE_MESSAGE);
+                throw new UserServiceTransactionRollbackedException(TRANSACTION_ROLLBACK_MESSAGE);
             }
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
@@ -138,7 +124,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserPassword(String email) {
         String userPassword = String.valueOf(UUID.randomUUID());
-        String message = "Your password was updated to";
         try (Connection connection = userRepository.getConnection()) {
             connection.setAutoCommit(false);
             try {
@@ -147,7 +132,7 @@ public class UserServiceImpl implements UserService {
                 user.setPassword(new BCryptPasswordEncoder().encode(userPassword));
                 userRepository.updatePassword(connection, user);
                 logger.info(userPassword);
-                mailSender.send(email, email, message + " " + userPassword);
+                mailSender.send(email, email, SUCCESS_MESSAGE_AFTER_UPDATING + " " + userPassword);
                 connection.commit();
             } catch (Exception e) {
                 connection.rollback();
@@ -179,20 +164,32 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void validateUserRole(List<Long> ids, Connection connection) {
-        for (Long id : ids) {
-            User user = userRepository.getUserById(connection, id);
-            if (!user.getRole().getName().equals("ADMINISTRATOR")) {
-                userRepository.deleteById(connection, id);
+    @Override
+    public UserDTO getUserById(Long id) {
+        try (Connection connection = userRepository.getConnection()) {
+            connection.setAutoCommit(false);
+            try {
+                User user = userRepository.getUserById(connection, id);
+                UserDTO userDTO = userConverter.toUserDTO(user);
+                connection.commit();
+                return userDTO;
+            } catch (SQLException e) {
+                connection.rollback();
+                logger.error(e.getMessage(), e);
+                throw new UserServiceTransactionRollbackedException(TRANSACTION_ROLLBACK_MESSAGE);
             }
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+            throw new ConnectionServiceStateException(CONNECTION_SERVICE_MESSAGE);
         }
     }
 
-    private void validateUser(Long id, String roleName, Connection connection) throws SQLException {
-        User user = userRepository.getUserById(connection, id);
-        if (!user.getEmail().equals("admin@admin.com")) {
-            userRepository.updateUsersRole(connection, id, roleName);
-            connection.commit();
+    private void validateUserRole(List<Long> ids, Connection connection) {
+        for (Long id : ids) {
+            User user = userRepository.getUserById(connection, id);
+            if (!user.getRole().getName().equals(ROLE_ADMIN_CONSTANT)) {
+                userRepository.deleteById(connection, id);
+            }
         }
     }
 }
