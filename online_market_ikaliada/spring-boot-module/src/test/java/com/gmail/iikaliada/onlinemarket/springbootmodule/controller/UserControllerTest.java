@@ -8,7 +8,6 @@ import com.gmail.iikaliada.onlinemarket.springbootmodule.validation.UserValidati
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,7 +16,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Collections;
 import java.util.List;
 
-import static com.gmail.iikaliada.onlinemarket.springbootmodule.constant.AuthoritiesConstants.ADMIN_AUTHORITY_CONSTANT;
+import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.AuthoritiesConstants.ADMIN_AUTHORITY_CONSTANT;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -44,11 +43,16 @@ public class UserControllerTest {
     public void shouldReturnRedirectedPageToUsers() throws Exception {
         RoleDTO roleDTO = new RoleDTO();
         roleDTO.setId(1L);
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(1L);
+        userDTO.setName("name");
+        userDTO.setMiddlename("middlename");
+        userDTO.setLastname("lastname");
+        userDTO.setEmail("email");
+        userDTO.setPassword("1234");
+        userDTO.setRole(roleDTO);
         roleDTO.setName(ADMIN_AUTHORITY_CONSTANT);
-        List<UserDTO> users = Collections.singletonList(new UserDTO(1L,
-                "name",
-                "name1",
-                "name2", "email", "password", roleDTO));
+        List<UserDTO> users = Collections.singletonList(userDTO);
         int pageSize = 1;
         when(userService.getUsers(pageSize)).thenReturn(users);
         this.mockMvc.perform(get("/private/users.html"))

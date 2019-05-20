@@ -1,12 +1,9 @@
 package com.gmail.iikaliada.onlinemarket.springbootmodule.controller;
 
-import com.gmail.iikaliada.onlinemarket.repositorymodule.model.Role;
 import com.gmail.iikaliada.onlinemarket.servicemodule.ProfileService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.UserService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.LoginDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ProfileDTO;
-import com.gmail.iikaliada.onlinemarket.servicemodule.model.ReviewDTO;
-import com.gmail.iikaliada.onlinemarket.servicemodule.model.RoleDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserDTO;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,17 +11,11 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-
-import static com.gmail.iikaliada.onlinemarket.springbootmodule.constant.AuthoritiesConstants.ADMIN_AUTHORITY_CONSTANT;
+import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.AuthoritiesConstants.ADMIN_AUTHORITY_CONSTANT;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

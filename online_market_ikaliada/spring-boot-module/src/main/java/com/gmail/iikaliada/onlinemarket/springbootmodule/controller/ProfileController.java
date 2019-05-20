@@ -29,28 +29,23 @@ public class ProfileController {
 
     @GetMapping("/public/users/profile")
     public String getProfileById(Model model) {
-        getProfile(model);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        LoginDTO user = userService.getUsersByUsername(currentPrincipalName);
+        ProfileDTO profileDTO = profileService.getProfileById(user.getId());
+        model.addAttribute("profile", profileDTO);
         return "profile";
     }
 
     @PostMapping("/public/users/{id}/profile/update")
     public String updateProfile(@PathVariable("id") Long id,
                                 @Valid @ModelAttribute("profile") ProfileDTO profileDTO,
-                                Model model, BindingResult bindingResult) {
+                                BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            getProfile(model);
-            return "/profile";
+            return "profile";
         }
         profileDTO.setId(id);
         profileService.updateProfile(profileDTO);
         return "redirect:/public/users/profile";
-    }
-
-    private void getProfile(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-        LoginDTO user = userService.getUsersByUsername(currentPrincipalName);
-        ProfileDTO profileDTO = profileService.getProfileById(user.getId());
-        model.addAttribute("profile", profileDTO);
     }
 }

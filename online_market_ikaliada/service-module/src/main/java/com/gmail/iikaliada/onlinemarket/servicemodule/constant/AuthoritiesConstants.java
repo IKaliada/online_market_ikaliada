@@ -1,4 +1,4 @@
-package com.gmail.iikaliada.onlinemarket.springbootmodule.constant;
+package com.gmail.iikaliada.onlinemarket.servicemodule.constant;
 
 public class AuthoritiesConstants {
 

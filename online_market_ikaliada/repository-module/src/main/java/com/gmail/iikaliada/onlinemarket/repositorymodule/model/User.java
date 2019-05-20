@@ -1,5 +1,8 @@
 package com.gmail.iikaliada.onlinemarket.repositorymodule.model;
 
+import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +15,7 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
+@DynamicUpdate
 @Table(name = "user")
 public class User {
     @Id

@@ -6,7 +6,7 @@
     <h3><a th:href="@{/home}">Home</a></h3>
 </head>
 <body>
-<form th:action='@{/private/users/review/changeStatus}'
+<form th:action='@{/private/review/changeStatus}'
       method="POST"
       th:object="${reviews}">
 
@@ -45,15 +45,15 @@
 </form>
 <div class="pagination-div">
             <span th:if="${currentPage>1}">
-                <a th:href="@{/private/users/review(size=${amountPage},page=${previousPage})}">Previous</a>
+                <a th:href="@{/private/review(size=${totalPage},page=${previousPage})}">Previous</a>
             </span>
     <span th:each="pageNumber:${pages}">
-                <a th:href="@{/private/users/review(size=${amountPage},page=${pageNumber})}"
+                <a th:href="@{/private/review(size=${totalPage},page=${pageNumber})}"
                    th:text="${pageNumber}"
                    th:class="${pageNumber==pageNumber + 1}">1</a>
             </span>
-    <span th:if="${currentPage<amountPage}">
-                <a th:href="@{/private/users/review(size=${amountPage},page=${nextPage})}">Next</a>
+    <span th:if="${currentPage<totalPage}">
+                <a th:href="@{/private/users/review(size=${totalPage},page=${nextPage})}">Next</a>
             </span>
 </div>
 <div th:replace="fragments/footer :: footer"></div>

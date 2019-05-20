@@ -1,7 +1,5 @@
 package com.gmail.iikaliada.onlinemarket.repositorymodule.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,7 +29,6 @@ public class Article {
     @Column(name = "description")
     private String description;
     @Column(name = "date")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private Date date;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

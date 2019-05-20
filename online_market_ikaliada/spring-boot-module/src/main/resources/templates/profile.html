@@ -2,9 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
 >
 <head>
+    <title>
+        <h3>Profile</h3>
+    </title>
+    <h3><a th:href="@{/home}">Home</a> <a th:href="@{/about}">About</a></h3>
 </head>
 <body>
-<h3>Profile</h3>
 <form action="#" th:action="@{/public/users/{id}/profile/update(id=${profile.id})}" th:object="${profile}"
       method="post">
     <table>
@@ -43,13 +46,6 @@
         </tr>
         <tr>
             <td>Password:</td>
-            <td><label>
-                <input type="text" th:field="*{userDTO.password}" th:placeholder="*{userDTO.password}"/>
-            </label></td>
-            <td th:if="${#fields.hasErrors('userDTO.password')}" th:errors="*{userDTO.password}">Email Error</td>
-        </tr>
-        <tr>
-            <td>Repeat password:</td>
             <td><label>
                 <input type="text" th:field="*{userDTO.password}" th:placeholder="*{userDTO.password}"/>
             </label></td>
