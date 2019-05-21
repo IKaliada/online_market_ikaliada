@@ -13,7 +13,7 @@ public interface ArticleService {
 
     ArticleForPageDTO getArticleById(Long id);
 
-    ArticleForPageDTO getArticleByKeyWord(String keyWord);
+    List<ArticleForPageDTO> getArticleByKeyWord(String keyWord);
 
     void add(ArticleDTO articleDTO);
 

@@ -2,6 +2,7 @@ package com.gmail.iikaliada.onlinemarket.servicemodule.model;
 
 import com.gmail.iikaliada.onlinemarket.servicemodule.validator.LatinLetterValidator;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -14,8 +15,13 @@ public class UserForProfileDTO {
     @NotNull
     @Size(min = 2, max = 40)
     @LatinLetterValidator
+    private String middlename;
+    @NotNull
+    @Size(min = 2, max = 40)
+    @LatinLetterValidator
     private String lastname;
     private String password;
+    @Valid
     private ProfileDTO profileDTO;
 
     public Long getId() {
@@ -32,6 +38,14 @@ public class UserForProfileDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getMiddlename() {
+        return middlename;
+    }
+
+    public void setMiddlename(String middlename) {
+        this.middlename = middlename;
     }
 
     public String getLastname() {

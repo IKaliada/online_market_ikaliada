@@ -5,6 +5,7 @@ import com.gmail.iikaliada.onlinemarket.repositorymodule.model.User;
 import com.gmail.iikaliada.onlinemarket.servicemodule.UserService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.converter.UserConverter;
 import com.gmail.iikaliada.onlinemarket.servicemodule.exception.ConnectionServiceStateException;
+import com.gmail.iikaliada.onlinemarket.servicemodule.exception.NotValidUserException;
 import com.gmail.iikaliada.onlinemarket.servicemodule.exception.UserServiceTransactionRollbackedException;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.LoginDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserDTO;
@@ -22,6 +23,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.gmail.iikaliada.onlinemarket.repositorymodule.constant.LimitConstants.LIMIT;
+import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.AuthoritiesConstants.ADMIN_AUTHORITY_CONSTANT;
 import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.ServiceConstants.CONNECTION_SERVICE_MESSAGE;
 import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.ServiceConstants.TRANSACTION_ROLLBACK_MESSAGE;
 
@@ -29,7 +31,6 @@ import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.ServiceCon
 public class UserServiceImpl implements UserService {
 
     private final static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-    private final static String ROLE_ADMIN_CONSTANT = "Administrator";
     private final static String SUCCESS_MESSAGE_AFTER_UPDATING = "Your password was updated to";
 
     private final UserRepository userRepository;
@@ -187,8 +188,10 @@ public class UserServiceImpl implements UserService {
     private void validateUserRole(List<Long> ids, Connection connection) {
         for (Long id : ids) {
             User user = userRepository.getUserById(connection, id);
-            if (!user.getRole().getName().equals(ROLE_ADMIN_CONSTANT)) {
+            if (!user.getRole().getName().equals(ADMIN_AUTHORITY_CONSTANT)) {
                 userRepository.deleteById(connection, id);
+            }else {
+               throw new NotValidUserException("Not allowed delete this user");
             }
         }
     }

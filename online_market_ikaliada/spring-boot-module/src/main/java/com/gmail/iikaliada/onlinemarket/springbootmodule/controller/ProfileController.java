@@ -3,7 +3,6 @@ package com.gmail.iikaliada.onlinemarket.springbootmodule.controller;
 import com.gmail.iikaliada.onlinemarket.servicemodule.ProfileService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.UserService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.LoginDTO;
-import com.gmail.iikaliada.onlinemarket.servicemodule.model.ProfileDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForProfileDTO;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,12 +40,12 @@ public class ProfileController {
     @PostMapping("/public/users/{id}/profile/update")
     public String updateProfile(@PathVariable("id") Long id,
                                 @Valid @ModelAttribute("user") UserForProfileDTO userForProfileDTO,
-                                Model model, BindingResult bindingResult) {
+                                BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "profile";
         }
-        UserForProfileDTO userForProfileDTO1 = profileService.updateProfile(userForProfileDTO);
-        model.addAttribute("user", userForProfileDTO1);
+        UserForProfileDTO user = profileService.updateProfile(userForProfileDTO);
+        model.addAttribute("user", user);
         return "redirect:/public/users/profile";
     }
 }

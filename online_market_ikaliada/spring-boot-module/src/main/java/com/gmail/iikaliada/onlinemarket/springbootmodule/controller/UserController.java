@@ -32,6 +32,8 @@ public class UserController {
     String emailError;
     @Value("${user.exists.message}")
     String emailInsertError;
+    @Value("${not.allowed.message}")
+    String notAllowedMessage;
 
     private final UserService userService;
     private final UserValidation userValidation;
@@ -73,17 +75,24 @@ public class UserController {
     }
 
     @PostMapping("/private/users/delete")
-    public String deleteUserById(@Nullable @RequestParam("ids") Long[] ids) {
+    public String deleteUserById(@Nullable @RequestParam("ids") Long[] ids, Model model,
+                                 @RequestParam(name = "page", defaultValue = "1") Integer currentPage) {
         if (ids == null) {
             return "redirect:/private/users";
         }
         List<Long> collect = Arrays.stream(ids).collect(Collectors.toList());
-        userService.deleteUserById(collect);
+        try {
+            userService.deleteUserById(collect);
+        } catch (Exception e) {
+            getUsers(model, currentPage);
+            model.addAttribute("notAllowedMessage", notAllowedMessage);
+            return "users";
+        }
         return "redirect:/private/users";
     }
 
     @PostMapping("/private/users/{id}/update")
-    public String updateUsersAuthority(@PathVariable("id") Long id, UserDTO user, Model model, BindingResult result,
+    public String updateUsersAuthority(@PathVariable("id") Long id, UserDTO user,  BindingResult result, Model model,
                                        @RequestParam(name = "page", defaultValue = "1") Integer currentPage) {
         model.addAttribute("user", user);
         userValidation.validate(id, result);

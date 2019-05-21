@@ -20,7 +20,5 @@ public interface UserConverter {
 
     User fromUserForUiDTO(UserForUiDTO userForUiDTO);
 
-    User fromUserForProfileDTO(UserForProfileDTO userForProfileDTO);
-
     UserForProfileDTO toUserForProfileDTO(User user);
 }

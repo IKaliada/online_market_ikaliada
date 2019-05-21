@@ -39,13 +39,13 @@
                 <constraints nullable="true"/>
             </column>
             <column name="email" type="varchar(50)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="password" type="varchar(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="role_id" type="bigint">
-                <constraints foreignKeyName="true" nullable="false"/>
+                <constraints foreignKeyName="true" nullable="true"/>
             </column>
         </createTable>
     </changeSet>
@@ -53,10 +53,10 @@
     <changeSet id="market_2" author="iikaliada@gmail.com">
         <createTable tableName="role">
             <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints primaryKey="true" nullable="true"/>
             </column>
             <column name="name" type="varchar(50)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
         </createTable>
     </changeSet>
@@ -81,13 +81,13 @@
 
     <changeSet author="iikaliada@gmail.com" id="market_6">
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="reviews" onDelete="CASCADE" constraintName="FK_COMMENT"
+                                 baseTableName="reviews" onUpdate="NO ACTION" onDelete="CASCADE" constraintName="FK_COMMENT"
                                  referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
 
     <changeSet author="iikaliada@gmail.com" id="market_7">
         <addForeignKeyConstraint baseColumnNames="role_id"
-                                 baseTableName="user" constraintName="FK_ROLE"
+                                 baseTableName="user" onUpdate="NO ACTION" constraintName="FK_ROLE"
                                  referencedColumnNames="id" referencedTableName="role"/>
     </changeSet>
 
@@ -195,7 +195,7 @@
     </changeSet>
     <changeSet author="iikaliada@gmail.com" id="market_19">
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="articles" constraintName="PK_ARTICLE"
+                                 baseTableName="articles" onDelete="CASCADE" constraintName="PK_ARTICLE"
                                  referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
     <changeSet author="iikaliada@gmail.com" id="market_20">
@@ -205,7 +205,7 @@
     </changeSet>
     <changeSet author="iikaliada@gmail.com" id="market_21">
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="profile" onDelete="CASCADE" constraintName="PK_PROFILE"
+                                 baseTableName="profile" onUpdate="NO ACTION" onDelete="CASCADE" constraintName="PK_PROFILE"
                                  referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
     <changeSet author="iikaliada@gmail.com" id="market_22">
@@ -236,7 +236,7 @@
     </changeSet>
     <changeSet author="iikaliada@gmail.com" id="market_24">
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="comment" constraintName="FK_COMMENT_USER"
+                                 baseTableName="comment" onDelete="CASCADE" constraintName="FK_COMMENT_USER"
                                  referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
     <changeSet author="iikaliada@gmail.com" id="market_25">
@@ -246,11 +246,11 @@
     </changeSet>
     <changeSet author="iikaliada@gmail.com" id="market_26">
         <sql>insert into articles (article, description, date, user_id) values ('Title of article', 'Hibernate loads
-            eagerly fetched associations when it loads an entity.', now(), 2)
+            eagerly fetched associations when it loads an entity.', now(), 3)
         </sql>
     </changeSet>
     <changeSet author="iikaliada@gmail.com" id="market_27">
-        <sql>insert into comment (content, date, user_id, article_id) values ('First comment', now(), 2, 1)
+        <sql>insert into comment (content, date, user_id, article_id) values ('First comment', now(), 3, 1)
         </sql>
     </changeSet>
     <changeSet author="iikaliada@gmail.com" id="market_28">

@@ -69,14 +69,14 @@ public class ArticleController {
 
     @PostMapping("/articles/article/find")
     public String findArticleById(@RequestParam("keyWord") String keyWord, Model model) {
-        ArticleForPageDTO article = null;
+        List<ArticleForPageDTO> articles = null;
         try {
-            article = articleService.getArticleByKeyWord(keyWord);
+            articles = articleService.getArticleByKeyWord(keyWord);
         } catch (Exception e) {
             model.addAttribute("notFoundMessage", notFoundMessage);
             return "articles";
         }
-        model.addAttribute("article", article);
-        return "article";
+        model.addAttribute("articles", articles);
+        return "articles";
     }
 }

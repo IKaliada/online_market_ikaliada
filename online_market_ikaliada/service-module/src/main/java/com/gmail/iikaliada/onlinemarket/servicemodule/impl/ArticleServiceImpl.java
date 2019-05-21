@@ -5,6 +5,7 @@ import com.gmail.iikaliada.onlinemarket.repositorymodule.model.Article;
 import com.gmail.iikaliada.onlinemarket.servicemodule.ArticleService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.converter.ArticleConverter;
 import com.gmail.iikaliada.onlinemarket.servicemodule.exception.ConnectionServiceStateException;
+import com.gmail.iikaliada.onlinemarket.servicemodule.exception.UserServiceTransactionRollbackedException;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ArticleDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ArticleForPageDTO;
 import org.slf4j.Logger;
@@ -34,15 +35,36 @@ public class ArticleServiceImpl implements ArticleService {
         this.articleConverter = articleConverter;
     }
 
+//    @Override
+//    @Transactional
+//    public List<ArticleDTO> getArticle(int currentPage) {
+//        int offset = LIMIT * currentPage;
+//        currentPage = currentPage - 1;
+//        List<Article> articles = articleRepository.findAll(currentPage, offset);
+//        return articles.stream()
+//                .map(articleConverter::toArticleDTO)
+//                .collect(Collectors.toList());
+//    }
+
     @Override
-    @Transactional
     public List<ArticleDTO> getArticle(int currentPage) {
-        int offset = LIMIT * currentPage;
-        currentPage = currentPage - 1;
-        List<Article> articles = articleRepository.findAll(currentPage, offset);
-        return articles.stream()
-                .map(articleConverter::toArticleDTO)
-                .collect(Collectors.toList());
+        try (Connection connection = articleRepository.getConnection()) {
+            try {
+                connection.setAutoCommit(false);
+                List<Article> articles = articleRepository.getArticles(connection, currentPage);
+                connection.commit();
+                return articles.stream()
+                        .map(articleConverter::toArticleDTO)
+                        .collect(Collectors.toList());
+            } catch (SQLException e) {
+                connection.rollback();
+                logger.error(e.getMessage(), e);
+                throw new UserServiceTransactionRollbackedException(TRANSACTION_ROLLBACK_MESSAGE);
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+            throw new ConnectionServiceStateException(CONNECTION_SERVICE_MESSAGE);
+        }
     }
 
     @Override
@@ -64,14 +86,17 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleForPageDTO getArticleByKeyWord(String keyWord) {
+    public List<ArticleForPageDTO> getArticleByKeyWord(String keyWord) {
         try (Connection connection = articleRepository.getConnection()) {
             connection.setAutoCommit(false);
             try {
-                Article article = articleRepository.getArticleByKeyWord(connection, keyWord);
-                ArticleForPageDTO articleForPageDTO = articleConverter.toArticleForPageDTO(article);
+                List<Article> articles = articleRepository.getArticleByKeyWord(connection, keyWord);
+
+                List<ArticleForPageDTO> articleForPageDTOList = articles.stream()
+                        .map(articleConverter::toArticleForPageDTO)
+                        .collect(Collectors.toList());
                 connection.commit();
-                return articleForPageDTO;
+                return articleForPageDTOList;
             } catch (SQLException e) {
                 connection.rollback();
                 logger.error(e.getMessage(), e);

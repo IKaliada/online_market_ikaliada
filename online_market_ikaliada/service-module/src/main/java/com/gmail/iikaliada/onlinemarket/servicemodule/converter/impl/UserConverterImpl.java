@@ -85,20 +85,11 @@ public class UserConverterImpl implements UserConverter {
     }
 
     @Override
-    public User fromUserForProfileDTO(UserForProfileDTO userForProfileDTO) {
-        User user = new User();
-        user.setId(userForProfileDTO.getId());
-        user.setName(userForProfileDTO.getName());
-        user.setLastname(userForProfileDTO.getLastname());
-        user.setPassword(userForProfileDTO.getPassword());
-        return user;
-    }
-
-    @Override
     public UserForProfileDTO toUserForProfileDTO(User user) {
         UserForProfileDTO userForProfileDTO = new UserForProfileDTO();
         userForProfileDTO.setId(user.getId());
         userForProfileDTO.setName(user.getName());
+        userForProfileDTO.setMiddlename(user.getMiddlename());
         userForProfileDTO.setLastname(user.getLastname());
         userForProfileDTO.setPassword(user.getPassword());
         userForProfileDTO.setProfileDTO(profileConverter.toProfileDTO(user.getProfile()));

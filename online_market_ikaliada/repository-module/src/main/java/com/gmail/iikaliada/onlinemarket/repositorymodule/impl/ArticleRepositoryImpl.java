@@ -26,24 +26,71 @@ public class ArticleRepositoryImpl extends GenericRepositoryImpl<Long, Article> 
 
     private final static Logger logger = LoggerFactory.getLogger(ArticleRepositoryImpl.class);
 
+    private static final int LIMIT = 10;
+
     @Override
-    public Article getArticleByKeyWord(Connection connection, String keyWord) {
+    public List<Article> getArticleByKeyWord(Connection connection, String keyWord) {
         String keyWordQuery = "SELECT a.*, u.name, u.lastname, us.name, us.lastname, " +
                 "c.id as comment_id, c.date as comment_date, c.content " +
                 "FROM articles a JOIN user u ON a.user_id = u.id JOIN comment c ON a.id = c.article_id " +
                 "JOIN user us ON c.user_id = us.id WHERE MATCH (description) AGAINST (?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(keyWordQuery)) {
             preparedStatement.setString(1, keyWord);
+            List<Article> articles = new ArrayList<>();
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return getArticle(resultSet);
+                while (resultSet.next()) {
+                    articles.add(getArticle(resultSet));
                 }
             }
+            return articles;
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
             throw new IllegalFormatStatementRepositoryException(STATEMENT_REPOSITORY_MESSAGE + keyWordQuery);
         }
-        return null;
+    }
+
+    @Override
+    public List<Article> getArticles(Connection connection, Integer currentPage) {
+        String articleByIdQuery = "SELECT a.id, a.article, SUBSTRING(a.description, 1, 100), " +
+                "a.date, a.user_id, u.name, u.lastname FROM articles a " +
+                "JOIN user u ON a.user_id = u.id ORDER BY date DESC LIMIT ? OFFSET ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(articleByIdQuery)) {
+            preparedStatement.setInt(1, LIMIT);
+            preparedStatement.setInt(2, getOffset(currentPage));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<Article> articles = new ArrayList<>();
+            while (resultSet.next()) {
+                Article article = getArticleForPage(resultSet);
+                articles.add(article);
+            }
+            return articles;
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+            throw new IllegalFormatStatementRepositoryException(STATEMENT_REPOSITORY_MESSAGE + articleByIdQuery);
+        }
+    }
+
+    private Article getArticleForPage(ResultSet resultSet) {
+        try {
+            Article article = new Article();
+            article.setId(resultSet.getLong("id"));
+            article.setArticle(resultSet.getString("article"));
+            article.setDescription(resultSet.getString("SUBSTRING(a.description, 1, 100)"));
+            article.setDate(resultSet.getTimestamp("date"));
+            User user = new User();
+            user.setId(resultSet.getLong("user_id"));
+            user.setName(resultSet.getString("name"));
+            user.setLastname(resultSet.getString("lastname"));
+            article.setUser(user);
+            return article;
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            throw new IllegalDatabaseStateException(DATABASE_STATE_MESSAGE);
+        }
+    }
+
+    private int getOffset(Integer currentPage) {
+        return (currentPage - 1) * LIMIT;
     }
 
     private Article getArticle(ResultSet resultSet) {
