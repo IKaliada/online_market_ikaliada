@@ -1,11 +1,21 @@
 package com.gmail.iikaliada.onlinemarket.servicemodule.model;
 
+import com.gmail.iikaliada.onlinemarket.servicemodule.validator.LatinLetterValidator;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class ProfileDTO {
 
     private Long id;
+    @NotNull
+    @Size(min = 2, max = 20)
+    @LatinLetterValidator
     private String address;
+    @NotNull
+    @Size(min = 13, max = 14)
     private String telephone;
-    private UserDTO userDTO;
+    private UserForProfileDTO userForProfileDTO;
 
     public Long getId() {
         return id;
@@ -31,11 +41,11 @@ public class ProfileDTO {
         this.telephone = telephone;
     }
 
-    public UserDTO getUserDTO() {
-        return userDTO;
+    public UserForProfileDTO getUserForProfileDTO() {
+        return userForProfileDTO;
     }
 
-    public void setUserDTO(UserDTO userDTO) {
-        this.userDTO = userDTO;
+    public void setUserForProfileDTO(UserForProfileDTO userForProfileDTO) {
+        this.userForProfileDTO = userForProfileDTO;
     }
 }

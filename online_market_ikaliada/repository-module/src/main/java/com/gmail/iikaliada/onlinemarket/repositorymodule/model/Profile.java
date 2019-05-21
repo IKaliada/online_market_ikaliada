@@ -1,5 +1,8 @@
 package com.gmail.iikaliada.onlinemarket.repositorymodule.model;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,22 +11,28 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "profile")
+@Table
 public class Profile {
+
+    @GenericGenerator(
+            name = "generator",
+            strategy = "foreign",
+            parameters = @Parameter(name = "property", value = "user"))
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @GeneratedValue(generator = "generator")
+    @Column(unique = true, nullable = false)
     private Long id;
-    @Column(name = "address")
+    @Column
     private String address;
-    @Column(name = "telephone")
+    @Column
     private String telephone;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @PrimaryKeyJoinColumn
     private User user;
 
     public Long getId() {
@@ -65,11 +74,12 @@ public class Profile {
         Profile profile = (Profile) o;
         return Objects.equals(id, profile.id) &&
                 Objects.equals(address, profile.address) &&
-                Objects.equals(telephone, profile.telephone);
+                Objects.equals(telephone, profile.telephone) &&
+                user == profile.user;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, address, telephone);
+        return Objects.hash(id, address, telephone, user);
     }
 }

@@ -43,7 +43,12 @@ public class ReviewControllerTest {
     @Test
     @WithMockUser(authorities = ADMIN_AUTHORITY_CONSTANT)
     public void shouldReturnCommentPage() throws Exception {
-        ReviewDTO reviewDTO = new ReviewDTO(1L, "some text", new Date(), true, userForUiDTO);
+        ReviewDTO reviewDTO = new ReviewDTO();
+        reviewDTO.setId(1L);
+        reviewDTO.setText("some text");
+        reviewDTO.setDate(new Date());
+        reviewDTO.setShown(true);
+        reviewDTO.setUserForUiDTO(userForUiDTO);
         List<ReviewDTO> reviews = Collections.singletonList(reviewDTO);
         int pageSize = 1;
         when(reviewService.getReviews(pageSize)).thenReturn(reviews);

@@ -1,10 +1,11 @@
 package com.gmail.iikaliada.onlinemarket.servicemodule;
 
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ProfileDTO;
+import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForProfileDTO;
 
 public interface ProfileService {
 
-    void updateProfile(ProfileDTO profileDTO);
+    UserForProfileDTO updateProfile(UserForProfileDTO userForProfileDTO);
 
-    ProfileDTO getProfileById(Long id);
+    UserForProfileDTO getProfileById(Long id);
 }

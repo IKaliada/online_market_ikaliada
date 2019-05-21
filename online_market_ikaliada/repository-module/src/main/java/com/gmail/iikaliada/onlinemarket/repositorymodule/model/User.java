@@ -1,5 +1,6 @@
 package com.gmail.iikaliada.onlinemarket.repositorymodule.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,29 +9,35 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "user")
+@Table
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column
     private Long id;
-    @Column(name = "name")
+    @Column
     private String name;
-    @Column(name = "lastname")
+    @Column
     private String lastname;
-    @Column(name = "middlename")
+    @Column
     private String middlename;
-    @Column(name = "email")
+    @Column
     private String email;
-    @Column(name = "password")
+    @Column
     private String password;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     private Role role;
+    @OneToOne(fetch = FetchType.LAZY,
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private Profile profile;
 
     public Long getId() {
         return id;
@@ -88,6 +95,14 @@ public class User {
         this.role = role;
     }
 
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -98,11 +113,12 @@ public class User {
                 Objects.equals(lastname, user.lastname) &&
                 Objects.equals(middlename, user.middlename) &&
                 Objects.equals(email, user.email) &&
-                Objects.equals(password, user.password);
+                Objects.equals(password, user.password) &&
+                profile == user.profile;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, lastname, middlename, email, password);
+        return Objects.hash(id, name, lastname, middlename, email, password, profile);
     }
 }

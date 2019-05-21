@@ -45,10 +45,15 @@ public class UserControllerTest {
         RoleDTO roleDTO = new RoleDTO();
         roleDTO.setId(1L);
         roleDTO.setName(ADMIN_AUTHORITY_CONSTANT);
-        List<UserDTO> users = Collections.singletonList(new UserDTO(1L,
-                "name",
-                "name1",
-                "name2", "email", "password", roleDTO));
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(1L);
+        userDTO.setName("name");
+        userDTO.setMiddlename("middlename");
+        userDTO.setLastname("lastname");
+        userDTO.setEmail("email");
+        userDTO.setPassword("password");
+        userDTO.setRole(roleDTO);
+        List<UserDTO> users = Collections.singletonList(userDTO);
         int pageSize = 1;
         when(userService.getUsers(pageSize)).thenReturn(users);
         this.mockMvc.perform(get("/private/users.html"))

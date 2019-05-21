@@ -51,8 +51,8 @@ public class GenericRepositoryImpl<I, T> implements GenericRepository<I, T> {
     }
 
     @Override
-    public void merge(T entity) {
-        entityManager.merge(entity);
+    public T merge(T entity) {
+        return entityManager.merge(entity);
     }
 
     @Override

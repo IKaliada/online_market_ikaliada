@@ -8,6 +8,7 @@ import com.gmail.iikaliada.onlinemarket.servicemodule.model.ProfileDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ReviewDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.RoleDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserDTO;
+import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForProfileDTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,15 +55,15 @@ public class ProfileControllerTest {
         profileDTO.setId(1L);
         profileDTO.setTelephone("123456");
         profileDTO.setAddress("Belarus");
-        UserDTO userDTO = new UserDTO();
-        userDTO.setName("name");
-        userDTO.setLastname("lastname");
-        userDTO.setPassword("123456");
-        profileDTO.setUserDTO(userDTO);
+        UserForProfileDTO userForProfileDTO = new UserForProfileDTO();
+        userForProfileDTO.setName("name");
+        userForProfileDTO.setLastname("lastname");
+        userForProfileDTO.setPassword("123456");
+        profileDTO.setUserForProfileDTO(userForProfileDTO);
         LoginDTO loginDTO = new LoginDTO();
         loginDTO.setEmail("email");
-        when(userService.getUsersByUsername(userDTO.getEmail())).thenReturn(loginDTO);
-        when(profileService.getProfileById(loginDTO.getId())).thenReturn(profileDTO);
+//        when(userService.getUsersByUsername(userDTO.getEmail())).thenReturn(loginDTO);
+        when(profileService.getProfileById(loginDTO.getId())).thenReturn(userForProfileDTO);
         this.mockMvc.perform(get("/public/users/profile.html"))
                 .andDo(print())
                 .andExpect(status().isOk())

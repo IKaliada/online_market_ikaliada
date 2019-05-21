@@ -9,19 +9,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProfileConverterImpl implements ProfileConverter {
 
-    private final UserConverter userConverter;
-
-    public ProfileConverterImpl(UserConverter userConverter) {
-        this.userConverter = userConverter;
-    }
-
     @Override
     public Profile fromProfileDTO(ProfileDTO profileDTO) {
         Profile profile = new Profile();
         profile.setId(profileDTO.getId());
         profile.setAddress(profileDTO.getAddress());
         profile.setTelephone(profileDTO.getTelephone());
-        profile.setUser(userConverter.fromUserDTO(profileDTO.getUserDTO()));
         return profile;
     }
 
@@ -31,7 +24,6 @@ public class ProfileConverterImpl implements ProfileConverter {
         profileDTO.setId(profile.getId());
         profileDTO.setAddress(profile.getAddress());
         profileDTO.setTelephone(profile.getTelephone());
-        profileDTO.setUserDTO(userConverter.toUserDTO(profile.getUser()));
         return profileDTO;
     }
 }
