@@ -12,13 +12,13 @@ public class MailSenderImpl implements MailSender {
 
     private final JavaMailSender mailSender;
 
+    @Value("${spring.mail.username}")
+    private String username;
+
     @Autowired
     public MailSenderImpl(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
-
-    @Value("${spring.mail.username}")
-    private String username;
 
     public void send(String emailTo, String subject, String message) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();

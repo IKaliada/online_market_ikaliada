@@ -7,7 +7,7 @@
 <h3>Add</h3>
 <form action="#" th:action="@{/private/users/add_user}" th:object="${userDTO}" method="post">
     <table>
-        <div th:if="${emailMessage}" th:utext="${emailMessage}">
+        <div th:if="${emailInsertError}" th:utext="${emailInsertError}">
         </div>
         <tr>
             <td><label>
@@ -47,11 +47,11 @@
             <td>Role:</td>
             <td>
                 <label>
-                    <select th:field="*{role.name}">
-                        <option th:value="'CUSTOMER_USER'" th:text="CUSTOMER_USER"></option>
-                        <option th:value="'SALE_USER'" th:text="SALE_USER"></option>
-                        <option th:value="'SECURE_API_USER'" th:text="SECURE_API_USER"></option>
-                        <option th:value="'ADMINISTRATOR'" th:text="ADMINISTRATOR"></option>
+                    <select th:field="*{role.id}">
+                        <option th:each="role : ${roles}"
+                                th:value="${role.id}"
+                                th:text="${role.name}">Wireframe
+                        </option>
                     </select>
                 </label>
             </td>

@@ -1,6 +1,6 @@
 package com.gmail.iikaliada.onlinemarket.servicemodule.model;
 
-public class UserForReviewDTO {
+public class UserForUiDTO {
 
     private Long id;
     private String name;

@@ -29,23 +29,6 @@ public class UserDTO {
     @NotNull
     private RoleDTO role;
 
-    public UserDTO(Long id, @NotNull @Size(min = 2, max = 20) String name,
-                   @NotNull @Size(min = 2, max = 40) String lastname,
-                   @NotNull @Size(min = 2, max = 40) String middlename,
-                   @NotNull @Size(min = 2, max = 40) String email, String password,
-                   @NotNull RoleDTO role) {
-        this.id = id;
-        this.name = name;
-        this.lastname = lastname;
-        this.middlename = middlename;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
-
-    public UserDTO() {
-    }
-
     public Long getId() {
         return id;
     }
@@ -100,18 +83,5 @@ public class UserDTO {
 
     public void setRole(RoleDTO role) {
         this.role = role;
-    }
-
-    @Override
-    public String toString() {
-        return "UserDTO{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", middlename='" + middlename + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", role=" + role +
-                '}';
     }
 }

@@ -1,8 +1,10 @@
 package com.gmail.iikaliada.onlinemarket.springbootmodule.controller;
 
+import com.gmail.iikaliada.onlinemarket.servicemodule.RoleService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.UserService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.RoleDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserDTO;
+import com.gmail.iikaliada.onlinemarket.springbootmodule.validation.UserValidation;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,13 +29,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
     private MockMvc mockMvc;
 
-    @Mock
     private UserService userService;
+    private UserValidation userValidation;
+    private RoleService roleService;
 
     @Before
     public void init() {
-        UserController controller = new UserController(userService);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        UserController userController = new UserController(userService, userValidation, roleService);
+        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
     }
 
     @Test
@@ -42,10 +45,15 @@ public class UserControllerTest {
         RoleDTO roleDTO = new RoleDTO();
         roleDTO.setId(1L);
         roleDTO.setName(ADMIN_AUTHORITY_CONSTANT);
-        List<UserDTO> users = Collections.singletonList(new UserDTO(1L,
-                "name",
-                "name1",
-                "name2", "email", "password", roleDTO));
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(1L);
+        userDTO.setName("name");
+        userDTO.setMiddlename("middlename");
+        userDTO.setLastname("lastname");
+        userDTO.setEmail("email");
+        userDTO.setPassword("password");
+        userDTO.setRole(roleDTO);
+        List<UserDTO> users = Collections.singletonList(userDTO);
         int pageSize = 1;
         when(userService.getUsers(pageSize)).thenReturn(users);
         this.mockMvc.perform(get("/private/users.html"))

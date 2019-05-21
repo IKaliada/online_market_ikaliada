@@ -10,7 +10,7 @@ public interface ReviewService {
 
     int getTotalPagesForReview();
 
-    void changeStatus(Long ids);
+    void changeStatus(List<ReviewDTO> reviewDTOS);
 
     void deleteReview(Long id);
 }

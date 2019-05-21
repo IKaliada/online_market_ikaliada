@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title><h1>Article</h1></title>
+    <h3><a th:href="@{/home}">Home</a>
+        <a th:href="@{/about}">About</a></h3>
+</head>
+<body>
+<form th:action='@{/articles/article}'
+      method="POST"
+      th:object="${article}">
+    <table border="1" class='table table-sm responsive'>
+        <thead class='thead-default'>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Author</th>
+            <th>Comments</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td hidden th:text=" ${article.id}"></td>
+            <td align="center" width="10%" th:text=" ${article.article}"></td>
+            <td align="center" width="40%" th:text="${article.description}"></td>
+            <td align="center" width="10%" th:text="${article.date}"></td>
+            <td align="center" width="10%">
+                <table>
+                    <tbody>
+                    <tr>
+                        <td th:text="${article.userForUiDTO.name} + ' ' + ${article.userForUiDTO.lastname}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+            <td align="center" width="30%">
+                <table border="1">
+                    <thead>
+                    <tr>
+                        <th>Comment</th>
+                        <th>Date</th>
+                        <th>Author</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="comment : ${article.commentDTOList}">
+                        <td align="center" width="20%" th:text="${comment.content}"></td>
+                        <td align="center" width="5%" th:text="${comment.date}"></td>
+                        <td align="center" width="5%"
+                            th:text="${comment.user.name} + ' ' + ${comment.user.lastname}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

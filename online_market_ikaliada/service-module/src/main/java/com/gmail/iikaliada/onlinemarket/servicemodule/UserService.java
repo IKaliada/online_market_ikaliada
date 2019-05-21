@@ -15,9 +15,11 @@ public interface UserService {
 
     void deleteUserById(List<Long> id);
 
-    String updateUsersRole(Long id, String roleName);
+    String updateUsersRole(Long id, Long roleId);
 
     void updateUserPassword(String email);
 
     int getTotalPages();
+
+    UserDTO getUserById(Long id);
 }

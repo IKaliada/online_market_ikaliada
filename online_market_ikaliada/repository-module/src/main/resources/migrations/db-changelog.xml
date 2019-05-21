@@ -56,7 +56,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(50)">
-                <constraints foreignKeyName="true" nullable="false"/>
+                <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
@@ -87,7 +87,7 @@
 
     <changeSet author="iikaliada@gmail.com" id="market_7">
         <addForeignKeyConstraint baseColumnNames="role_id"
-                                 baseTableName="user" onDelete="CASCADE" constraintName="FK_ROLE"
+                                 baseTableName="user" constraintName="FK_ROLE"
                                  referencedColumnNames="id" referencedTableName="role"/>
     </changeSet>
 
@@ -134,14 +134,16 @@
     </changeSet>
 
     <changeSet author="iikaliada@gmail.com" id="market_13">
-        <sql>insert into user (email, password, role_id) values ('admin@admin.com',
+        <sql>insert into user (name, middlename, lastname, email, password, role_id) values ('Ivan', 'Iosifavich',
+            'Kaliada', 'admin@admin.com',
             '$2a$10$yOiWMdbf/yaOxx8eqs9XtObXTsb7iy8VTQdZpANPUvdJ8yvYKtH7K', (SELECT r.id FROM role r WHERE r.name =
             ('ADMINISTRATOR')))
         </sql>
     </changeSet>
 
     <changeSet author="iikaliada@gmail.com" id="market_14">
-        <sql>insert into user (name, middlename, lastname, email, password, role_id) values ('Ivan', 'Iosifavich', 'Kaliada', 'customer@customer.com',
+        <sql>insert into user (name, middlename, lastname, email, password, role_id) values ('Ivan', 'Iosifavich',
+            'Kaliada', 'customer@customer.com',
             '$2a$10$yOiWMdbf/yaOxx8eqs9XtObXTsb7iy8VTQdZpANPUvdJ8yvYKtH7K', (SELECT r.id FROM role r WHERE r.name =
             ('CUSTOMER_USER')))
         </sql>
@@ -149,6 +151,126 @@
     <changeSet author="iikaliada@gmail.com" id="market_15">
         <sql>insert into reviews (review, shown, date, user_id) values ('first review',
             1, now(), (SELECT u.id FROM user u WHERE u.email = ('customer@customer.com')))
+        </sql>
+    </changeSet>
+    <changeSet id="market_16" author="iikaliada@gmail.com">
+        <createTable tableName="articles">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="article" type="clob">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints foreignKeyName="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="market_17" author="iikaliada@gmail.com">
+        <createTable tableName="profile">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="address" type="varchar(40)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="telephone" type="varchar(40)">
+                <constraints nullable="true"/>online_market_iikaliada
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints foreignKeyName="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_18">
+        <createIndex indexName="FK_ARTICLE" tableName="articles">
+            <column name="id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_19">
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="articles" constraintName="PK_ARTICLE"
+                                 referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_20">
+        <createIndex indexName="FK_PROFILE" tableName="profile">
+            <column name="id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_21">
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="profile" onDelete="CASCADE" constraintName="PK_PROFILE"
+                                 referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_22">
+        <sql>insert into user (name, middlename, lastname, email, password, role_id) values ('Ivan', 'Iosifavich',
+            'Kaliada', 'seller@seller.com',
+            '$2a$10$yOiWMdbf/yaOxx8eqs9XtObXTsb7iy8VTQdZpANPUvdJ8yvYKtH7K', (SELECT r.id FROM role r WHERE r.name =
+            ('SALE_USER')))
+        </sql>
+    </changeSet>
+    <changeSet id="market_23" author="iikaliada@gmail.com">
+        <createTable tableName="comment">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="content" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints foreignKeyName="true" nullable="false"/>
+            </column>
+            <column name="article_id" type="bigint">
+                <constraints foreignKeyName="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_24">
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="comment" constraintName="FK_COMMENT_USER"
+                                 referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_25">
+        <addForeignKeyConstraint baseColumnNames="article_id"
+                                 baseTableName="comment" onDelete="CASCADE" constraintName="FK_COMMENT_ARTICLE"
+                                 referencedColumnNames="id" referencedTableName="articles"/>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_26">
+        <sql>insert into articles (article, description, date, user_id) values ('Title of article', 'Hibernate loads
+            eagerly fetched associations when it loads an entity.', now(), 2)
+        </sql>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_27">
+        <sql>insert into comment (content, date, user_id, article_id) values ('First comment', now(), 2, 1)
+        </sql>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_28">
+        <createIndex indexName="idx_fulltext_comment" tableName="articles">
+            <column name="article(255)"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_29">
+        <sql>ALTER TABLE articles ADD FULLTEXT(description)</sql>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_30">
+        <sql>insert into profile (address, telephone, user_id) values ('Belarus', '+375333255405', 1)
+        </sql>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_31">
+        <sql>insert into profile (address, telephone, user_id) values ('Belarus', '+375333255405', 2)
+        </sql>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_32">
+        <sql>insert into profile (address, telephone, user_id) values ('Belarus', '+375333255405', 3)
         </sql>
     </changeSet>
 </databaseChangeLog>

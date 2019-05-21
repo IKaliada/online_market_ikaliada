@@ -23,7 +23,7 @@ public class HomeController {
         return "about";
     }
 
-    @GetMapping("/403")
+    @GetMapping("/denied")
     public String getAccessDeniedPage() {
         return "denied";
     }
@@ -34,7 +34,8 @@ public class HomeController {
     }
 
     @PostMapping("/login")
-    public String loginUserToSite(@Valid @ModelAttribute("loginDTO") LoginDTO loginDTO, Model model, BindingResult bindingResult) {
+    public String loginUserToSite(@Valid @ModelAttribute("loginDTO") LoginDTO loginDTO,
+                                  Model model, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "login";
         }

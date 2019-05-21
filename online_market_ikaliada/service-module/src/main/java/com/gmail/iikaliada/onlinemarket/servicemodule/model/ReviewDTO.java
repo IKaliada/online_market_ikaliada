@@ -7,34 +7,23 @@ public class ReviewDTO {
     private Long id;
     private String text;
     private Date date;
-    private boolean isShown;
-    private UserForReviewDTO userForReviewDTO;
+    private Boolean shown;
+    private UserForUiDTO userForUiDTO;
 
-    public ReviewDTO(Long id, String text, Date date, boolean isShown, UserForReviewDTO userForReviewDTO) {
-        this.id = id;
-        this.text = text;
-        this.date = date;
-        this.isShown = isShown;
-        this.userForReviewDTO = userForReviewDTO;
+    public UserForUiDTO getUserForUiDTO() {
+        return userForUiDTO;
     }
 
-    public ReviewDTO() {
+    public void setUserForUiDTO(UserForUiDTO userForUiDTO) {
+        this.userForUiDTO = userForUiDTO;
     }
 
-    public UserForReviewDTO getUserForReviewDTO() {
-        return userForReviewDTO;
+    public Boolean getShown() {
+        return shown;
     }
 
-    public void setUserForReviewDTO(UserForReviewDTO userForReviewDTO) {
-        this.userForReviewDTO = userForReviewDTO;
-    }
-
-    public boolean isShown() {
-        return isShown;
-    }
-
-    public void setShown(boolean shown) {
-        isShown = shown;
+    public void setShown(Boolean shown) {
+        this.shown = shown;
     }
 
     public Long getId() {

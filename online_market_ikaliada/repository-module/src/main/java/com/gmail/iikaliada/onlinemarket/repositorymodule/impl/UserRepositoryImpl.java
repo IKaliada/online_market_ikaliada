@@ -17,13 +17,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
-public class UserRepositoryImpl extends ConnectionRepositoryImpl implements UserRepository {
+import static com.gmail.iikaliada.onlinemarket.repositorymodule.constant.LimitConstants.LIMIT;
+import static com.gmail.iikaliada.onlinemarket.repositorymodule.constant.RepositoryConstants.DATABASE_STATE_MESSAGE;
+import static com.gmail.iikaliada.onlinemarket.repositorymodule.constant.RepositoryConstants.STATEMENT_REPOSITORY_MESSAGE;
 
-    private static final Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
-    private static final String DATABASE_STATE_MESSAGE = "Database exception during getting user";
-    private static final String STATEMENT_REPOSITORY_MESSAGE = "Cannot execute SQL query ";
-    private static final int LIMIT = 10;
+@Repository
+public class UserRepositoryImpl extends GenericRepositoryImpl<Long, User> implements UserRepository {
+
+    private final static Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
 
     @Override
     public User getUsersByUsername(Connection connection, String email) {
@@ -31,34 +32,16 @@ public class UserRepositoryImpl extends ConnectionRepositoryImpl implements User
                 "ON u.role_id = r.id WHERE email = ? ";
         try (PreparedStatement preparedStatement = connection.prepareStatement(userQuery)) {
             preparedStatement.setString(1, email);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                return getUserForLogin(resultSet);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return getUserForLogin(resultSet);
+                }
             }
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
             throw new IllegalFormatStatementRepositoryException(STATEMENT_REPOSITORY_MESSAGE + userQuery);
         }
         return null;
-    }
-
-    @Override
-    public List<User> getUsers(Connection connection, int pageSize) {
-        List<User> users = new ArrayList<>();
-        String userQuery = "SELECT u.*, r.name as role_name  FROM user u JOIN role r ON u.role_id = r.id ORDER BY u.email LIMIT ? OFFSET ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(userQuery)) {
-            preparedStatement.setInt(1, LIMIT);
-            preparedStatement.setInt(2, getOffset(pageSize));
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                User user = getUser(resultSet);
-                users.add(user);
-            }
-            return users;
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new IllegalFormatStatementRepositoryException(STATEMENT_REPOSITORY_MESSAGE + userQuery);
-        }
     }
 
     @Override
@@ -93,27 +76,10 @@ public class UserRepositoryImpl extends ConnectionRepositoryImpl implements User
     }
 
     @Override
-    public void addUser(Connection connection, User user) {
-        String userQuery = "INSERT INTO user (name, lastname, middlename, email, password, role_id) VALUES (?, ?, ?, ?, ?, (SELECT r.id FROM role r WHERE r.name = ?))";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(userQuery)) {
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getLastname());
-            preparedStatement.setString(3, user.getMiddlename());
-            preparedStatement.setString(4, user.getEmail());
-            preparedStatement.setString(5, user.getPassword());
-            preparedStatement.setString(6, user.getRole().getName());
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new IllegalFormatStatementRepositoryException(STATEMENT_REPOSITORY_MESSAGE + userQuery);
-        }
-    }
-
-    @Override
-    public void updateUsersRole(Connection connection, Long id, String roleName) {
-        String updateUsersRoleQuery = "UPDATE user SET role_id = (SELECT id FROM role where name = ?) WHERE id = ?";
+    public void updateUsersRole(Connection connection, Long id, Long roleId) {
+        String updateUsersRoleQuery = "UPDATE user SET role_id = ? WHERE user.id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(updateUsersRoleQuery)) {
-            preparedStatement.setString(1, roleName);
+            preparedStatement.setLong(1, roleId);
             preparedStatement.setLong(2, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -137,7 +103,6 @@ public class UserRepositoryImpl extends ConnectionRepositoryImpl implements User
         }
         return null;
     }
-
 
     @Override
     public int getTotalPagesForUser(Connection connection) {
@@ -196,7 +161,7 @@ public class UserRepositoryImpl extends ConnectionRepositoryImpl implements User
         }
     }
 
-    private int getOffset(int pageSize) {
+    private int getOffsetForUserPages(int pageSize) {
         return (pageSize - 1) * LIMIT;
     }
 }
