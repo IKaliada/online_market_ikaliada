@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public class UserRepositoryImpl extends GenericRepositoryImpl<Long, User> implements UserRepository {
 
+
     @Override
     @SuppressWarnings("unchecked")
     public List<User> getUsers(int offset, int limit) {

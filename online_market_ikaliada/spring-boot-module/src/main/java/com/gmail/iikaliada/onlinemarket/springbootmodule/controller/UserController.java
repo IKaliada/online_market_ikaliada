@@ -1,6 +1,5 @@
 package com.gmail.iikaliada.onlinemarket.springbootmodule.controller;
 
-
 import com.gmail.iikaliada.onlinemarket.servicemodule.RoleService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.UserService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.RoleDTO;
@@ -17,15 +16,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Controller
 public class UserController {
+
     @Value("${failed.update.message}")
     String emailError;
     @Value("${user.exists.message}")
@@ -135,6 +133,11 @@ public class UserController {
     }
 
     private void getUsersRole(Model model) {
+        List<RoleDTO> roles = roleService.getRoles();
+        model.addAttribute("roles", roles);
+    }
+
+    private void getRoleForController(Model model) {
         List<RoleDTO> roles = roleService.getRoles();
         model.addAttribute("roles", roles);
     }

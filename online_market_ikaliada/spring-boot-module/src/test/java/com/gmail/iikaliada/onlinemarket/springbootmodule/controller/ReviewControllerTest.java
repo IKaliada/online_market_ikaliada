@@ -55,7 +55,7 @@ public class ReviewControllerTest {
         reviewDTOList.setReviewDTOList(reviews);
         int pageSize = 1;
         when(reviewService.getReviews(pageSize)).thenReturn(reviews);
-        this.mockMvc.perform(get("/private/review.html"))
+        this.mockMvc.perform(get("/private/users/review.html"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("review"));

@@ -2,7 +2,6 @@ package com.gmail.iikaliada.onlinemarket.servicemodule.model;
 
 import com.gmail.iikaliada.onlinemarket.servicemodule.validator.LatinLetterValidator;
 import com.gmail.iikaliada.onlinemarket.servicemodule.validator.PhoneValidator;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 

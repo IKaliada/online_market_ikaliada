@@ -24,4 +24,5 @@ public interface UserConverter {
     User fromUserForArticleDTO(UserForArticleDTO userForArticleDTO);
 
     UserForArticleDTO toUserForArticleDTO(User user);
+
 }

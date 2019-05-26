@@ -16,14 +16,6 @@ public class ReviewConverterImpl implements ReviewConverter {
     }
 
     @Override
-    public Review fromReviewDTO(ReviewDTO reviewDTO) {
-        Review review = new Review();
-        review.setId(reviewDTO.getId());
-        review.setShown(reviewDTO.getShown());
-        return review;
-    }
-
-    @Override
     public ReviewDTO toReviewDTO(Review review) {
         ReviewDTO reviewDTO = new ReviewDTO();
         reviewDTO.setId(review.getId());

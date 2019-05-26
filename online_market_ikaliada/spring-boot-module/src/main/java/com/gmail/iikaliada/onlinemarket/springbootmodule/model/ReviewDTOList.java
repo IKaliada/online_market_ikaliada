@@ -1,7 +1,6 @@
 package com.gmail.iikaliada.onlinemarket.springbootmodule.model;
 
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ReviewDTO;
-
 import java.util.ArrayList;
 import java.util.List;
 

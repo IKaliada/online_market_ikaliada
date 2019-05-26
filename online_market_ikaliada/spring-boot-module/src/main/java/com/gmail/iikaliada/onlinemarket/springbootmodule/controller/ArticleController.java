@@ -30,6 +30,7 @@ public class ArticleController {
     @Value("${delete.comment.message}")
     String deleteCommentMessage;
 
+
     private final ArticleService articleService;
 
     @Autowired
@@ -40,6 +41,7 @@ public class ArticleController {
     @GetMapping("/articles")
     public String getArticles(
             @RequestParam(name = "page", defaultValue = "1") Integer currentPage, Model model) {
+
         model.addAttribute("currentPage", currentPage);
         List<ArticleDTO> articles = articleService.getArticle(currentPage);
         int totalPage = articleService.getTotalPages();
@@ -64,6 +66,7 @@ public class ArticleController {
     }
 
     @GetMapping("/articles/article/{id}")
+
     public String showArticleById(@PathVariable("id") Long id, Model model) {
         ArticleForPageDTO article = articleService.getArticleById(id);
         model.addAttribute("article", article);

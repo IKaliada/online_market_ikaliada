@@ -35,15 +35,6 @@ public class UserConverterImpl implements UserConverter {
     }
 
     @Override
-    public User fromLoginDTO(LoginDTO loginDTO) {
-        User user = new User();
-        user.setId(loginDTO.getId());
-        user.setPassword(loginDTO.getPassword());
-        user.setEmail(loginDTO.getEmail());
-        return user;
-    }
-
-    @Override
     public UserDTO toUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());

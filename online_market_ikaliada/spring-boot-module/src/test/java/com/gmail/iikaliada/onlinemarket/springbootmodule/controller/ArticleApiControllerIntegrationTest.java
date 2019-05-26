@@ -59,6 +59,7 @@ public class ArticleApiControllerIntegrationTest {
     @Test
     public void shouldGetStatus200ForArticleApiWhenGetArticle() throws Exception {
         mvc.perform(get("/api/v1/articles/article/1")
+
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content("{\"article\": \"New Article\",\n" +
                         "\"description\": \"I don't now what i'm doing\",\n" +

@@ -18,3 +18,4 @@ public class RoleRepositoryImpl extends GenericRepositoryImpl<Long, Role> implem
         return q.getResultList();
     }
 }
+

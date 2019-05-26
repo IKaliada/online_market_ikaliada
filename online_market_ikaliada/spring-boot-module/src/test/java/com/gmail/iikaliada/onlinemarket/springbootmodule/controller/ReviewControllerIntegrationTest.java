@@ -49,6 +49,6 @@ public class ReviewControllerIntegrationTest {
     public void shouldGetCommentPageWhenDeleteComment() throws Exception {
         this.mockMvc.perform(post("/private/review/1/delete"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/private/review"));
+                .andExpect(redirectedUrl("/private/users/comment"));
     }
 }
