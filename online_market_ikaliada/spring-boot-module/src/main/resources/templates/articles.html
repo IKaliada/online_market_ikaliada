@@ -1,10 +1,12 @@
 <!DOCTYPE HTML>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title><h1>Article</h1></title>
     <h3><a th:href="@{/home}">Home</a> <a th:href="@{/about}">About</a></h3>
     <form action="#" th:action="@{/articles/article/find}" method="post">
         <div th:if="${notFoundMessage}" th:utext="${notFoundMessage}"></div>
+        <div th:if="${deleteCommentMessage}" th:utext="${deleteCommentMessage}"></div>
         <td><label>
             <input type="text" th:name="keyWord"/>
         </label></td>
@@ -12,30 +14,42 @@
     </form>
 </head>
 <body>
-<table border="1" class='table table-sm responsive'>
-    <thead class='thead-default'>
-    <tr>
-        <th>Aritcle</th>
-        <th>Description</th>
-        <th>Date</th>
-        <th>Author</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="article : ${articles}">
-        <td width="5%" align="center" th:text="${article.article}"></td>
-        <td width="20%" align="center">
-            <form action="#" th:action='@{/articles/article/{id}/(id=${article.id})}' method="post">
+<form th:action="@{/articles/article/delete}" method="post">
+    <table border="1">
+        <thead>
+        <tr>
+            <div sec:authorize="hasAuthority('SALE_USER')">
+                <th></th>
+            </div>
+            <th>Aritcle</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Author</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="article : ${articles}">
+            <div sec:authorize="hasAuthority('SALE_USER')">
+                <td width="1%" align="center">
+                    <input type="checkbox" id="ids" th:name="ids" th:value="${article.id}"/>
+                </td>
+            </div>
+            <td width="5%" align="center" th:text="${article.article}"></td>
+            <td width="10%" align="center">
                 <span th:text="${article.description}"></span>
-                <input type="submit" value="read more">
-            </form>
-        </td>
-        <td width="5%" align="center" th:text="${article.date}"></td>
-        <td width="5%" align="center"
-            th:text="${article.userForUiDTO.name} + ' ' + ${article.userForUiDTO.lastname}"></td>
-    </tr>
-    </tbody>
-</table>
+                <a th:href="${'/articles/article/' + article.id}">read more</a>
+            </td>
+            <td width="5%" align="center" th:text="${article.date}"></td>
+            <td width="5%" align="center"
+                th:text="${article.userForUiDTO.name} + ' ' + ${article.userForUiDTO.lastname}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div sec:authorize="hasAuthority('SALE_USER')"><input type="submit" value="DELETE"/></div>
+</form>
+<form th:action="@{/articles/new/article}">
+    <div sec:authorize="hasAuthority('SALE_USER')"><input type="submit" value="New Article"/></div>
+</form>
 <div class="pagination-div">
             <span th:if="${currentPage>1}">
                 <a th:href="@{/articles(size=${totalPage},page=${previousPage})}">Previous</a>

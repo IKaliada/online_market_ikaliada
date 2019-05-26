@@ -8,11 +8,15 @@
 </head>
 <body>
 <h3>Profile</h3>
-<form action="#" th:action="@{/public/users/{id}/profile/update(id=${user.id})}" th:object="${user}" method="post">
+<form action="#" th:action="@{/public/users/profile/update}" th:object="${user}" method="post">
     <table>
         <tr>
             <td><label>
                 <input hidden type="text" th:field="*{profileDTO.id}"/>
+            </label>
+            </td>
+            <td><label>
+                <input hidden type="text" th:field="*{id}"/>
             </label></td>
         </tr>
         <tr>
@@ -48,7 +52,9 @@
             <td><label>
                 <input type="text" th:field="*{profileDTO.telephone}" th:placeholder="*{profileDTO.telephone}"/>
             </label></td>
-            <td th:if="${#fields.hasErrors('profileDTO.telephone')}" th:errors="*{profileDTO.telephone}">Telephone Error</td>
+            <td th:if="${#fields.hasErrors('profileDTO.telephone')}" th:errors="*{profileDTO.telephone}">Telephone
+                Error
+            </td>
         </tr>
         <tr>
             <td>Password:</td>

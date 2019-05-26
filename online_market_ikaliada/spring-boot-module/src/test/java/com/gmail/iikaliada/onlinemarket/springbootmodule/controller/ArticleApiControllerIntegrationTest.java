@@ -39,20 +39,26 @@ public class ArticleApiControllerIntegrationTest {
     }
 
     @Test
+    public void shouldGetStatusOkForArticleApiWhenGetById() throws Exception {
+        mvc.perform(get("/api/v1/articles/article/1"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void shouldSaveSucceedWith200ForArticleApi() throws Exception {
         mvc.perform(post("/api/v1/articles/article")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content("[{'article':'New Article'" +
-                        ",'description':'I don't now what i'm doing'" +
-                        ", 'date':'now()'" +
-                        ", 'userForUiDTO':['name':'Igar'" +
-                        ", 'lastname': 'Kaliada']}]"))
+                .content("{\"article\":\"New Article\"\n" +
+                        ",\"description\":\"I don't now what i'm doing\"\n" +
+                        ", \"date\":\"2019-05-19T14:42:31+03:00\"\n" +
+                        ", \"userForUiDT\":{\"name\":\"Igar\"\n" +
+                        ", \"lastname\": \"Qwerty\"}}"))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void shouldGetStatus200ForArticleApiWhenGetArticle() throws Exception {
-        mvc.perform(post("/api/v1/articles/article/1")
+        mvc.perform(get("/api/v1/articles/article/1")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content("{\"article\": \"New Article\",\n" +
                         "\"description\": \"I don't now what i'm doing\",\n" +
@@ -64,7 +70,6 @@ public class ArticleApiControllerIntegrationTest {
                         "\"date\": \"2019-05-19T14:42:31+03:00\",\n" +
                         "\"user_id\": 1, \n" +
                         "\"article_id\": 1}}"))
-
                 .andExpect(status().isOk());
     }
 
@@ -73,5 +78,4 @@ public class ArticleApiControllerIntegrationTest {
         mvc.perform(delete("/api/v1/articles/article/1"))
                 .andExpect(status().isOk());
     }
-
 }

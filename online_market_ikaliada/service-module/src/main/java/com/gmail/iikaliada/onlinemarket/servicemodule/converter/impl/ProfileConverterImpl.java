@@ -2,7 +2,6 @@ package com.gmail.iikaliada.onlinemarket.servicemodule.converter.impl;
 
 import com.gmail.iikaliada.onlinemarket.repositorymodule.model.Profile;
 import com.gmail.iikaliada.onlinemarket.servicemodule.converter.ProfileConverter;
-import com.gmail.iikaliada.onlinemarket.servicemodule.converter.UserConverter;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ProfileDTO;
 import org.springframework.stereotype.Component;
 

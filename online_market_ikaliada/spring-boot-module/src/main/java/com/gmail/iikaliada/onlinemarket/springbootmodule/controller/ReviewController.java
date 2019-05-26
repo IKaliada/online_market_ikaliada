@@ -15,6 +15,7 @@ import java.util.List;
 
 @Controller
 public class ReviewController {
+
     private final ReviewService reviewService;
 
     public ReviewController(ReviewService reviewService) {
@@ -30,8 +31,6 @@ public class ReviewController {
         int totalPage = reviewService.getTotalPagesForReview();
         ReviewDTOList reviewDTOList = new ReviewDTOList();
         reviewDTOList.setReviewDTOList(reviews);
-        int size = 10;
-        model.addAttribute("size", size);
         model.addAttribute("reviews", reviewDTOList);
         model.addAttribute("totalPage", totalPage);
         if (currentPage > 1) {
@@ -51,12 +50,12 @@ public class ReviewController {
     }
 
     @PostMapping("/private/review/changeStatus")
-    public String changeStatus(@ModelAttribute("reviewDTOList") ReviewDTOList reviewDTOList) {
+    public String changeStatus(@ModelAttribute("reviews") ReviewDTOList reviewDTOList) {
         reviewService.changeStatus(reviewDTOList.getReviewDTOList());
         return "redirect:/private/review";
     }
 
-    @PostMapping("/private/review/{id}")
+    @PostMapping("/private/review/{id}/delete")
     public String changePassword(@PathVariable("id") Long id) {
         reviewService.deleteReview(id);
         return "redirect:/private/review";

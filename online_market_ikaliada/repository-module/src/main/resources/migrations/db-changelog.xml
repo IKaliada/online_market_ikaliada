@@ -81,7 +81,8 @@
 
     <changeSet author="iikaliada@gmail.com" id="market_6">
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="reviews" onUpdate="NO ACTION" onDelete="CASCADE" constraintName="FK_COMMENT"
+                                 baseTableName="reviews" onUpdate="NO ACTION" onDelete="CASCADE"
+                                 constraintName="FK_COMMENT"
                                  referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
 
@@ -205,7 +206,8 @@
     </changeSet>
     <changeSet author="iikaliada@gmail.com" id="market_21">
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="profile" onUpdate="NO ACTION" onDelete="CASCADE" constraintName="PK_PROFILE"
+                                 baseTableName="profile" onUpdate="NO ACTION" onDelete="CASCADE"
+                                 constraintName="PK_PROFILE"
                                  referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
     <changeSet author="iikaliada@gmail.com" id="market_22">
@@ -272,5 +274,24 @@
     <changeSet author="iikaliada@gmail.com" id="market_32">
         <sql>insert into profile (address, telephone, user_id) values ('Belarus', '+375333255405', 3)
         </sql>
+    </changeSet>
+    <changeSet id="market_33" author="iikaliada@gmail.com">
+        <createTable tableName="item">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="DECIMAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unique_number" type="varchar(38)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(200)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
     </changeSet>
 </databaseChangeLog>

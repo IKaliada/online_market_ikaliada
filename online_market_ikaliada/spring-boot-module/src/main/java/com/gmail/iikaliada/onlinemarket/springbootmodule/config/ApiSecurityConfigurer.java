@@ -30,10 +30,13 @@ public class ApiSecurityConfigurer extends WebSecurityConfigurerAdapter {
     }
 
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.antMatcher("/api/v1/private/users/**").antMatcher("/api/v1/articles/**")
+        httpSecurity
+                .antMatcher("/api/v1/private/users/**")
+                .antMatcher("/api/v1/articles/**")
+                .antMatcher("/api/v1/private/items/**")
                 .authorizeRequests()
                 .anyRequest()
-                .hasRole(SECURE_API_AUTHORITY_CONSTANT)
+                .hasAuthority(SECURE_API_AUTHORITY_CONSTANT)
                 .and()
                 .httpBasic()
                 .and()

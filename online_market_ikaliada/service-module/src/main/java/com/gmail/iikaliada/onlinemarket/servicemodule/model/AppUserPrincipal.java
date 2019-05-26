@@ -16,7 +16,7 @@ public class AppUserPrincipal implements UserDetails {
     public AppUserPrincipal(LoginDTO loginDTO) {
         this.loginDTO = loginDTO;
         this.grantedAuthorities = new HashSet<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(loginDTO.getRole().getName()));
+        grantedAuthorities.add(new SimpleGrantedAuthority(loginDTO.getRoleDTO().getName()));
     }
 
     @Override

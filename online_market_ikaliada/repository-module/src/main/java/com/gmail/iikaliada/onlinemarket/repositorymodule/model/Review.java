@@ -15,14 +15,13 @@ import java.util.Objects;
 @Entity
 @Table(name = "reviews")
 public class Review {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long id;
     @Column(name = "review")
     private String text;
-    @Column(name = "date")
+    @Column
     private Date date;
     @Column(name = "shown")
     private boolean isShown;

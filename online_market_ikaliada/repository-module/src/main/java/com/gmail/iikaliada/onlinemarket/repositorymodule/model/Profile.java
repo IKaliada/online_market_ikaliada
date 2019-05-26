@@ -16,7 +16,6 @@ import java.util.Objects;
 @Entity
 @Table
 public class Profile {
-
     @GenericGenerator(
             name = "generator",
             strategy = "foreign",

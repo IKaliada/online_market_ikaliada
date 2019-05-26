@@ -61,4 +61,23 @@ public class UserControllerIntegrationTest {
                         .is3xxRedirection())
                 .andExpect(redirectedUrl("/private/users"));
     }
+
+    @Test
+    @WithMockUser(authorities = ADMIN_AUTHORITY_CONSTANT)
+    public void shouldReturnRedirectedPageWhenChangePassword() throws Exception {
+        this.mockMvc.perform(post("/private/users/{1}/password", 1))
+                .andDo(print())
+                .andExpect(status()
+                        .isOk());
+    }
+
+    @Test
+    @WithMockUser(authorities = ADMIN_AUTHORITY_CONSTANT)
+    public void shouldReturnRedirectedPageWhenAddUser() throws Exception {
+        this.mockMvc.perform(post("/private/users/add_user"))
+                .andDo(print())
+                .andExpect(status()
+                        .is3xxRedirection())
+                .andExpect(redirectedUrl("/private/users"));
+    }
 }

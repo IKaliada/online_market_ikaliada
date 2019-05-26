@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title><h1>Article</h1></title>
+    <h3><a th:href="@{/home}">Home</a>
+        <a th:href="@{/about}">About</a></h3>
+</head>
+<body>
+<form th:action='@{/articles/new/article}'
+      method="POST"
+      th:object="${article}">
+    <label>
+        <input hidden type="text" th:field="*{id}"/>
+    </label>
+    <table width="80%">
+        <thead class='thead-default'>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td width="10%">
+                <label>
+                    <textarea rows="10" cols="40" th:field="*{article}"></textarea></p>
+                </label>
+            </td>
+            <td th:if="${#fields.hasErrors('article')}" th:errors="*{article}">Article Error</td>
+            <td width="20%">
+                <label>
+                    <textarea rows="10" cols="80" th:field="*{description}"></textarea></p>
+                </label>
+            </td>
+            <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description Error</td>
+        </tr>
+        </tbody>
+    </table>
+    <input type="submit" value="SAVE"/>
+</form>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

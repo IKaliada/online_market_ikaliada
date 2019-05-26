@@ -3,6 +3,7 @@ package com.gmail.iikaliada.onlinemarket.springbootmodule.controller;
 import com.gmail.iikaliada.onlinemarket.servicemodule.ReviewService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ReviewDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForUiDTO;
+import com.gmail.iikaliada.onlinemarket.springbootmodule.model.ReviewDTOList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,11 +23,11 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ReviewControllerTest {
+
     private MockMvc mockMvc;
     @Mock
     private ReviewService reviewService;
@@ -50,12 +51,13 @@ public class ReviewControllerTest {
         reviewDTO.setShown(true);
         reviewDTO.setUserForUiDTO(userForUiDTO);
         List<ReviewDTO> reviews = Collections.singletonList(reviewDTO);
+        ReviewDTOList reviewDTOList = new ReviewDTOList();
+        reviewDTOList.setReviewDTOList(reviews);
         int pageSize = 1;
         when(reviewService.getReviews(pageSize)).thenReturn(reviews);
-        this.mockMvc.perform(get("/private/users/review.html"))
+        this.mockMvc.perform(get("/private/review.html"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("reviews", reviews))
                 .andExpect(forwardedUrl("review"));
     }
 }

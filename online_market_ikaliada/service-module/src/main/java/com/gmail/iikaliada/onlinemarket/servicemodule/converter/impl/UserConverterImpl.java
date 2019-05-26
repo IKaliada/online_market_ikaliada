@@ -6,6 +6,7 @@ import com.gmail.iikaliada.onlinemarket.servicemodule.converter.RoleConverter;
 import com.gmail.iikaliada.onlinemarket.servicemodule.converter.UserConverter;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.LoginDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserDTO;
+import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForArticleDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForProfileDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForUiDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class UserConverterImpl implements UserConverter {
         loginDTO.setId(user.getId());
         loginDTO.setPassword(user.getPassword());
         loginDTO.setEmail(user.getEmail());
-        loginDTO.setRole(user.getRole());
+        loginDTO.setRoleDTO(roleConverter.toRoleDTO(user.getRole()));
         return loginDTO;
     }
 
@@ -94,5 +95,21 @@ public class UserConverterImpl implements UserConverter {
         userForProfileDTO.setPassword(user.getPassword());
         userForProfileDTO.setProfileDTO(profileConverter.toProfileDTO(user.getProfile()));
         return userForProfileDTO;
+    }
+
+    @Override
+    public User fromUserForArticleDTO(UserForArticleDTO userForArticleDTO) {
+        User user = new User();
+        user.setId(userForArticleDTO.getId());
+        user.setEmail(userForArticleDTO.getEmail());
+        return user;
+    }
+
+    @Override
+    public UserForArticleDTO toUserForArticleDTO(User user) {
+        UserForArticleDTO userForArticleDTO = new UserForArticleDTO();
+        userForArticleDTO.setId(user.getId());
+        userForArticleDTO.setEmail(user.getEmail());
+        return userForArticleDTO;
     }
 }

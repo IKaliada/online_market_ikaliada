@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
@@ -37,9 +36,8 @@ public class ProfileController {
         return "profile";
     }
 
-    @PostMapping("/public/users/{id}/profile/update")
-    public String updateProfile(@PathVariable("id") Long id,
-                                @Valid @ModelAttribute("user") UserForProfileDTO userForProfileDTO,
+    @PostMapping("/public/users/profile/update")
+    public String updateProfile(@Valid @ModelAttribute("user") UserForProfileDTO userForProfileDTO,
                                 BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "profile";

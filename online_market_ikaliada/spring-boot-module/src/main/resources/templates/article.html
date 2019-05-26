@@ -1,13 +1,13 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
->
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title><h1>Article</h1></title>
     <h3><a th:href="@{/home}">Home</a>
         <a th:href="@{/about}">About</a></h3>
 </head>
 <body>
-<form th:action='@{/articles/article}'
+<form th:action='@{/articles/article/{id}/change(id=${article.id})}'
       method="POST"
       th:object="${article}">
     <table border="1" class='table table-sm responsive'>
@@ -22,8 +22,8 @@
         </thead>
         <tbody>
         <tr>
-            <td hidden th:text=" ${article.id}"></td>
-            <td align="center" width="10%" th:text=" ${article.article}"></td>
+            <td hidden id="id" th:name="id" th:value="${article.id}"></td>
+            <td align="center" width="10%" th:text="${article.article}"></td>
             <td align="center" width="40%" th:text="${article.description}"></td>
             <td align="center" width="10%" th:text="${article.date}"></td>
             <td align="center" width="10%">
@@ -57,6 +57,7 @@
         </tr>
         </tbody>
     </table>
+    <div sec:authorize="hasAuthority('SALE_USER')"><input type="submit" value="Change article"/></div>
 </form>
 <div th:replace="fragments/footer :: footer"></div>
 </body>

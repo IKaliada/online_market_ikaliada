@@ -1,7 +1,5 @@
 package com.gmail.iikaliada.onlinemarket.repositorymodule.model;
 
-import org.hibernate.annotations.DynamicUpdate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,15 +9,13 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@DynamicUpdate
-@Table(name = "role")
+@Table
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(updatable = false, nullable = false)
     private Long id;
-
-    @Column(name = "name")
+    @Column
     private String name;
 
     public Long getId() {

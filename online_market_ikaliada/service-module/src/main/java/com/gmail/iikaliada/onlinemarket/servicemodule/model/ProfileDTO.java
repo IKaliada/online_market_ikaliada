@@ -10,7 +10,7 @@ public class ProfileDTO {
 
     private Long id;
     @NotNull
-    @Size(min = 2, max = 40)
+    @Size(min = 2, max = 40, message = "{validation.size.message}")
     @LatinLetterValidator
     private String address;
     @NotNull

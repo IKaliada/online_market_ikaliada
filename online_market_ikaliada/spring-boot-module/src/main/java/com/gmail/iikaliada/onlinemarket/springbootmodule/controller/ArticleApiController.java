@@ -2,6 +2,7 @@ package com.gmail.iikaliada.onlinemarket.springbootmodule.controller;
 
 import com.gmail.iikaliada.onlinemarket.servicemodule.ArticleService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ArticleDTO;
+import com.gmail.iikaliada.onlinemarket.servicemodule.model.ArticleForPageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,13 +36,12 @@ public class ArticleApiController {
     @PostMapping("/articles/article")
     public ResponseEntity<String> addArticle(@RequestBody ArticleDTO articleDTO) {
         articleService.add(articleDTO);
-        return new ResponseEntity<>(articleDTO.toString(), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/articles/article/{id}")
-    public ResponseEntity<String> addArticle(@PathVariable("id") Long id) {
-        articleService.getArticleById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ArticleForPageDTO getArticleById(@PathVariable("id") Long id) {
+        return articleService.getArticleById(id);
     }
 
     @DeleteMapping("/articles/article/{id}")
@@ -49,5 +49,4 @@ public class ArticleApiController {
         articleService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }

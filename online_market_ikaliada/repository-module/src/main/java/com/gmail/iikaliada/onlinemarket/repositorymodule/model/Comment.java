@@ -14,13 +14,13 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "comment")
+@Table
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "content")
+    @Column
     private String content;
     @Column(name = "date")
     private Date date;

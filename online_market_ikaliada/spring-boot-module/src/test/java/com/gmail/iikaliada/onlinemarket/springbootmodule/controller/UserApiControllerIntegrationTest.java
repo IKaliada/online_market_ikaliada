@@ -13,7 +13,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -37,15 +36,16 @@ public class UserApiControllerIntegrationTest {
         mvc.perform(get("/api/v1/private/users"))
                 .andExpect(status().isOk());
     }
+
     @Test
     public void shouldSaveSucceedWith200ForUserApi() throws Exception {
         mvc.perform(post("/api/v1/private/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content("[{'name':'username'" +
-                ",'middlename':'middlename'" +
-                ", 'lastname':'lastname'" +
-                ", 'email':'email@email.com'" +
-                ", 'password':'123456'" +
-                ", 'role':['name':'name']}]"));
+                        ",'middlename':'middlename'" +
+                        ", 'lastname':'lastname'" +
+                        ", 'email':'email@email.com'" +
+                        ", 'password':'123456'" +
+                        ", 'role':['name':'name']}]"));
     }
 }

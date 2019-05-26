@@ -8,6 +8,7 @@ import com.gmail.iikaliada.onlinemarket.springbootmodule.validation.UserValidati
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,10 +27,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserControllerTest {
-    private MockMvc mockMvc;
 
+    private MockMvc mockMvc;
+    @Mock
     private UserService userService;
+    @Mock
     private UserValidation userValidation;
+    @Mock
     private RoleService roleService;
 
     @Before
@@ -54,11 +58,13 @@ public class UserControllerTest {
         roleDTO.setName(ADMIN_AUTHORITY_CONSTANT);
         List<UserDTO> users = Collections.singletonList(userDTO);
         int pageSize = 1;
+        int totalPage = 0;
         when(userService.getUsers(pageSize)).thenReturn(users);
         this.mockMvc.perform(get("/private/users.html"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("users", users))
+                .andExpect(model().attribute("totalPage", totalPage))
                 .andExpect(forwardedUrl("users"));
     }
 }

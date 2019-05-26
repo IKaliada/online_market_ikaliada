@@ -26,7 +26,6 @@ public class ReviewControllerIntegrationTest {
     @Autowired
     private WebApplicationContext context;
 
-    @Autowired
     private MockMvc mockMvc;
 
     @Before
@@ -40,16 +39,16 @@ public class ReviewControllerIntegrationTest {
     @Test
     @WithMockUser(authorities = ADMIN_AUTHORITY_CONSTANT)
     public void shouldGetCommentPageWhenGoToCommentUrl() throws Exception {
-        this.mockMvc.perform(post("/private/users/comment/changeStatus"))
-                .andExpect(status().isOk())
-                .andExpect(redirectedUrl("/private/users/comment"));
+        this.mockMvc.perform(post("/private/review/changeStatus"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/private/review"));
     }
 
     @Test
     @WithMockUser(authorities = ADMIN_AUTHORITY_CONSTANT)
     public void shouldGetCommentPageWhenDeleteComment() throws Exception {
-        this.mockMvc.perform(post("/private/users/comment/1"))
+        this.mockMvc.perform(post("/private/review/1/delete"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/private/users/comment"));
+                .andExpect(redirectedUrl("/private/review"));
     }
 }
