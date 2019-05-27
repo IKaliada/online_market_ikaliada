@@ -27,7 +27,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public List<RoleDTO> getRoles() {
-        List<Role> roles = roleRepository.getRoles();
+        List<Role> roles = roleRepository.getAllEntity();
         return roles.stream().map(roleConverter::toRoleDTO).collect(Collectors.toList());
     }
 }

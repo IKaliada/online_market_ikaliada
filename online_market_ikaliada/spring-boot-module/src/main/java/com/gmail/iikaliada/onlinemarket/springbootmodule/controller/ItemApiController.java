@@ -38,13 +38,13 @@ public class ItemApiController {
         return new ResponseEntity<>(itemDTO.toString(), HttpStatus.OK);
     }
 
-    @PostMapping("/items/item")
+    @PostMapping("/items")
     public ResponseEntity<String> addItem(@RequestBody ItemDTO itemDTO) {
         itemService.add(itemDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/items/item/{id}")
+    @DeleteMapping("/items/{id}")
     public ResponseEntity<String> addItem(@PathVariable(name = "id") Long id) {
         itemService.deleteItemById(id);
         return new ResponseEntity<>(HttpStatus.OK);

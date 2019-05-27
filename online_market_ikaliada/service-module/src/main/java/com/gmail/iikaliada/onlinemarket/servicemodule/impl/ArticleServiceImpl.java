@@ -4,7 +4,6 @@ import com.gmail.iikaliada.onlinemarket.repositorymodule.ArticleRepository;
 import com.gmail.iikaliada.onlinemarket.repositorymodule.CommentRepository;
 import com.gmail.iikaliada.onlinemarket.repositorymodule.model.Article;
 import com.gmail.iikaliada.onlinemarket.repositorymodule.model.Comment;
-import com.gmail.iikaliada.onlinemarket.repositorymodule.model.User;
 import com.gmail.iikaliada.onlinemarket.servicemodule.ArticleService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.UserService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.converter.ArticleConverter;
@@ -17,8 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,8 +45,7 @@ public class ArticleServiceImpl implements ArticleService {
     public List<ArticleDTO> getArticle(int currentPage) {
         int offset = ((LIMIT * currentPage));
         currentPage = LIMIT * (currentPage - 1);
-        List<Object[]> result = articleRepository.getArticles(currentPage, offset);
-        List<Article> articles = getArticles(result);
+        List<Article> articles = articleRepository.getArticles(currentPage, offset);
         return articles.stream().map(articleConverter::toArticleDTO).collect(Collectors.toList());
     }
 
@@ -70,9 +66,8 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     @Transactional
     public List<ArticleForPageDTO> getArticleByKeyWord(String keyWord) {
-        List<Object[]> result = articleRepository.getArticleByKeyWord(keyWord);
-        List<Article> articles = getArticlesByKeyWord(result);
-        return articles.stream().map(articleConverter::toArticleForPageDTO).collect(Collectors.toList());
+        List<Article> articleByKeyWord = articleRepository.getArticleByKeyWord(keyWord);
+        return articleByKeyWord.stream().map(articleConverter::toArticleForPageDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -128,52 +123,11 @@ public class ArticleServiceImpl implements ArticleService {
 
     }
 
-    private List<Article> getArticles(List<Object[]> result) {
-        List<Article> articles = new ArrayList<>();
-        for (Object[] object : result) {
-            Article article = new Article();
-            article.setId((Long) object[0]);
-            article.setArticle((String) object[1]);
-            article.setDescription((String) object[2]);
-            article.setDate((Date) (object[3]));
-            article.setUser((User) (object[4]));
-            articles.add(article);
-        }
-        return articles;
-    }
-
     private int getPagesNumber(int totalEntities) {
         int pagesNumber = totalEntities / LIMIT;
         if (totalEntities % LIMIT > 0) {
             pagesNumber += 1;
         }
         return pagesNumber;
-    }
-
-    private List<Article> getArticlesByKeyWord(List<Object[]> result) {
-        List<Article> articles = new ArrayList<>();
-        for (Object[] object : result) {
-            Article article = new Article();
-            article.setId(Long.parseLong(object[0].toString()));
-            article.setArticle((String) object[1]);
-            article.setDescription((String) object[2]);
-            article.setDate((Date) (object[3]));
-            User user = new User();
-            user.setId(Long.parseLong(object[4].toString()));
-            user.setName((String) object[5]);
-            user.setLastname((String) object[6]);
-            Comment comment = new Comment();
-            User userForComment = new User();
-            userForComment.setName((String) object[7]);
-            userForComment.setLastname((String) object[8]);
-            userForComment.setId(Long.parseLong(object[9].toString()));
-            comment.setDate((Date) (object[10]));
-            comment.setContent((String) object[11]);
-            article.setUser(user);
-            comment.setUser(userForComment);
-            article.setComment(Collections.singletonList(comment));
-            articles.add(article);
-        }
-        return articles;
     }
 }

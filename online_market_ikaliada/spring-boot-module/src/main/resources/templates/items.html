@@ -23,8 +23,8 @@
             <td>
                 <input type="checkbox" id="ids" th:name="ids" th:value="${item.id}"/>
             </td>
-            <td >
-                <a th:href="${'/private/items/item/' + item.id}"><span th:text="${item.name}"></span></a>
+            <td>
+                <a th:href="${'/private/items/' + item.id}"><span th:text="${item.name}"></span></a>
             </td>
             <td th:text="${item.price}"></td>
             <td th:text="${item.uniqueNumber}"></td>

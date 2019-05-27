@@ -65,4 +65,12 @@ public class GenericRepositoryImpl<I, T> implements GenericRepository<I, T> {
         Query q = entityManager.createQuery(query);
         return ((Number) q.getSingleResult()).intValue();
     }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<T> getAllEntity() {
+        String query = "from " + entityClass.getName();
+        Query q = entityManager.createQuery(query);
+        return q.getResultList();
+    }
 }

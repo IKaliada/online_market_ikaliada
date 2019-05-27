@@ -66,7 +66,7 @@ public class ItemControllerTest {
         itemDTO.setPrice(BigDecimal.valueOf(100L));
         itemDTO.setUniqueNumber("d74a8ac4-3b29-424d-a636-69b5447921b1");
         when(itemService.getItemById(itemDTO.getId())).thenReturn(itemDTO);
-        this.mockMvc.perform(get("/private/items/item/1"))
+        this.mockMvc.perform(get("/private/items/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("item", itemDTO))

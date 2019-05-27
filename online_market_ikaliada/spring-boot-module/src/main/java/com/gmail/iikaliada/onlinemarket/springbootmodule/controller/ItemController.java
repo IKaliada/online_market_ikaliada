@@ -59,7 +59,7 @@ public class ItemController {
         return "redirect:/private/items";
     }
 
-    @GetMapping("/items/item/{id}")
+    @GetMapping("/items/{id}")
     public String showItemById(@PathVariable("id") Long id, Model model) {
         ItemDTO itemDTO = itemService.getItemById(id);
         model.addAttribute("item", itemDTO);

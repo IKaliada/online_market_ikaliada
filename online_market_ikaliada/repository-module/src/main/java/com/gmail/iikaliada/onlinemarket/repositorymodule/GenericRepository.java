@@ -16,4 +16,6 @@ public interface GenericRepository<I, T> {
     List<T> findAll(int offset, int limit);
 
     int getCountOfEntities();
+
+    List<T> getAllEntity();
 }

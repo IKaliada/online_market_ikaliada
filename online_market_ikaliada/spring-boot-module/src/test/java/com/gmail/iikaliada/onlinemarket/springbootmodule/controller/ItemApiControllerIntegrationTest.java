@@ -39,7 +39,7 @@ public class ItemApiControllerIntegrationTest {
 
     @Test
     public void shouldSaveSucceedWith200ForArticleApi() throws Exception {
-        mvc.perform(get("/api/v1/private/items/8")
+        mvc.perform(get("/api/v1/private/items/1")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content("{\"name\":\"New item\"\n" +
                         ",\"price\":100\n" +
@@ -50,7 +50,7 @@ public class ItemApiControllerIntegrationTest {
 
     @Test
     public void shouldSuccessfullySaveItemWith200ForItemAPI() throws Exception {
-        mvc.perform(post("/api/v1/private/items/item")
+        mvc.perform(post("/api/v1/private/items")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content("{\"name\": \"Item name\"" +
                         ", \"price\":100" +
@@ -61,7 +61,7 @@ public class ItemApiControllerIntegrationTest {
 
     @Test
     public void shouldGetStatusOkAfterDeletingItem() throws Exception {
-        mvc.perform(delete("/api/v1/private/items/item/2"))
+        mvc.perform(delete("/api/v1/private/items/1"))
                 .andExpect(status().isOk());
     }
 }
