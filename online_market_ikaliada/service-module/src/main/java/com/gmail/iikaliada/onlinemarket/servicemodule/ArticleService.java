@@ -1,8 +1,8 @@
 package com.gmail.iikaliada.onlinemarket.servicemodule;
 
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ArticleDTO;
+import com.gmail.iikaliada.onlinemarket.servicemodule.model.ArticleForNewsDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ArticleForPageDTO;
-
 import java.util.List;
 
 public interface ArticleService {
@@ -13,9 +13,17 @@ public interface ArticleService {
 
     ArticleForPageDTO getArticleById(Long id);
 
-    ArticleForPageDTO getArticleByKeyWord(String keyWord);
+    List<ArticleForPageDTO> getArticleByKeyWord(String keyWord);
 
     void add(ArticleDTO articleDTO);
 
     void deleteById(Long id);
+
+    void deleteArticleById(List<Long> ids);
+
+    void updateArticle(ArticleForPageDTO articleForPageDTO);
+
+    void deleteCommentById(List<Long> collect);
+
+    void createNewArticle(ArticleForNewsDTO articleForNewsDTO);
 }

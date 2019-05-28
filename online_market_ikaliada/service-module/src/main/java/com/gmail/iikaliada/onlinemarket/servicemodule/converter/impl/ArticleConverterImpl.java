@@ -5,6 +5,7 @@ import com.gmail.iikaliada.onlinemarket.servicemodule.converter.ArticleConverter
 import com.gmail.iikaliada.onlinemarket.servicemodule.converter.CommentConverter;
 import com.gmail.iikaliada.onlinemarket.servicemodule.converter.UserConverter;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ArticleDTO;
+import com.gmail.iikaliada.onlinemarket.servicemodule.model.ArticleForNewsDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ArticleForPageDTO;
 import org.springframework.stereotype.Component;
 
@@ -51,6 +52,17 @@ public class ArticleConverterImpl implements ArticleConverter {
         article.setDescription(articleDTO.getDescription());
         article.setDate(articleDTO.getDate());
         article.setUser(userConverter.fromUserForUiDTO(articleDTO.getUserForUiDTO()));
+        return article;
+    }
+
+    @Override
+    public Article fromArticleForNewsDTO(ArticleForNewsDTO articleForNewsDTO) {
+        Article article = new Article();
+        article.setId(articleForNewsDTO.getId());
+        article.setArticle(articleForNewsDTO.getArticle());
+        article.setDescription(articleForNewsDTO.getDescription());
+        article.setDate(articleForNewsDTO.getDate());
+        article.setUser(userConverter.fromUserForArticleDTO(articleForNewsDTO.getUserForArticleDTO()));
         return article;
     }
 }

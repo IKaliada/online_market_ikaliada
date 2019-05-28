@@ -6,6 +6,7 @@ import com.gmail.iikaliada.onlinemarket.servicemodule.converter.RoleConverter;
 import com.gmail.iikaliada.onlinemarket.servicemodule.converter.UserConverter;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.LoginDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserDTO;
+import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForArticleDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForProfileDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForUiDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,17 +30,8 @@ public class UserConverterImpl implements UserConverter {
         loginDTO.setId(user.getId());
         loginDTO.setPassword(user.getPassword());
         loginDTO.setEmail(user.getEmail());
-        loginDTO.setRole(user.getRole());
+        loginDTO.setRoleDTO(roleConverter.toRoleDTO(user.getRole()));
         return loginDTO;
-    }
-
-    @Override
-    public User fromLoginDTO(LoginDTO loginDTO) {
-        User user = new User();
-        user.setId(loginDTO.getId());
-        user.setPassword(loginDTO.getPassword());
-        user.setEmail(loginDTO.getEmail());
-        return user;
     }
 
     @Override
@@ -85,23 +77,30 @@ public class UserConverterImpl implements UserConverter {
     }
 
     @Override
-    public User fromUserForProfileDTO(UserForProfileDTO userForProfileDTO) {
-        User user = new User();
-        user.setId(userForProfileDTO.getId());
-        user.setName(userForProfileDTO.getName());
-        user.setLastname(userForProfileDTO.getLastname());
-        user.setPassword(userForProfileDTO.getPassword());
-        return user;
-    }
-
-    @Override
     public UserForProfileDTO toUserForProfileDTO(User user) {
         UserForProfileDTO userForProfileDTO = new UserForProfileDTO();
         userForProfileDTO.setId(user.getId());
         userForProfileDTO.setName(user.getName());
+        userForProfileDTO.setMiddlename(user.getMiddlename());
         userForProfileDTO.setLastname(user.getLastname());
         userForProfileDTO.setPassword(user.getPassword());
         userForProfileDTO.setProfileDTO(profileConverter.toProfileDTO(user.getProfile()));
         return userForProfileDTO;
+    }
+
+    @Override
+    public User fromUserForArticleDTO(UserForArticleDTO userForArticleDTO) {
+        User user = new User();
+        user.setId(userForArticleDTO.getId());
+        user.setEmail(userForArticleDTO.getEmail());
+        return user;
+    }
+
+    @Override
+    public UserForArticleDTO toUserForArticleDTO(User user) {
+        UserForArticleDTO userForArticleDTO = new UserForArticleDTO();
+        userForArticleDTO.setId(user.getId());
+        userForArticleDTO.setEmail(user.getEmail());
+        return userForArticleDTO;
     }
 }

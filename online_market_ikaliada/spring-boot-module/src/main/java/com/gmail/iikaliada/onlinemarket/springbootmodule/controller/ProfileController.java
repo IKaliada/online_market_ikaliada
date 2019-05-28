@@ -3,7 +3,6 @@ package com.gmail.iikaliada.onlinemarket.springbootmodule.controller;
 import com.gmail.iikaliada.onlinemarket.servicemodule.ProfileService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.UserService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.LoginDTO;
-import com.gmail.iikaliada.onlinemarket.servicemodule.model.ProfileDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForProfileDTO;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
@@ -38,15 +36,14 @@ public class ProfileController {
         return "profile";
     }
 
-    @PostMapping("/public/users/{id}/profile/update")
-    public String updateProfile(@PathVariable("id") Long id,
-                                @Valid @ModelAttribute("user") UserForProfileDTO userForProfileDTO,
-                                Model model, BindingResult bindingResult) {
+    @PostMapping("/public/users/profile/update")
+    public String updateProfile(@Valid @ModelAttribute("user") UserForProfileDTO userForProfileDTO,
+                                BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "profile";
         }
-        UserForProfileDTO userForProfileDTO1 = profileService.updateProfile(userForProfileDTO);
-        model.addAttribute("user", userForProfileDTO1);
+        UserForProfileDTO user = profileService.updateProfile(userForProfileDTO);
+        model.addAttribute("user", user);
         return "redirect:/public/users/profile";
     }
 }

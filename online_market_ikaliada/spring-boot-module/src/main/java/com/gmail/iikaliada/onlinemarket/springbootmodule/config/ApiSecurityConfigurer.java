@@ -10,8 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
-
-import static com.gmail.iikaliada.onlinemarket.springbootmodule.constant.AuthoritiesConstants.SECURE_API_AUTHORITY_CONSTANT;
+import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.AuthoritiesConstants.SECURE_API_AUTHORITY_CONSTANT;
 
 @Configuration
 @Order(1)
@@ -30,10 +29,13 @@ public class ApiSecurityConfigurer extends WebSecurityConfigurerAdapter {
     }
 
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.antMatcher("/api/v1/private/users/**").antMatcher("/api/v1/articles/**")
+        httpSecurity
+                .antMatcher("/api/v1/private/users/**")
+                .antMatcher("/api/v1/articles/**")
+                .antMatcher("/api/v1/private/items/**")
                 .authorizeRequests()
                 .anyRequest()
-                .hasRole(SECURE_API_AUTHORITY_CONSTANT)
+                .hasAuthority(SECURE_API_AUTHORITY_CONSTANT)
                 .and()
                 .httpBasic()
                 .and()

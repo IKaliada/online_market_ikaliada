@@ -10,20 +10,20 @@ public class UserDTO {
 
     private Long id;
     @NotNull
-    @Size(min = 2, max = 20)
+    @Size(min = 2, max = 20, message = "{validation.size.message}")
     @LatinLetterValidator
     private String name;
     @NotNull
-    @Size(min = 2, max = 40)
+    @Size(min = 2, max = 40, message = "{validation.size.message}")
     @LatinLetterValidator
     private String lastname;
     @NotNull
-    @Size(min = 2, max = 40)
+    @Size(min = 2, max = 40, message = "{validation.size.message}")
     @LatinLetterValidator
     private String middlename;
     @NotNull
     @EmailValidator
-    @Size(min = 2, max = 40)
+    @Size(min = 2, max = 40, message = "{validation.size.message}")
     private String email;
     private String password;
     @NotNull

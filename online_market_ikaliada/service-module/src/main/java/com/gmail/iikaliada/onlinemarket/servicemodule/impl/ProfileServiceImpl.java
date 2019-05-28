@@ -42,10 +42,11 @@ public class ProfileServiceImpl implements ProfileService {
     private void reSetUpUser(UserForProfileDTO userForProfileDTO, User user) {
         user.setId(userForProfileDTO.getId());
         user.setName(userForProfileDTO.getName());
+        user.setMiddlename(userForProfileDTO.getMiddlename());
         user.setLastname(userForProfileDTO.getLastname());
-        if (!user.getPassword().equals(userForProfileDTO.getPassword())){
+        if (!user.getPassword().equals(userForProfileDTO.getPassword())) {
             user.setPassword(new BCryptPasswordEncoder().encode(userForProfileDTO.getPassword()));
-        }else {
+        } else {
             user.setPassword(userForProfileDTO.getPassword());
         }
         user.setProfile(profileConverter.fromProfileDTO(userForProfileDTO.getProfileDTO()));

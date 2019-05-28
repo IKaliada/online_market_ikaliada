@@ -16,8 +16,9 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Set;
 
-import static com.gmail.iikaliada.onlinemarket.springbootmodule.constant.AuthoritiesConstants.ADMIN_AUTHORITY_CONSTANT;
-import static com.gmail.iikaliada.onlinemarket.springbootmodule.constant.AuthoritiesConstants.SELLER_AUTHORITY_CONSTANT;
+import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.AuthoritiesConstants.ADMIN_AUTHORITY_CONSTANT;
+import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.AuthoritiesConstants.CUSTOMER_AUTHORITY_CONSTANT;
+import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.AuthoritiesConstants.SELLER_AUTHORITY_CONSTANT;
 
 public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private static Logger logger = LoggerFactory.getLogger(AppUrlAuthenticationSuccessHandler.class);
@@ -48,7 +49,10 @@ public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccess
             return "/home";
         }
         if (authorities.contains(SELLER_AUTHORITY_CONSTANT)) {
-            return "/articles";
+            return "/home";
+        }
+        if (authorities.contains(CUSTOMER_AUTHORITY_CONSTANT)) {
+            return "/home";
         } else {
             throw new IllegalStateException();
         }

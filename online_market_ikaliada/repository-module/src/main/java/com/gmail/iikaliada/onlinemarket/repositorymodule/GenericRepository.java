@@ -1,6 +1,5 @@
 package com.gmail.iikaliada.onlinemarket.repositorymodule;
 
-import java.sql.Connection;
 import java.util.List;
 
 public interface GenericRepository<I, T> {
@@ -18,5 +17,5 @@ public interface GenericRepository<I, T> {
 
     int getCountOfEntities();
 
-    Connection getConnection();
+    List<T> getAllEntity();
 }

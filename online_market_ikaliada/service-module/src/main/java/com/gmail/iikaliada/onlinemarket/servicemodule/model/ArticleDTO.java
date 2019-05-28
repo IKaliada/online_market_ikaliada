@@ -49,4 +49,5 @@ public class ArticleDTO {
     public void setUserForUiDTO(UserForUiDTO userForUiDTO) {
         this.userForUiDTO = userForUiDTO;
     }
+
 }

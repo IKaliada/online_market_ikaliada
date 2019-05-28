@@ -7,6 +7,8 @@
     </h3>
     <h3><a th:href="@{/private/review}">Show Reviews</a></h3>
     <div th:if="${emailError}" th:utext="${emailError}"></div>
+    <div th:if="${notAllowedMessage}" th:utext="${notAllowedMessage}"></div>
+    <div th:if="${passwordUpdatedMessage}" th:utext="${passwordUpdatedMessage}"></div>
 </head>
 <body>
 <form th:action='@{/private/users/delete}'
@@ -47,7 +49,7 @@
                 </form>
             </td>
             <td>
-                <form action="#" th:action="@{/private/users/password/{email}(email=${user.getEmail()})}" method="post">
+                <form action="#" th:action="@{/private/users/{id}/password(id=${user.id})}" method="post">
                     <input type="submit" value="CHANGE PASSWORD"/>
                 </form>
             </td>

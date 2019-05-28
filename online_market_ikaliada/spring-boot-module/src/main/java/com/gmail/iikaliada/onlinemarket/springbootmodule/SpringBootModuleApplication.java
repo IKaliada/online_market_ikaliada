@@ -14,7 +14,7 @@ import org.springframework.context.annotation.PropertySource;
         exclude = {UserDetailsServiceAutoConfiguration.class,
                 LiquibaseAutoConfiguration.class}
 )
-@EntityScan(basePackages = "com.gmail.iikaliada.onlinemarket")
+@EntityScan(basePackages = "com.gmail.iikaliada.onlinemarket.repositorymodule.model")
 @PropertySource({"classpath:mail.properties", "classpath:validation.properties"})
 public class SpringBootModuleApplication {
 

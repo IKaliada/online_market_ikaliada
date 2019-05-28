@@ -13,9 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import static com.gmail.iikaliada.onlinemarket.springbootmodule.constant.AuthoritiesConstants.ADMIN_AUTHORITY_CONSTANT;
-import static com.gmail.iikaliada.onlinemarket.springbootmodule.constant.AuthoritiesConstants.CUSTOMER_AUTHORITY_CONSTANT;
-import static com.gmail.iikaliada.onlinemarket.springbootmodule.constant.AuthoritiesConstants.SELLER_AUTHORITY_CONSTANT;
+import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.AuthoritiesConstants.ADMIN_AUTHORITY_CONSTANT;
+import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.AuthoritiesConstants.CUSTOMER_AUTHORITY_CONSTANT;
+import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.AuthoritiesConstants.SELLER_AUTHORITY_CONSTANT;
 
 @Configuration
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
@@ -31,10 +31,12 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/private/users/**", "/private/review/**")
                 .hasAuthority(ADMIN_AUTHORITY_CONSTANT)
+                .antMatchers("/private/items/**")
+                .hasAuthority(SELLER_AUTHORITY_CONSTANT)
                 .antMatchers("/", "/denied", "/home", "/about", "/login")
                 .permitAll()
                 .antMatchers("/articles/**", "/public/**")
-                .hasAnyAuthority(ADMIN_AUTHORITY_CONSTANT, CUSTOMER_AUTHORITY_CONSTANT, SELLER_AUTHORITY_CONSTANT)
+                .hasAnyAuthority(CUSTOMER_AUTHORITY_CONSTANT, SELLER_AUTHORITY_CONSTANT)
                 .and()
                 .formLogin()
                 .loginPage("/login")

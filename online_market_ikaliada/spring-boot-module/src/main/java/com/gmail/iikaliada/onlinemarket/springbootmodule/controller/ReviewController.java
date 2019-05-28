@@ -2,7 +2,9 @@ package com.gmail.iikaliada.onlinemarket.springbootmodule.controller;
 
 import com.gmail.iikaliada.onlinemarket.servicemodule.ReviewService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ReviewDTO;
+import com.gmail.iikaliada.onlinemarket.springbootmodule.handler.PaginationHandler;
 import com.gmail.iikaliada.onlinemarket.springbootmodule.model.ReviewDTOList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,9 @@ import java.util.List;
 
 @Controller
 public class ReviewController {
+
+    @Autowired
+    private PaginationHandler pagination;
     private final ReviewService reviewService;
 
     public ReviewController(ReviewService reviewService) {
@@ -30,33 +35,18 @@ public class ReviewController {
         int totalPage = reviewService.getTotalPagesForReview();
         ReviewDTOList reviewDTOList = new ReviewDTOList();
         reviewDTOList.setReviewDTOList(reviews);
-        int size = 10;
-        model.addAttribute("size", size);
         model.addAttribute("reviews", reviewDTOList);
-        model.addAttribute("totalPage", totalPage);
-        if (currentPage > 1) {
-            int previousPage = currentPage - 1;
-            model.addAttribute("previousPage", previousPage);
-        }
-        if (currentPage < totalPage) {
-            int nextPage = currentPage + 1;
-            model.addAttribute("nextPage", nextPage);
-        }
-        int[] pages = new int[totalPage];
-        for (int i = 0; i < totalPage; i++) {
-            pages[i] = i + 1;
-        }
-        model.addAttribute("pages", pages);
+        pagination.getPagination(currentPage, model, totalPage);
         return "review";
     }
 
     @PostMapping("/private/review/changeStatus")
-    public String changeStatus(@ModelAttribute("reviewDTOList") ReviewDTOList reviewDTOList) {
+    public String changeStatus(@ModelAttribute("reviews") ReviewDTOList reviewDTOList) {
         reviewService.changeStatus(reviewDTOList.getReviewDTOList());
         return "redirect:/private/review";
     }
 
-    @PostMapping("/private/review/{id}")
+    @PostMapping("/private/review/{id}/delete")
     public String changePassword(@PathVariable("id") Long id) {
         reviewService.deleteReview(id);
         return "redirect:/private/review";

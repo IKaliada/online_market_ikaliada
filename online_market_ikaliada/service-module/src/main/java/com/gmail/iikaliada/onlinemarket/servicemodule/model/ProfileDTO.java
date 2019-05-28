@@ -1,7 +1,7 @@
 package com.gmail.iikaliada.onlinemarket.servicemodule.model;
 
 import com.gmail.iikaliada.onlinemarket.servicemodule.validator.LatinLetterValidator;
-
+import com.gmail.iikaliada.onlinemarket.servicemodule.validator.PhoneValidator;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -9,11 +9,11 @@ public class ProfileDTO {
 
     private Long id;
     @NotNull
-    @Size(min = 2, max = 20)
+    @Size(min = 2, max = 40, message = "{validation.size.message}")
     @LatinLetterValidator
     private String address;
     @NotNull
-    @Size(min = 13, max = 14)
+    @PhoneValidator
     private String telephone;
     private UserForProfileDTO userForProfileDTO;
 

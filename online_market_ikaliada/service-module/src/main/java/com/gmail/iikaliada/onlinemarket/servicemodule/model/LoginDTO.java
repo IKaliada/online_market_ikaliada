@@ -1,13 +1,11 @@
 package com.gmail.iikaliada.onlinemarket.servicemodule.model;
 
-import com.gmail.iikaliada.onlinemarket.repositorymodule.model.Role;
-
 public class LoginDTO {
 
     private Long id;
     private String email;
     private String password;
-    private Role role;
+    private RoleDTO roleDTO;
 
     public Long getId() {
         return id;
@@ -33,11 +31,11 @@ public class LoginDTO {
         this.password = password;
     }
 
-    public Role getRole() {
-        return role;
+    public RoleDTO getRoleDTO() {
+        return roleDTO;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRoleDTO(RoleDTO roleDTO) {
+        this.roleDTO = roleDTO;
     }
 }
