@@ -4,6 +4,7 @@ import com.gmail.iikaliada.onlinemarket.servicemodule.ArticleService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ArticleDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ArticleForNewsDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ArticleForPageDTO;
+import com.gmail.iikaliada.onlinemarket.springbootmodule.handler.PaginationHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
@@ -30,7 +31,8 @@ public class ArticleController {
     @Value("${delete.comment.message}")
     String deleteCommentMessage;
 
-
+    @Autowired
+    private PaginationHandler pagination;
     private final ArticleService articleService;
 
     @Autowired
@@ -41,27 +43,11 @@ public class ArticleController {
     @GetMapping("/articles")
     public String getArticles(
             @RequestParam(name = "page", defaultValue = "1") Integer currentPage, Model model) {
-
         model.addAttribute("currentPage", currentPage);
         List<ArticleDTO> articles = articleService.getArticle(currentPage);
-        int totalPage = articleService.getTotalPages();
-        int size = 10;
         model.addAttribute("articles", articles);
-        model.addAttribute("size", size);
-        model.addAttribute("totalPage", totalPage);
-        if (currentPage > 1) {
-            int previousPage = currentPage - 1;
-            model.addAttribute("previousPage", previousPage);
-        }
-        if (currentPage < totalPage) {
-            int nextPage = currentPage + 1;
-            model.addAttribute("nextPage", nextPage);
-        }
-        int[] pages = new int[totalPage];
-        for (int i = 0; i < totalPage; i++) {
-            pages[i] = i + 1;
-        }
-        model.addAttribute("pages", pages);
+        int totalPage = articleService.getTotalPages();
+        pagination.getPagination(currentPage, model, totalPage);
         return "articles";
     }
 

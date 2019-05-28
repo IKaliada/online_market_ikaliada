@@ -50,14 +50,4 @@ public class ArticleDTO {
         this.userForUiDTO = userForUiDTO;
     }
 
-    @Override
-    public String toString() {
-        return "ArticleDTO{" +
-                "id=" + id +
-                ", article='" + article + '\'' +
-                ", description='" + description + '\'' +
-                ", date=" + date +
-                ", userForUiDTO=" + userForUiDTO +
-                '}';
-    }
 }

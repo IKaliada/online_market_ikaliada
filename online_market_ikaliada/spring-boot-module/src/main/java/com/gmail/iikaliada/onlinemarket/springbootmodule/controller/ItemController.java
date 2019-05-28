@@ -2,6 +2,8 @@ package com.gmail.iikaliada.onlinemarket.springbootmodule.controller;
 
 import com.gmail.iikaliada.onlinemarket.servicemodule.ItemService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ItemDTO;
+import com.gmail.iikaliada.onlinemarket.springbootmodule.handler.PaginationHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,8 @@ import java.util.List;
 @RequestMapping("/private")
 public class ItemController {
 
+    @Autowired
+    private PaginationHandler pagination;
     private final ItemService itemService;
 
     public ItemController(ItemService itemService) {
@@ -31,20 +35,7 @@ public class ItemController {
         List<ItemDTO> items = itemService.getItems(currentPage);
         model.addAttribute("items", items);
         int totalPage = itemService.getTotalPages();
-        model.addAttribute("totalPage", totalPage);
-        if (currentPage > 1) {
-            int previousPage = currentPage - 1;
-            model.addAttribute("previousPage", previousPage);
-        }
-        if (currentPage < totalPage) {
-            int nextPage = currentPage + 1;
-            model.addAttribute("nextPage", nextPage);
-        }
-        int[] pages = new int[totalPage];
-        for (int i = 0; i < totalPage; i++) {
-            pages[i] = i + 1;
-        }
-        model.addAttribute("pages", pages);
+        pagination.getPagination(currentPage, model, totalPage);
         return "items";
     }
 

@@ -4,7 +4,9 @@ import com.gmail.iikaliada.onlinemarket.servicemodule.RoleService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.UserService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.RoleDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserDTO;
+import com.gmail.iikaliada.onlinemarket.springbootmodule.handler.PaginationHandler;
 import com.gmail.iikaliada.onlinemarket.springbootmodule.validation.UserValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +36,8 @@ public class UserController {
     @Value("${success.update.password}")
     String passwordUpdatedMessage;
 
+    @Autowired
+    private PaginationHandler pagination;
     private final UserService userService;
     private final UserValidation userValidation;
     private final RoleService roleService;
@@ -55,20 +60,7 @@ public class UserController {
         user.setRole(new RoleDTO());
         model.addAttribute("user", user);
         int totalPage = userService.getTotalPages();
-        model.addAttribute("totalPage", totalPage);
-        if (currentPage > 1) {
-            int previousPage = currentPage - 1;
-            model.addAttribute("previousPage", previousPage);
-        }
-        if (currentPage < totalPage) {
-            int nextPage = currentPage + 1;
-            model.addAttribute("nextPage", nextPage);
-        }
-        int[] pages = new int[totalPage];
-        for (int i = 0; i < totalPage; i++) {
-            pages[i] = i + 1;
-        }
-        model.addAttribute("pages", pages);
+        pagination.getPagination(currentPage, model, totalPage);
         return "users";
     }
 
@@ -133,11 +125,6 @@ public class UserController {
     }
 
     private void getUsersRole(Model model) {
-        List<RoleDTO> roles = roleService.getRoles();
-        model.addAttribute("roles", roles);
-    }
-
-    private void getRoleForController(Model model) {
         List<RoleDTO> roles = roleService.getRoles();
         model.addAttribute("roles", roles);
     }

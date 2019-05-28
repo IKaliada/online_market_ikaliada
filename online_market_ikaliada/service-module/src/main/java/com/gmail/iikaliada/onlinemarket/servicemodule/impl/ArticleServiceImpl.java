@@ -25,6 +25,8 @@ import static com.gmail.iikaliada.onlinemarket.repositorymodule.constant.LimitCo
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
+    private static final Integer LIMIT_FOR_ARTICLE = 200;
+
     private final ArticleRepository articleRepository;
     private final ArticleConverter articleConverter;
     private final CommentRepository commentRepository;
@@ -45,8 +47,14 @@ public class ArticleServiceImpl implements ArticleService {
     public List<ArticleDTO> getArticle(int currentPage) {
         int offset = ((LIMIT * currentPage));
         currentPage = LIMIT * (currentPage - 1);
-        List<Article> articles = articleRepository.getArticles(currentPage, offset);
-        return articles.stream().map(articleConverter::toArticleDTO).collect(Collectors.toList());
+        List<Article> articles = articleRepository.findAll(currentPage, offset);
+        return articles.stream()
+                .map(articleConverter::toArticleDTO)
+                .peek(articleDTO -> {
+                    if (articleDTO.getDescription().length() > LIMIT_FOR_ARTICLE) {
+                        articleDTO.setDescription(articleDTO.getDescription().substring(0, LIMIT_FOR_ARTICLE));
+                    }
+                }).collect(Collectors.toList());
     }
 
     @Override
@@ -67,7 +75,11 @@ public class ArticleServiceImpl implements ArticleService {
     @Transactional
     public List<ArticleForPageDTO> getArticleByKeyWord(String keyWord) {
         List<Article> articleByKeyWord = articleRepository.getArticleByKeyWord(keyWord);
-        return articleByKeyWord.stream().map(articleConverter::toArticleForPageDTO).collect(Collectors.toList());
+        return articleByKeyWord.stream().map(articleConverter::toArticleForPageDTO).peek(articleDTO -> {
+            if (articleDTO.getDescription().length() > LIMIT_FOR_ARTICLE) {
+                articleDTO.setDescription(articleDTO.getDescription().substring(0, LIMIT_FOR_ARTICLE));
+            }
+        }).collect(Collectors.toList());
     }
 
     @Override
