@@ -297,4 +297,37 @@
         <sql>insert into item (description, name, price, unique_number) values ('description', 'name', 3, 3)
         </sql>
     </changeSet>
+    <changeSet id="market_40" author="iikaliada@gmail.com">
+        <createTable tableName="orders">
+            <column name="uid" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="item_id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="order_status" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_35">
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="orders" onDelete="CASCADE" constraintName="FK_USER_ORDER"
+                                 referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_36">
+        <addForeignKeyConstraint baseColumnNames="item_id"
+                                 baseTableName="orders" onDelete="CASCADE" constraintName="FK_ITEM_ORDER"
+                                 referencedColumnNames="id" referencedTableName="item"/>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_351">
+        <sql>insert into orders (user_id, item_id, order_status, quantity) values (1, 1, 'NEW', 1)
+        </sql>
+    </changeSet>
 </databaseChangeLog>

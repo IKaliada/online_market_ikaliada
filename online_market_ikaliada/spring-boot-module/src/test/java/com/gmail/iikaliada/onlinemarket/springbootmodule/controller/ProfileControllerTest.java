@@ -54,7 +54,6 @@ public class ProfileControllerTest {
         userForProfileDTO.setName("name");
         userForProfileDTO.setLastname("lastname");
         userForProfileDTO.setPassword("123456");
-        profileDTO.setUserForProfileDTO(userForProfileDTO);
         LoginDTO loginDTO = new LoginDTO();
         loginDTO.setId(1L);
         loginDTO.setPassword("123");
@@ -87,7 +86,6 @@ public class ProfileControllerTest {
         userForProfileDTO.setName("name");
         userForProfileDTO.setLastname("lastname");
         userForProfileDTO.setPassword("123456");
-        profileDTO.setUserForProfileDTO(userForProfileDTO);
         LoginDTO loginDTO = new LoginDTO();
         loginDTO.setId(1L);
         loginDTO.setPassword("123");

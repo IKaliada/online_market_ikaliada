@@ -15,7 +15,6 @@ public class ProfileDTO {
     @NotNull
     @PhoneValidator
     private String telephone;
-    private UserForProfileDTO userForProfileDTO;
 
     public Long getId() {
         return id;
@@ -39,13 +38,5 @@ public class ProfileDTO {
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
-    }
-
-    public UserForProfileDTO getUserForProfileDTO() {
-        return userForProfileDTO;
-    }
-
-    public void setUserForProfileDTO(UserForProfileDTO userForProfileDTO) {
-        this.userForProfileDTO = userForProfileDTO;
     }
 }

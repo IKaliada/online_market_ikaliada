@@ -7,6 +7,7 @@ import com.gmail.iikaliada.onlinemarket.servicemodule.converter.UserConverter;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.LoginDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForArticleDTO;
+import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForOrderDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForProfileDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForUiDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,5 +103,15 @@ public class UserConverterImpl implements UserConverter {
         userForArticleDTO.setId(user.getId());
         userForArticleDTO.setEmail(user.getEmail());
         return userForArticleDTO;
+    }
+
+    @Override
+    public UserForOrderDTO toUserForOrderDTO(User user) {
+        UserForOrderDTO userForOrderDTO = new UserForOrderDTO();
+        userForOrderDTO.setId(user.getId());
+        userForOrderDTO.setName(user.getName());
+        userForOrderDTO.setLastname(user.getLastname());
+        userForOrderDTO.setProfileDTO(profileConverter.toProfileDTO(user.getProfile()));
+        return userForOrderDTO;
     }
 }
