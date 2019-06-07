@@ -2,6 +2,7 @@ package com.gmail.iikaliada.onlinemarket.springbootmodule.controller;
 
 import com.gmail.iikaliada.onlinemarket.servicemodule.OrderService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.OrderDTO;
+import com.gmail.iikaliada.onlinemarket.springbootmodule.exception.OrderNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +16,7 @@ import java.util.List;
 @RequestMapping("/api/v1")
 public class OrderApiController {
 
-    private OrderService orderService;
+    private final OrderService orderService;
 
     @Autowired
     public OrderApiController(OrderService orderService) {
@@ -23,12 +24,16 @@ public class OrderApiController {
     }
 
     @GetMapping("/orders")
-    public List<OrderDTO> getArticles(@RequestParam(value = "page", defaultValue = "1") Integer pageSize) {
+    public List<OrderDTO> getOrders(@RequestParam(value = "page", defaultValue = "1") Integer pageSize) {
         return orderService.getOrders(pageSize);
     }
 
-    @GetMapping("/orders/{uid}")
-    public OrderDTO getArticles(@PathVariable("uid") Long uid) {
-        return orderService.getOrderById(uid);
+    @GetMapping("/orders/{uId}")
+    public OrderDTO getOrdersById(@PathVariable("uId") String uId) {
+        try {
+            return orderService.getOrderById(uId);
+        } catch (Exception e) {
+            throw new OrderNotFoundException(uId);
+        }
     }
 }

@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <h1>Orders</h1>
+</head>
+<body>
+<table width="80%" border="1" class='table table-sm responsive'>
+    <thead class='thead-default'>
+    <tr align="center">
+        <th width="30%">Order number</th>
+        <th width="20%">Item name</th>
+        <th width="10%">Status</th>
+        <th width="5%">Quantity</th>
+        <th width="10%">Total price</th>
+        <th width="15%">Customer</th>
+        <th width="20%">Contact information</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr align="center">
+        <td th:text="${order.UId}"></td>
+        <td th:text="${order.itemDTO.name}"></td>
+        <td th:text="${order.orderStatusDTO.name}"></td>
+        <td th:text="${order.quantity}"></td>
+        <td th:text="${order.totalPrice}"></td>
+        <td th:text="${order.userForOrderDTO.name} + ' ' + ${order.userForOrderDTO.lastname}"></td>
+        <td>
+            <span th:text="${order.userForOrderDTO.profileDTO.address}"></span>
+            <br/>
+            <span th:text="${order.userForOrderDTO.profileDTO.telephone}"></span>
+        </td>
+        <td>
+            <form action="#" th:action="@{/private/orders/{id}/update(id=${order.UId})}" method="post">
+                <label>
+                    <select th:field="${order.orderStatusDTO.id}">
+                        <option th:each="status : ${statuses}"
+                                th:value="${status.id}"
+                                th:text="${status.name}">DefaultName
+                        </option>
+                    </select>
+                </label>
+                <input type="submit" value="Change status"/>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

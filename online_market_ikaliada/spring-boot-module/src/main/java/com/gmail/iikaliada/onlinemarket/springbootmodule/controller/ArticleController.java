@@ -31,13 +31,13 @@ public class ArticleController {
     @Value("${delete.comment.message}")
     String deleteCommentMessage;
 
-    @Autowired
-    private PaginationHandler pagination;
+    private final PaginationHandler pagination;
     private final ArticleService articleService;
 
     @Autowired
-    public ArticleController(ArticleService articleService) {
+    public ArticleController(ArticleService articleService, PaginationHandler pagination) {
         this.articleService = articleService;
+        this.pagination = pagination;
     }
 
     @GetMapping("/articles")

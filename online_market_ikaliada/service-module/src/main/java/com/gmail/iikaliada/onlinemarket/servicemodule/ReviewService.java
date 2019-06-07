@@ -13,4 +13,8 @@ public interface ReviewService {
     void changeStatus(List<ReviewDTO> reviewDTOS);
 
     void deleteReview(Long id);
+
+    void addReview(ReviewDTO reviewDTO);
+
+    List<ReviewDTO> getReviewWhereShownIsTrue();
 }

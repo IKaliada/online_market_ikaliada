@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <h1>Users</h1>
+    <h3><a th:href="@{/private/users/add_user}">Add User</a>
+    </h3>
+    <h3><a th:href="@{/private/reviews}">Show Reviews</a></h3>
+    <div th:if="${emailError}" th:utext="${emailError}"></div>
+    <div th:if="${notAllowedMessage}" th:utext="${notAllowedMessage}"></div>
+    <div th:if="${passwordUpdatedMessage}" th:utext="${passwordUpdatedMessage}"></div>
+    <div th:if="${notAllowedUpdatePasswordMessage}" th:utext="${notAllowedUpdatePasswordMessage}"></div>
+</head>
+<body>
+    <table border="1" class='table table-sm responsive'>
+        <thead class='thead-default'>
+        <tr>
+            <th>NAME</th>
+            <th>LASTNAME</th>
+            <th>MIDDLENAME</th>
+            <th>EMAIL</th>
+            <th>ROLE</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}" th:object="${users}">
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.lastname}"></td>
+            <td th:text="${user.middlename}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.role.name}"></td>
+            <td>
+                <form action="#" th:action="@{/private/users/{id}/update(id=${user.id})}" method="post">
+                    <label>
+                        <select th:field="${user.role.id}">
+                            <option th:each="role : ${roles}"
+                                    th:value="${role.id}"
+                                    th:text="${role.name}">DefaultName
+                            </option>
+                        </select>
+                    </label>
+                    <input type="submit" value="CHANGE ROLE"/>
+                </form>
+            </td>
+            <td>
+                <form action="#" th:action="@{/private/users/{id}/password(id=${user.id})}" method="post">
+                    <input type="submit" value="CHANGE PASSWORD"/>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+<div class="pagination-div">
+            <span th:if="${currentPage>1}">
+                <a th:href="@{/private/users(size=${totalPage},page=${previousPage})}">Previous</a>
+            </span>
+    <span th:each="pageNumber:${pages}">
+                <a th:href="@{/private/users(size=${totalPage},page=${pageNumber})}"
+                   th:text="${pageNumber}"
+                   th:class="${pageNumber==pageNumber + 1}">1</a>
+            </span>
+    <span th:if="${currentPage<totalPage}">
+                <a th:href="@{/private/users(size=${totalPage},page=${nextPage})}">Next</a>
+            </span>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

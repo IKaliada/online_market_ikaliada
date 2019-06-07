@@ -8,8 +8,10 @@
 <div sec:authorize="hasAuthority('ADMINISTRATOR')"><h3><a th:href="@{/private/users/add_user}">Add User</a></h3></div>
 <div sec:authorize="hasAuthority('ADMINISTRATOR')"><h3><a th:href="@{/private/users}">Users</a></h3></div>
 <div sec:authorize="hasAuthority('SALE_USER')"><h3><a th:href="@{/articles}">Articles</a></h3></div>
-<div sec:authorize="hasAuthority('SALE_USER')"><h3><a th:href="@{/private/items}">Items</a></h3></div>
+<div sec:authorize="hasAuthority('SALE_USER')"><h3><a th:href="@{/private/orders}">Orders</a></h3></div>
+<div sec:authorize="hasAnyAuthority('SALE_USER','CUSTOMER_USER')"><h3><a th:href="@{/private/items}">Items</a></h3></div>
 <div sec:authorize="hasAuthority('CUSTOMER_USER')"><h3><a th:href="@{/articles}">Articles</a></h3></div>
+<div sec:authorize="hasAuthority('CUSTOMER_USER')"><h3><a th:href="@{/private/review}">Add review</a></h3></div>
 <div sec:authorize="authenticated"><h3><a th:href="@{/public/users/profile}">Profile</a></h3></div>
 <div sec:authorize="anonymous"><h3><a th:href="@{/login}">Sign in</a></h3></div>
 <h3><a th:href="@{/about}">About</a></h3>

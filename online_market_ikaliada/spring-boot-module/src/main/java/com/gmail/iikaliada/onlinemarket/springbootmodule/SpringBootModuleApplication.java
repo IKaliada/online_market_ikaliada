@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration;
 import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication(scanBasePackages = {
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.PropertySource;
         "com.gmail.iikaliada.onlinemarket.springbootmodule",
         "com.gmail.iikaliada.onlinemarket.servicemodule"},
         exclude = {UserDetailsServiceAutoConfiguration.class,
-                LiquibaseAutoConfiguration.class}
+                LiquibaseAutoConfiguration.class, MultipartAutoConfiguration.class}
 )
 @EntityScan(basePackages = "com.gmail.iikaliada.onlinemarket.repositorymodule.model")
 @PropertySource({"classpath:mail.properties", "classpath:validation.properties"})

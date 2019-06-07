@@ -19,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ItemApiControllerIntegrationTest {
+
     @Autowired
     private WebApplicationContext context;
 
@@ -38,13 +39,8 @@ public class ItemApiControllerIntegrationTest {
     }
 
     @Test
-    public void shouldSaveSucceedWith200ForArticleApi() throws Exception {
-        mvc.perform(get("/api/v1/private/items/1")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content("{\"name\":\"New item\"\n" +
-                        ",\"price\":100\n" +
-                        ", \"unique_number\":\"12\"\n" +
-                        ", \"description\":\"name\"}}"))
+    public void shouldSaveSucceedWith200ForItemApi() throws Exception {
+        mvc.perform(get("/api/v1/private/items/1"))
                 .andExpect(status().isOk());
     }
 
@@ -52,16 +48,15 @@ public class ItemApiControllerIntegrationTest {
     public void shouldSuccessfullySaveItemWith200ForItemAPI() throws Exception {
         mvc.perform(post("/api/v1/private/items")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content("{\"name\": \"Item name\"" +
-                        ", \"price\":100" +
-                        ", \"unique_number\":1234" +
-                        ", \"description\":\"some description\"}"))
+                .content("{\"name\": \"new item\",\n" +
+                        "\"price\": 1.21,\n" +
+                        "\"description\": \"some new description\"}"))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void shouldGetStatusOkAfterDeletingItem() throws Exception {
-        mvc.perform(delete("/api/v1/private/items/1"))
+        mvc.perform(delete("/api/v1/private/items/2"))
                 .andExpect(status().isOk());
     }
 }

@@ -36,7 +36,7 @@ public class OrderApiControllerIntegrationTest {
 
     @Test
     public void shouldGetStatusOkForOrderApiWhenGetById() throws Exception {
-        mvc.perform(get("/api/v1/orders/1"))
+        mvc.perform(get("/api/v1/orders/36c9b60d-7ef6-4d17-b668-06eac349df1f"))
                 .andExpect(status().isOk());
     }
 }

@@ -31,18 +31,4 @@ public class CommentConverterImpl implements CommentConverter {
         }
         return commentDTOList;
     }
-
-    @Override
-    public List<Comment> fromCommentDTO(List<CommentDTO> commentDTOList) {
-        List<Comment> comments = new ArrayList<>();
-        for (CommentDTO commentDTO : commentDTOList) {
-            Comment comment = new Comment();
-            comment.setId(commentDTO.getId());
-            comment.setContent(commentDTO.getContent());
-            comment.setDate(commentDTO.getDate());
-            comment.setUser(userConverter.fromUserForUiDTO(commentDTO.getUser()));
-            comments.add(comment);
-        }
-        return comments;
-    }
 }

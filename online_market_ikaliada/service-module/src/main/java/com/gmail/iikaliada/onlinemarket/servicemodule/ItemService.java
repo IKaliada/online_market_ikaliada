@@ -2,6 +2,7 @@ package com.gmail.iikaliada.onlinemarket.servicemodule;
 
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ItemDTO;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 public interface ItemService {

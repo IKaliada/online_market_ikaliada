@@ -1,42 +1,44 @@
 package com.gmail.iikaliada.onlinemarket.servicemodule.converter.impl;
 
 import com.gmail.iikaliada.onlinemarket.repositorymodule.model.Order;
-import com.gmail.iikaliada.onlinemarket.repositorymodule.model.OrderId;
 import com.gmail.iikaliada.onlinemarket.servicemodule.converter.ItemConverter;
 import com.gmail.iikaliada.onlinemarket.servicemodule.converter.OrderConverter;
+import com.gmail.iikaliada.onlinemarket.servicemodule.converter.OrderStatusConverter;
 import com.gmail.iikaliada.onlinemarket.servicemodule.converter.UserConverter;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.OrderDTO;
-import com.gmail.iikaliada.onlinemarket.servicemodule.model.OrderDTOId;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OrderConverterImpl implements OrderConverter {
 
     private final ItemConverter itemConverter;
-    private final UserConverter userConverterl;
+    private final UserConverter userConverter;
+    private final OrderStatusConverter orderStatusConverter;
 
-    public OrderConverterImpl(ItemConverter itemConverter, UserConverter userConverterl) {
+    public OrderConverterImpl(ItemConverter itemConverter,
+                              UserConverter userConverter,
+                              OrderStatusConverter orderStatusConverter) {
         this.itemConverter = itemConverter;
-        this.userConverterl = userConverterl;
+        this.userConverter = userConverter;
+        this.orderStatusConverter = orderStatusConverter;
     }
 
     @Override
     public OrderDTO toOrderDTO(Order order) {
         OrderDTO orderDTO = new OrderDTO();
-        orderDTO.setUniqueId(order.getUid());
-        orderDTO.setId(toOrderDTOId(order.getId()));
-        orderDTO.setOrderStatus(order.getOrderStatus());
+        orderDTO.setUId(order.getUid());
         orderDTO.setQuantity(order.getQuantity());
-        orderDTO.setUserForOrderDTO(userConverterl.toUserForOrderDTO(order.getUser()));
+        orderDTO.setOrderStatusDTO(orderStatusConverter.toOrderStatusDTO(order.getOrderStatus()));
+        orderDTO.setUserForOrderDTO(userConverter.toUserForOrderDTO(order.getUser()));
         orderDTO.setItemDTO(itemConverter.toItemDTO(order.getItem()));
         return orderDTO;
     }
 
     @Override
-    public OrderDTOId toOrderDTOId(OrderId orderId) {
-        OrderDTOId orderDTOId = new OrderDTOId();
-        orderDTOId.setItemId(orderId.getItemId());
-        orderDTOId.setUserId(orderId.getUserId());
-        return orderDTOId;
+    public Order fromOrderDTO(OrderDTO orderDTO) {
+        Order order = new Order();
+        order.setQuantity(orderDTO.getQuantity());
+        order.setUser(userConverter.fromUserForOrderDTO(orderDTO.getUserForOrderDTO()));
+        return order;
     }
 }

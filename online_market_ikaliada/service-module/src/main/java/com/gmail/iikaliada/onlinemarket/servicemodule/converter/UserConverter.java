@@ -1,9 +1,9 @@
 package com.gmail.iikaliada.onlinemarket.servicemodule.converter;
 
 import com.gmail.iikaliada.onlinemarket.repositorymodule.model.User;
+import com.gmail.iikaliada.onlinemarket.servicemodule.model.AuthenticatedUserDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.LoginDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserDTO;
-import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForArticleDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForOrderDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForProfileDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForUiDTO;
@@ -22,9 +22,11 @@ public interface UserConverter {
 
     UserForProfileDTO toUserForProfileDTO(User user);
 
-    User fromUserForArticleDTO(UserForArticleDTO userForArticleDTO);
+    User fromUserForArticleDTO(AuthenticatedUserDTO authenticatedUserDTO);
 
-    UserForArticleDTO toUserForArticleDTO(User user);
+    AuthenticatedUserDTO toAuthenticatedUserDTO(User user);
 
-    UserForOrderDTO toUserForOrderDTO(User user);
+    UserForOrderDTO toUserForOrderDTO(User users);
+
+    User fromUserForOrderDTO(UserForOrderDTO userForOrderDTO);
 }

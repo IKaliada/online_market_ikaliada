@@ -33,6 +33,8 @@ public class User {
     private String email;
     @Column
     private String password;
+    @Column(name = "deleted")
+    private Boolean isDeleted;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     private Role role;
@@ -92,6 +94,14 @@ public class User {
         this.password = password;
     }
 
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
     public Role getRole() {
         return role;
     }
@@ -127,11 +137,12 @@ public class User {
                 Objects.equals(middlename, user.middlename) &&
                 Objects.equals(email, user.email) &&
                 Objects.equals(password, user.password) &&
+                Objects.equals(isDeleted, user.isDeleted) &&
                 profile == user.profile;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, lastname, middlename, email, password, profile);
+        return Objects.hash(id, name, lastname, middlename, email, password, isDeleted, profile);
     }
 }

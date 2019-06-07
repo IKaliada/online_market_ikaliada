@@ -11,7 +11,5 @@ public interface ArticleConverter {
 
     ArticleForPageDTO toArticleForPageDTO(Article article);
 
-    Article fromArticleDTO(ArticleDTO articleDTO);
-
     Article fromArticleForNewsDTO(ArticleForNewsDTO articleForNewsDTO);
 }

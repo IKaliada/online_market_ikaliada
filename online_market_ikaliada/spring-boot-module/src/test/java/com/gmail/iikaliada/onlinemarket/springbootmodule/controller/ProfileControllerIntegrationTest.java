@@ -11,10 +11,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.AuthoritiesConstants.ADMIN_AUTHORITY_CONSTANT;
+import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.AuthoritiesConstants.CUSTOMER_AUTHORITY_CONSTANT;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -34,9 +34,9 @@ public class ProfileControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = ADMIN_AUTHORITY_CONSTANT)
+    @WithMockUser(authorities = CUSTOMER_AUTHORITY_CONSTANT)
     public void shouldGetProfilePage() throws Exception {
         this.mockMvc.perform(get("/public/users/profile"))
-                .andExpect(forwardedUrl("profile"));
+                .andExpect(status().isOk());
     }
 }

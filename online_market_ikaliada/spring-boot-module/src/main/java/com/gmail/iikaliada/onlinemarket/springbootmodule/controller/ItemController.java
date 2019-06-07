@@ -19,12 +19,13 @@ import java.util.List;
 @RequestMapping("/private")
 public class ItemController {
 
-    @Autowired
-    private PaginationHandler pagination;
+    private final PaginationHandler pagination;
     private final ItemService itemService;
 
-    public ItemController(ItemService itemService) {
+    @Autowired
+    public ItemController(ItemService itemService, PaginationHandler pagination) {
         this.itemService = itemService;
+        this.pagination = pagination;
     }
 
     @GetMapping("/items")

@@ -1,5 +1,6 @@
 package com.gmail.iikaliada.onlinemarket.springbootmodule.controller;
 
+import com.gmail.iikaliada.onlinemarket.servicemodule.model.ReviewDTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +14,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.AuthoritiesConstants.ADMIN_AUTHORITY_CONSTANT;
+import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.AuthoritiesConstants.CUSTOMER_AUTHORITY_CONSTANT;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,16 +42,33 @@ public class ReviewControllerIntegrationTest {
     @Test
     @WithMockUser(authorities = ADMIN_AUTHORITY_CONSTANT)
     public void shouldGetCommentPageWhenGoToCommentUrl() throws Exception {
-        this.mockMvc.perform(post("/private/review/changeStatus"))
+        this.mockMvc.perform(post("/private/reviews/changeStatus"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/private/review"));
+                .andExpect(redirectedUrl("/private/reviews"));
     }
 
     @Test
     @WithMockUser(authorities = ADMIN_AUTHORITY_CONSTANT)
     public void shouldGetCommentPageWhenDeleteComment() throws Exception {
-        this.mockMvc.perform(post("/private/review/1/delete"))
+        this.mockMvc.perform(post("/private/reviews/1/delete"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/private/users/comment"));
+                .andExpect(redirectedUrl("/private/reviews"));
+    }
+
+    @Test
+    @WithMockUser(authorities = CUSTOMER_AUTHORITY_CONSTANT)
+    public void shouldGetReviewCreationPageWhenGoThere() throws Exception {
+        this.mockMvc.perform(get("/private/review"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(authorities = CUSTOMER_AUTHORITY_CONSTANT)
+    public void shouldRedirectToArticlePageWhenSuccessfullySavedReview() throws Exception {
+        ReviewDTO reviewDTO = new ReviewDTO();
+        reviewDTO.setText("test for new review page");
+        this.mockMvc.perform(post("/private/review/add").flashAttr("review", reviewDTO))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/articles"));
     }
 }

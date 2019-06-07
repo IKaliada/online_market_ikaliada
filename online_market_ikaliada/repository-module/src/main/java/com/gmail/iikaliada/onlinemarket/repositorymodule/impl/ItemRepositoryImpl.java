@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public class ItemRepositoryImpl extends GenericRepositoryImpl<Long, Item> implements ItemRepository {
+
     @Override
     @SuppressWarnings("unchecked")
     public List<Item> getItems(Integer offset, Integer limit) {

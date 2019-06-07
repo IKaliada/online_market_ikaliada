@@ -1,11 +1,7 @@
 package com.gmail.iikaliada.onlinemarket.springbootmodule.controller;
 
 import com.gmail.iikaliada.onlinemarket.servicemodule.ProfileService;
-import com.gmail.iikaliada.onlinemarket.servicemodule.UserService;
-import com.gmail.iikaliada.onlinemarket.servicemodule.model.LoginDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForProfileDTO;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,19 +15,14 @@ import javax.validation.Valid;
 public class ProfileController {
 
     private final ProfileService profileService;
-    private final UserService userService;
 
-    public ProfileController(ProfileService profileService, UserService userService) {
+    public ProfileController(ProfileService profileService) {
         this.profileService = profileService;
-        this.userService = userService;
     }
 
     @GetMapping("/public/users/profile")
     public String getProfileById(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-        LoginDTO user = userService.getUsersByUsername(currentPrincipalName);
-        UserForProfileDTO userForProfileDTO = profileService.getProfileById(user.getId());
+        UserForProfileDTO userForProfileDTO = profileService.getProfileById();
         model.addAttribute("user", userForProfileDTO);
         return "profile";
     }

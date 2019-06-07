@@ -1,24 +1,24 @@
 package com.gmail.iikaliada.onlinemarket.servicemodule.model;
 
-import com.gmail.iikaliada.onlinemarket.servicemodule.validator.LatinLetterValidator;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class UserForProfileDTO {
+
     private Long id;
     @NotNull
     @Size(min = 2, max = 20, message = "{validation.size.message}")
-    @LatinLetterValidator
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "{letter.not.correct}")
     private String name;
     @NotNull
     @Size(min = 2, max = 40, message = "{validation.size.message}")
-    @LatinLetterValidator
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "{letter.not.correct}")
     private String middlename;
     @NotNull
     @Size(min = 2, max = 40, message = "{validation.size.message}")
-    @LatinLetterValidator
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "{letter.not.correct}")
     private String lastname;
     private String password;
     @Valid

@@ -1,41 +1,63 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
->
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
 <head>
     <h1>Items</h1>
+    <div sec:authorize="hasAuthority('CUSTOMER_USER')"><a th:href="@{/private/review}">Add review</a>
+        <a th:href="@{/public/users/profile}">Profile</a>
+    </div>
+    <a th:href="@{/about}">About</a>
+    <a th:href="@{/private/orders/find}">Orders</a>
+    <a th:href="@{/articles}">Articles</a>
+
 </head>
 <body>
+<div th:if="${notFoundMessage}" th:utext="${notFoundMessage}"></div>
 <form th:action='@{/private/items/delete}'
       method="POST"
       th:object="${items}">
     <table border="1" class='table table-sm responsive'>
         <thead class='thead-default'>
         <tr align="center">
-            <th width="2%"></th>
+            <div sec:authorize="hasAuthority('SALE_USER')">
+                <th width="2%"></th>
+            </div>
             <th width="10%">NAME</th>
             <th width="10%">PRICE</th>
             <th width="30%">UNIQUE_NUMBER</th>
-            <th width="5%"></th>
+            <div sec:authorize="hasAuthority('SALE_USER')">
+                <th width="5%"></th>
+            </div>
         </tr>
         </thead>
         <tbody>
         <tr align="center" th:each="item : ${items}">
-            <td>
-                <input type="checkbox" id="ids" th:name="ids" th:value="${item.id}"/>
-            </td>
+            <div sec:authorize="hasAuthority('SALE_USER')">
+                <td>
+                    <input type="checkbox" id="ids" th:name="ids" th:value="${item.id}"/>
+                </td>
+            </div>
             <td>
                 <a th:href="${'/private/items/' + item.id}"><span th:text="${item.name}"></span></a>
             </td>
             <td th:text="${item.price}"></td>
             <td th:text="${item.uniqueNumber}"></td>
-            <td>
-                <a th:href="${'/private/items/' + item.id + '/copy'}">Copy</a>
-            </td>
+            <div sec:authorize="hasAuthority('SALE_USER')">
+                <td>
+                    <a th:href="${'/private/items/' + item.id + '/copy'}">Copy</a>
+                </td>
+            </div>
         </tr>
         </tbody>
     </table>
-    <input type="submit" value="DELETE"/>
+    <div sec:authorize="hasAuthority('SALE_USER')"><input type="submit" value="DELETE"/></div>
 </form>
+<div sec:authorize="hasAuthority('SALE_USER')">
+    <form method="post" th:action='@{/upload}' enctype="multipart/form-data">
+        File to upload: <input type="file" name="file"/>
+        <input type="submit" value="Upload">Press here to upload the file!
+    </form>
+</div>
 <div class="pagination-div">
             <span th:if="${currentPage>1}">
                 <a th:href="@{/private/items(size=${totalPage},page=${previousPage})}">Previous</a>

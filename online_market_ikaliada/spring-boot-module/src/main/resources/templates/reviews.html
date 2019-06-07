@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <h1>Reviews</h1>
+</head>
+<body>
+<form th:action='@{/private/reviews/changeStatus} '
+      method="POST"
+      th:object="${reviews}">
+    <table border="1" class='table table-sm responsive'>
+        <thead class='thead-default'>
+        <tr>
+            <th></th>
+            <th>NAME</th>
+            <th>LASTNAME</th>
+            <th>DATE</th>
+            <th>REVIEW</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="review, stat :${reviews.reviewDTOList}">
+            <td>
+                <input class="checkbox" type="checkbox"
+                       th:field="${reviews.reviewDTOList[__${stat.index}__].shown}">
+                <input hidden th:name="id" th:value="${review.id}"
+                       th:field="${reviews.reviewDTOList[__${stat.index}__].id}">
+            </td>
+            <td th:text="${review.userForUiDTO.name}"></td>
+            <td th:text="${review.userForUiDTO.lastname}"></td>
+            <td th:text="${review.date}"></td>
+            <td th:text="${review.text}"></td>
+            <td>
+                <form action="#" th:action="@{/private/reviews/{id}/delete(id=${review.id})}" method="post">
+                    <input type="submit" value="DELETE"/>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <input type="submit" value="SAVE"/>
+</form>
+<div class="pagination-div">
+            <span th:if="${currentPage>1}">
+                <a th:href="@{/private/reviews(page=${previousPage})}">Previous</a>
+            </span>
+    <span th:each="pageNumber:${pages}">
+                <a th:href="@{/private/reviews(page=${pageNumber})}"
+                   th:text="${pageNumber}"
+                   th:class="${pageNumber==pageNumber + 1}">1</a>
+            </span>
+    <span th:if="${currentPage<totalPage}">
+                <a th:href="@{/private/reviews(page=${nextPage})}">Next</a>
+            </span>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

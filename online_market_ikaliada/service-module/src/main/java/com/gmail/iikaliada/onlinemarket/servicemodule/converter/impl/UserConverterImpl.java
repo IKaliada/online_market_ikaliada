@@ -4,9 +4,9 @@ import com.gmail.iikaliada.onlinemarket.repositorymodule.model.User;
 import com.gmail.iikaliada.onlinemarket.servicemodule.converter.ProfileConverter;
 import com.gmail.iikaliada.onlinemarket.servicemodule.converter.RoleConverter;
 import com.gmail.iikaliada.onlinemarket.servicemodule.converter.UserConverter;
+import com.gmail.iikaliada.onlinemarket.servicemodule.model.AuthenticatedUserDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.LoginDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserDTO;
-import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForArticleDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForOrderDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForProfileDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForUiDTO;
@@ -90,19 +90,19 @@ public class UserConverterImpl implements UserConverter {
     }
 
     @Override
-    public User fromUserForArticleDTO(UserForArticleDTO userForArticleDTO) {
+    public User fromUserForArticleDTO(AuthenticatedUserDTO authenticatedUserDTO) {
         User user = new User();
-        user.setId(userForArticleDTO.getId());
-        user.setEmail(userForArticleDTO.getEmail());
+        user.setId(authenticatedUserDTO.getId());
+        user.setEmail(authenticatedUserDTO.getEmail());
         return user;
     }
 
     @Override
-    public UserForArticleDTO toUserForArticleDTO(User user) {
-        UserForArticleDTO userForArticleDTO = new UserForArticleDTO();
-        userForArticleDTO.setId(user.getId());
-        userForArticleDTO.setEmail(user.getEmail());
-        return userForArticleDTO;
+    public AuthenticatedUserDTO toAuthenticatedUserDTO(User user) {
+        AuthenticatedUserDTO authenticatedUserDTO = new AuthenticatedUserDTO();
+        authenticatedUserDTO.setId(user.getId());
+        authenticatedUserDTO.setEmail(user.getEmail());
+        return authenticatedUserDTO;
     }
 
     @Override
@@ -113,5 +113,12 @@ public class UserConverterImpl implements UserConverter {
         userForOrderDTO.setLastname(user.getLastname());
         userForOrderDTO.setProfileDTO(profileConverter.toProfileDTO(user.getProfile()));
         return userForOrderDTO;
+    }
+
+    @Override
+    public User fromUserForOrderDTO(UserForOrderDTO userForOrderDTO) {
+        User user = new User();
+        user.setId(userForOrderDTO.getId());
+        return user;
     }
 }

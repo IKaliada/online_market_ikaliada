@@ -43,6 +43,9 @@
             <column name="password" type="varchar(255)">
                 <constraints nullable="true"/>
             </column>
+            <column name="deleted" type="bit(1)">
+                <constraints nullable="false"/>
+            </column>
             <column name="role_id" type="bigint">
                 <constraints foreignKeyName="true" nullable="true"/>
             </column>
@@ -134,25 +137,28 @@
     </changeSet>
 
     <changeSet author="iikaliada@gmail.com" id="market_13">
-        <sql>insert into user (name, middlename, lastname, email, password, role_id) values ('Ivan', 'Iosifavich',
-            'Kaliada', 'admin@admin.com',
-            '$2a$10$yOiWMdbf/yaOxx8eqs9XtObXTsb7iy8VTQdZpANPUvdJ8yvYKtH7K', (SELECT r.id FROM role r WHERE r.name =
+        <sql>insert into user (name, middlename, lastname, email, password, deleted, role_id) values ('Admin', 'Admin',
+            'Admin', 'admin@admin.com',
+            '$2a$10$yOiWMdbf/yaOxx8eqs9XtObXTsb7iy8VTQdZpANPUvdJ8yvYKtH7K', 0, (SELECT r.id FROM role r WHERE r.name =
             ('ADMINISTRATOR')))
         </sql>
     </changeSet>
 
     <changeSet author="iikaliada@gmail.com" id="market_14">
-        <sql>insert into user (name, middlename, lastname, email, password, role_id) values ('Ivan', 'Iosifavich',
-            'Kaliada', 'customer@customer.com',
-            '$2a$10$yOiWMdbf/yaOxx8eqs9XtObXTsb7iy8VTQdZpANPUvdJ8yvYKtH7K', (SELECT r.id FROM role r WHERE r.name =
+        <sql>insert into user (name, middlename, lastname, email, password, deleted, role_id) values ('Customer',
+            'Customer',
+            'Customer', 'customer@customer.com',
+            '$2a$10$yOiWMdbf/yaOxx8eqs9XtObXTsb7iy8VTQdZpANPUvdJ8yvYKtH7K', 0, (SELECT r.id FROM role r WHERE r.name =
             ('CUSTOMER_USER')))
         </sql>
     </changeSet>
+
     <changeSet author="iikaliada@gmail.com" id="market_15">
         <sql>insert into reviews (review, shown, date, user_id) values ('first review',
             1, now(), (SELECT u.id FROM user u WHERE u.email = ('customer@customer.com')))
         </sql>
     </changeSet>
+
     <changeSet id="market_16" author="iikaliada@gmail.com">
         <createTable tableName="articles">
             <column name="id" type="bigint" autoIncrement="true">
@@ -172,6 +178,7 @@
             </column>
         </createTable>
     </changeSet>
+
     <changeSet id="market_17" author="iikaliada@gmail.com">
         <createTable tableName="profile">
             <column name="id" type="bigint" autoIncrement="true">
@@ -188,34 +195,41 @@
             </column>
         </createTable>
     </changeSet>
+
     <changeSet author="iikaliada@gmail.com" id="market_18">
         <createIndex indexName="FK_ARTICLE" tableName="articles">
             <column name="id"/>
         </createIndex>
     </changeSet>
+
     <changeSet author="iikaliada@gmail.com" id="market_19">
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="articles" onDelete="CASCADE" constraintName="PK_ARTICLE"
                                  referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
+
     <changeSet author="iikaliada@gmail.com" id="market_20">
         <createIndex indexName="FK_PROFILE" tableName="profile">
             <column name="id"/>
         </createIndex>
     </changeSet>
+
     <changeSet author="iikaliada@gmail.com" id="market_21">
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="profile" onUpdate="NO ACTION" onDelete="CASCADE"
                                  constraintName="PK_PROFILE"
                                  referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
+
     <changeSet author="iikaliada@gmail.com" id="market_22">
-        <sql>insert into user (name, middlename, lastname, email, password, role_id) values ('Ivan', 'Iosifavich',
-            'Kaliada', 'seller@seller.com',
-            '$2a$10$yOiWMdbf/yaOxx8eqs9XtObXTsb7iy8VTQdZpANPUvdJ8yvYKtH7K', (SELECT r.id FROM role r WHERE r.name =
+        <sql>insert into user (name, middlename, lastname, email, password, deleted, role_id) values ('Seller',
+            'Seller',
+            'Seller', 'seller@seller.com',
+            '$2a$10$yOiWMdbf/yaOxx8eqs9XtObXTsb7iy8VTQdZpANPUvdJ8yvYKtH7K', 0, (SELECT r.id FROM role r WHERE r.name =
             ('SALE_USER')))
         </sql>
     </changeSet>
+
     <changeSet id="market_23" author="iikaliada@gmail.com">
         <createTable tableName="comment">
             <column name="id" type="bigint" autoIncrement="true">
@@ -235,45 +249,55 @@
             </column>
         </createTable>
     </changeSet>
+
     <changeSet author="iikaliada@gmail.com" id="market_24">
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="comment" onDelete="CASCADE" constraintName="FK_COMMENT_USER"
                                  referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
+
     <changeSet author="iikaliada@gmail.com" id="market_25">
         <addForeignKeyConstraint baseColumnNames="article_id"
                                  baseTableName="comment" onDelete="CASCADE" constraintName="FK_COMMENT_ARTICLE"
                                  referencedColumnNames="id" referencedTableName="articles"/>
     </changeSet>
+
     <changeSet author="iikaliada@gmail.com" id="market_26">
         <sql>insert into articles (article, description, date, user_id) values ('Title of article', 'Hibernate loads
             eagerly fetched associations when it loads an entity.', now(), 3)
         </sql>
     </changeSet>
+
     <changeSet author="iikaliada@gmail.com" id="market_27">
         <sql>insert into comment (content, date, user_id, article_id) values ('First comment', now(), 3, 1)
         </sql>
     </changeSet>
+
     <changeSet author="iikaliada@gmail.com" id="market_28">
         <createIndex indexName="idx_fulltext_comment" tableName="articles">
             <column name="article(255)"/>
         </createIndex>
     </changeSet>
+
     <changeSet author="iikaliada@gmail.com" id="market_29">
         <sql>ALTER TABLE articles ADD FULLTEXT(description)</sql>
     </changeSet>
+
     <changeSet author="iikaliada@gmail.com" id="market_30">
-        <sql>insert into profile (address, telephone, user_id) values ('Belarus', '+375333255405', 1)
+        <sql>insert into profile (address, telephone, user_id) values ('Belarus', '+375331111111', 1)
         </sql>
     </changeSet>
+
     <changeSet author="iikaliada@gmail.com" id="market_31">
-        <sql>insert into profile (address, telephone, user_id) values ('Belarus', '+375333255405', 2)
+        <sql>insert into profile (address, telephone, user_id) values ('Belarus', '+375331111111', 2)
         </sql>
     </changeSet>
+
     <changeSet author="iikaliada@gmail.com" id="market_32">
-        <sql>insert into profile (address, telephone, user_id) values ('Belarus', '+375333255405', 3)
+        <sql>insert into profile (address, telephone, user_id) values ('Belarus', '+375331111111', 3)
         </sql>
     </changeSet>
+
     <changeSet id="market_33" author="iikaliada@gmail.com">
         <createTable tableName="item">
             <column name="id" type="bigint" autoIncrement="true">
@@ -282,7 +306,7 @@
             <column name="name" type="varchar(20)">
                 <constraints nullable="false"/>
             </column>
-            <column name="price" type="DECIMAL">
+            <column name="price" type="DECIMAL(10,2)">
                 <constraints nullable="false"/>
             </column>
             <column name="unique_number" type="varchar(38)">
@@ -293,41 +317,175 @@
             </column>
         </createTable>
     </changeSet>
+
     <changeSet author="iikaliada@gmail.com" id="market_34">
         <sql>insert into item (description, name, price, unique_number) values ('description', 'name', 3, 3)
         </sql>
     </changeSet>
-    <changeSet id="market_40" author="iikaliada@gmail.com">
+
+    <changeSet id="market_35" author="iikaliada@gmail.com">
         <createTable tableName="orders">
-            <column name="uid" type="bigint" autoIncrement="true">
+            <column name="uid" type="varchar(38)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="user_id" type="bigint">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints foreignKeyName="true" nullable="false"/>
             </column>
             <column name="item_id" type="bigint">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints foreignKeyName="true" nullable="false"/>
             </column>
-            <column name="order_status" type="varchar(20)">
-                <constraints nullable="false"/>
+            <column name="status_id" type="bigint">
+                <constraints foreignKeyName="true" nullable="false"/>
             </column>
             <column name="quantity" type="bigint">
                 <constraints nullable="false"/>
             </column>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
-    <changeSet author="iikaliada@gmail.com" id="market_35">
+
+    <changeSet author="iikaliada@gmail.com" id="market_36">
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="orders" onDelete="CASCADE" constraintName="FK_USER_ORDER"
                                  referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
-    <changeSet author="iikaliada@gmail.com" id="market_36">
+
+    <changeSet author="iikaliada@gmail.com" id="market_37">
         <addForeignKeyConstraint baseColumnNames="item_id"
                                  baseTableName="orders" onDelete="CASCADE" constraintName="FK_ITEM_ORDER"
                                  referencedColumnNames="id" referencedTableName="item"/>
     </changeSet>
-    <changeSet author="iikaliada@gmail.com" id="market_351">
-        <sql>insert into orders (user_id, item_id, order_status, quantity) values (1, 1, 'NEW', 1)
+
+    <changeSet id="market_38" author="iikaliada@gmail.com">
+        <createTable tableName="order_status">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="true"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="iikaliada@gmail.com" id="market_39">
+        <addForeignKeyConstraint baseColumnNames="status_id"
+                                 baseTableName="orders" onUpdate="NO ACTION"
+                                 constraintName="FK_ORDER_STATUS"
+                                 referencedColumnNames="id" referencedTableName="order_status"/>
+    </changeSet>
+
+    <changeSet author="iikaliada@gmail.com" id="market_40">
+        <insert catalogName="online_market_iikaliada"
+                dbms="mysql"
+                schemaName="online_market_iikaliada"
+                tableName="order_status">
+            <column name="name" type="varchar(255)" value="NEW"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="iikaliada@gmail.com" id="market_41">
+        <insert catalogName="online_market_iikaliada"
+                dbms="mysql"
+                schemaName="online_market_iikaliada"
+                tableName="order_status">
+            <column name="name" type="varchar(255)" value="IN_PROGRESS"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="iikaliada@gmail.com" id="market_42">
+        <insert catalogName="online_market_iikaliada"
+                dbms="mysql"
+                schemaName="online_market_iikaliada"
+                tableName="order_status">
+            <column name="name" type="varchar(255)" value="DELIVERED"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="iikaliada@gmail.com" id="market_43">
+        <insert catalogName="online_market_iikaliada"
+                dbms="mysql"
+                schemaName="online_market_iikaliada"
+                tableName="order_status">
+            <column name="name" type="varchar(255)" value="REJECTED"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="iikaliada@gmail.com" id="market_44">
+        <sql>insert into orders (uid, user_id, item_id, status_id, quantity, date) values ('1234', 1, 1, 1, 1, now())
+        </sql>
+    </changeSet>
+
+    <changeSet author="iikaliada@gmail.com" id="market_45">
+        <sql>insert into user (name, middlename, lastname, email, password, deleted, role_id) values ('SECURE', 'API',
+            'ADMIN', 'su@admin.com',
+            '$2a$10$yOiWMdbf/yaOxx8eqs9XtObXTsb7iy8VTQdZpANPUvdJ8yvYKtH7K', 0, (SELECT r.id FROM role r WHERE r.name =
+            ('SECURE_API_USER')))
+        </sql>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_46">
+        <addUniqueConstraint columnNames="email"
+                             constraintName="const_email"
+                             deferrable="true"
+                             disabled="true"
+                             initiallyDeferred="true"
+                             tableName="user"
+                             tablespace="A String"/>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_47">
+        <sql>insert into reviews (review, shown, date, user_id) values ('second review',
+            0, now(), (SELECT u.id FROM user u WHERE u.email = ('customer@customer.com')))
+        </sql>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_48">
+        <sql>insert into reviews (review, shown, date, user_id) values ('third review',
+            1, now(), (SELECT u.id FROM user u WHERE u.email = ('customer@customer.com')))
+        </sql>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_49">
+        <sql>insert into reviews (review, shown, date, user_id) values ('fourth review',
+            1, now(), (SELECT u.id FROM user u WHERE u.email = ('customer@customer.com')))
+        </sql>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_50">
+        <sql>insert into reviews (review, shown, date, user_id) values ('fifth review',
+            0, now(), (SELECT u.id FROM user u WHERE u.email = ('customer@customer.com')))
+        </sql>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_51">
+        <sql>insert into reviews (review, shown, date, user_id) values ('sixth review',
+            0, now(), (SELECT u.id FROM user u WHERE u.email = ('customer@customer.com')))
+        </sql>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_52">
+        <sql>insert into reviews (review, shown, date, user_id) values ('seventh review',
+            1, now(), (SELECT u.id FROM user u WHERE u.email = ('customer@customer.com')))
+        </sql>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_53">
+        <sql>insert into reviews (review, shown, date, user_id) values ('eighth review',
+            1, now(), (SELECT u.id FROM user u WHERE u.email = ('customer@customer.com')))
+        </sql>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market54">
+        <sql>insert into reviews (review, shown, date, user_id) values ('ninth review',
+            0, now(), (SELECT u.id FROM user u WHERE u.email = ('customer@customer.com')))
+        </sql>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_55">
+        <sql>insert into reviews (review, shown, date, user_id) values ('tenth review',
+            1, now(), (SELECT u.id FROM user u WHERE u.email = ('customer@customer.com')))
+        </sql>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_56">
+        <sql>insert into reviews (review, shown, date, user_id) values ('eleventh review',
+            0, now(), (SELECT u.id FROM user u WHERE u.email = ('customer@customer.com')))
+        </sql>
+    </changeSet>
+    <changeSet author="iikaliada@gmail.com" id="market_57">
+        <sql>insert into reviews (review, shown, date, user_id) values ('twelfth review',
+            0, now(), (SELECT u.id FROM user u WHERE u.email = ('customer@customer.com')))
         </sql>
     </changeSet>
 </databaseChangeLog>

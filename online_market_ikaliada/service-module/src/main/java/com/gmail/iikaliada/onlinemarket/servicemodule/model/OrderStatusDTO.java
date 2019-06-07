@@ -1,8 +1,9 @@
 package com.gmail.iikaliada.onlinemarket.servicemodule.model;
 
-public class UserForArticleDTO {
+public class OrderStatusDTO {
+
     private Long id;
-    private String email;
+    private String name;
 
     public Long getId() {
         return id;
@@ -12,11 +13,11 @@ public class UserForArticleDTO {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getName() {
+        return name;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setName(String name) {
+        this.name = name;
     }
 }
