@@ -2,58 +2,33 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
 >
 <head>
-    <h1>Comments</h1>
-    <h3><a th:href="@{/home}">Home</a></h3>
+    <title><h1>Review</h1></title>
+    <h3><a th:href="@{/about}">About</a></h3>
 </head>
 <body>
-<form th:action='@{/private/review/changeStatus} '
+<form th:action='@{/private/review/add}'
       method="POST"
-      th:object="${reviews}">
-    <table border="1" class='table table-sm responsive'>
+      th:object="${review}">
+
+    <table width="80%">
         <thead class='thead-default'>
         <tr>
             <th></th>
-            <th>NAME</th>
-            <th>LASTNAME</th>
-            <th>DATE</th>
-            <th>REVIEW</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="review, stat :${reviews.reviewDTOList}">
-            <td>
-                <input class="checkbox" type="checkbox"
-                       th:field="${reviews.reviewDTOList[__${stat.index}__].shown}">
-                <input hidden th:name="id" th:value="${review.id}"
-                       th:field="${reviews.reviewDTOList[__${stat.index}__].id}">
+        <tr>
+            <td width="50%">
+                <label>
+                    <textarea rows="20" cols="80" th:field="*{text}"></textarea></p>
+                </label>
             </td>
-            <td th:text="${review.userForUiDTO.name}"></td>
-            <td th:text="${review.userForUiDTO.lastname}"></td>
-            <td th:text="${review.date}"></td>
-            <td th:text="${review.text}"></td>
-            <td>
-                <form action="#" th:action="@{/private/review/{id}/delete(id=${review.id})}" method="post">
-                    <input type="submit" value="DELETE"/>
-                </form>
-            </td>
+            <td th:if="${#fields.hasErrors('text')}" th:errors="*{text}">Review Error</td>
         </tr>
         </tbody>
     </table>
-    <input type="submit" value="SAVE"/>
+    <input type="submit" value="Send"/>
 </form>
-<div class="pagination-div">
-            <span th:if="${currentPage>1}">
-                <a th:href="@{/private/review(page=${previousPage})}">Previous</a>
-            </span>
-    <span th:each="pageNumber:${pages}">
-                <a th:href="@{/private/review(page=${pageNumber})}"
-                   th:text="${pageNumber}"
-                   th:class="${pageNumber==pageNumber + 1}">1</a>
-            </span>
-    <span th:if="${currentPage<totalPage}">
-                <a th:href="@{/private/review(page=${nextPage})}">Next</a>
-            </span>
-</div>
 <div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>

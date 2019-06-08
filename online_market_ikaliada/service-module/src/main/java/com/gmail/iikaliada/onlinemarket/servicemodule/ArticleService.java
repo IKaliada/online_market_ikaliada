@@ -3,6 +3,8 @@ package com.gmail.iikaliada.onlinemarket.servicemodule;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ArticleDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ArticleForNewsDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ArticleForPageDTO;
+
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 public interface ArticleService {
@@ -15,7 +17,7 @@ public interface ArticleService {
 
     List<ArticleForPageDTO> getArticleByKeyWord(String keyWord);
 
-    void add(ArticleDTO articleDTO);
+    void add(ArticleForNewsDTO articleForNewsDTO);
 
     void deleteById(Long id);
 
@@ -26,4 +28,6 @@ public interface ArticleService {
     void deleteCommentById(List<Long> collect);
 
     void createNewArticle(ArticleForNewsDTO articleForNewsDTO);
+
+    List<ArticleDTO> getArticles();
 }

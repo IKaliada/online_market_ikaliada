@@ -1,8 +1,7 @@
 package com.gmail.iikaliada.onlinemarket.servicemodule.model;
 
-import com.gmail.iikaliada.onlinemarket.servicemodule.validator.LatinLetterValidator;
-
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
@@ -11,14 +10,14 @@ public class ArticleForNewsDTO {
     private Long id;
     @NotNull
     @Size(min = 10, max = 50, message = "{validation.size.message}")
-    @LatinLetterValidator
+    @Pattern(regexp = "^[a-zA-Z0-9/.,;:\"'?! ]+$", message = "{letter.not.correct}")
     private String article;
     @NotNull
     @Size(min = 10, max = 1000, message = "{validation.size.message}")
-    @LatinLetterValidator
+    @Pattern(regexp = "^[a-zA-Z0-9/.,;:\"'?! ]+$", message = "{letter.not.correct}")
     private String description;
     private Date date;
-    private UserForArticleDTO userForArticleDTO;
+    private AuthenticatedUserDTO authenticatedUserDTO;
 
     public Long getId() {
         return id;
@@ -52,11 +51,11 @@ public class ArticleForNewsDTO {
         this.date = date;
     }
 
-    public UserForArticleDTO getUserForArticleDTO() {
-        return userForArticleDTO;
+    public AuthenticatedUserDTO getAuthenticatedUserDTO() {
+        return authenticatedUserDTO;
     }
 
-    public void setUserForArticleDTO(UserForArticleDTO userForArticleDTO) {
-        this.userForArticleDTO = userForArticleDTO;
+    public void setAuthenticatedUserDTO(AuthenticatedUserDTO authenticatedUserDTO) {
+        this.authenticatedUserDTO = authenticatedUserDTO;
     }
 }

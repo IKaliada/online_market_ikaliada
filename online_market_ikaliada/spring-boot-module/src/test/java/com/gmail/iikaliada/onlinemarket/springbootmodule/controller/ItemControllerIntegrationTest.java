@@ -47,7 +47,7 @@ public class ItemControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = SELLER_AUTHORITY_CONSTANT)
-    public void shouldGetItemsPageWhenDeleteItemsAndConfirmRedirectionStatus() throws Exception {
+    public void shouldGetItemsPageWhenDeleteItemsWhenIdsAreNull() throws Exception {
         this.mockMvc.perform(post("/private/items/delete"))
                 .andDo(print())
                 .andExpect(status()
@@ -59,6 +59,17 @@ public class ItemControllerIntegrationTest {
     @WithMockUser(authorities = SELLER_AUTHORITY_CONSTANT)
     public void shouldGetItemsPageWhenCopyItemAndConfirmRedirectionStatus() throws Exception {
         this.mockMvc.perform(get("/private/items/1/copy"))
+                .andDo(print())
+                .andExpect(status()
+                        .is3xxRedirection())
+                .andExpect(redirectedUrl("/private/items"));
+    }
+
+    @Test
+    @WithMockUser(authorities = SELLER_AUTHORITY_CONSTANT)
+    public void shouldGetItemsPageWhenDeleteItemAndConfirmRedirectionStatus() throws Exception {
+        this.mockMvc.perform(post("/private/items/delete").param("ids", "2")
+                .param("page", "1"))
                 .andDo(print())
                 .andExpect(status()
                         .is3xxRedirection())

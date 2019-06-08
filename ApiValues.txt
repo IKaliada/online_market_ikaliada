@@ -1,0 +1,29 @@
+Item Api Controller:
+Add Item:
+/api/v1/private/items
+
+{"name": "new item",
+"price": 1.21,
+"description": "some new description"}
+
+Article Api Controller
+Add Article:
+
+/api/v1/articles/article
+
+{"article": "Title of new article",
+"description": "Description should not really short",
+"authenticatedUserDTO": {"id": 1}
+}
+
+User Api Controller
+Add User
+
+/api/v1/private/users
+
+{"name": "TestUser",
+"middlename": "TestUsermiddlename",
+"lastname": "TestUserlastname",
+"email": "emailTest@email.com",
+"role": {
+"id": 2}}

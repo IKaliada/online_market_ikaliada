@@ -3,7 +3,11 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title><h1>Article</h1></title>
-    <h3><a th:href="@{/home}">Home</a> <a th:href="@{/about}">About</a></h3>
+    <div sec:authorize="hasAuthority('CUSTOMER_USER')"><a th:href="@{/private/review}">Add review</a>
+        <a th:href="@{/public/users/profile}">Profile</a></div>
+    <a th:href="@{/private/orders}">Orders</a>
+    <a th:href="@{/about}">About</a>
+    <a th:href="@{/private/items}">Items</a>
     <form action="#" th:action="@{/articles/article/find}" method="post">
         <div th:if="${notFoundMessage}" th:utext="${notFoundMessage}"></div>
         <div th:if="${deleteCommentMessage}" th:utext="${deleteCommentMessage}"></div>

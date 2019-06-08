@@ -1,5 +1,7 @@
 package com.gmail.iikaliada.onlinemarket.springbootmodule.controller;
 
+import com.gmail.iikaliada.onlinemarket.servicemodule.model.RoleDTO;
+import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserDTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +19,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -30,12 +33,22 @@ public class UserControllerIntegrationTest {
 
     private MockMvc mockMvc;
 
+    private UserDTO userDTO = new UserDTO();
+
     @Before
     public void setup() {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(springSecurity())
                 .build();
+        RoleDTO roleDTO = new RoleDTO();
+        roleDTO.setId(1L);
+        userDTO.setName("name");
+        userDTO.setMiddlename("middlename");
+        userDTO.setLastname("lastname");
+        userDTO.setEmail("email@email.com");
+        userDTO.setRole(roleDTO);
+        roleDTO.setName(ADMIN_AUTHORITY_CONSTANT);
     }
 
     @Test
@@ -54,7 +67,7 @@ public class UserControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = ADMIN_AUTHORITY_CONSTANT)
-    public void shouldReturnRedirectedPageWhenDeleteUsers() throws Exception {
+    public void shouldReturnRedirectedPageWhenDeleteUsersWhenIdsNull() throws Exception {
         this.mockMvc.perform(post("/private/users/delete"))
                 .andDo(print())
                 .andExpect(status()
@@ -64,8 +77,9 @@ public class UserControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = ADMIN_AUTHORITY_CONSTANT)
-    public void shouldReturnRedirectedPageWhenChangePassword() throws Exception {
-        this.mockMvc.perform(post("/private/users/{1}/password", 1))
+    public void shouldReturnRedirectedPageWhenDeleteUsersWithNotAllowedDeleteRole() throws Exception {
+        this.mockMvc.perform(post("/private/users/delete").param("ids", "5")
+                .param("page", "1"))
                 .andDo(print())
                 .andExpect(status()
                         .isOk());
@@ -73,11 +87,44 @@ public class UserControllerIntegrationTest {
 
     @Test
     @WithMockUser(authorities = ADMIN_AUTHORITY_CONSTANT)
-    public void shouldReturnRedirectedPageWhenAddUser() throws Exception {
-        this.mockMvc.perform(post("/private/users/add_user"))
+    public void shouldReturnRedirectedPageWhenDeleteUsers() throws Exception {
+        this.mockMvc.perform(post("/private/users/delete").param("ids", "6")
+                .param("page", "1"))
                 .andDo(print())
                 .andExpect(status()
                         .is3xxRedirection())
                 .andExpect(redirectedUrl("/private/users"));
+    }
+
+    @Test
+    @WithMockUser(authorities = ADMIN_AUTHORITY_CONSTANT)
+    public void shouldReturnRedirectedPageWhenAddUser() throws Exception {
+        userDTO.setEmail("newEmail@email.com");
+        this.mockMvc.perform(post("/private/users/add_user").flashAttr("userDTO", userDTO))
+                .andDo(print())
+                .andExpect(status()
+                        .is3xxRedirection())
+                .andExpect(redirectedUrl("/private/users"));
+    }
+
+    @Test(expected = AssertionError.class)
+    @WithMockUser(authorities = ADMIN_AUTHORITY_CONSTANT)
+    public void shouldReturnRedirectedPageWhenAddUserIfMethodReturnException() throws Exception {
+        this.mockMvc.perform(post("/private/users/add_user").flashAttr("userDTO", userDTO))
+                .andDo(print())
+                .andExpect(status()
+                        .isExpectationFailed())
+                .andExpect(redirectedUrl("/private/users/add_user"));
+    }
+
+    @Test(expected = AssertionError.class)
+    @WithMockUser(authorities = ADMIN_AUTHORITY_CONSTANT)
+    public void shouldReturnAddUserPageWhenAddUserIfNotCorrectFilledTheFields() throws Exception {
+        userDTO.setName("");
+        this.mockMvc.perform(post("/private/users/add_user").flashAttr("userDTO", userDTO))
+                .andDo(print())
+                .andExpect(status()
+                        .isOk())
+                .andExpect(forwardedUrl("add_user"));
     }
 }

@@ -2,6 +2,7 @@ package com.gmail.iikaliada.onlinemarket.springbootmodule.controller;
 
 import com.gmail.iikaliada.onlinemarket.servicemodule.ItemService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ItemDTO;
+import com.gmail.iikaliada.onlinemarket.springbootmodule.handler.PaginationHandler;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,9 +32,12 @@ public class ItemControllerTest {
     @Mock
     private ItemService itemService;
 
+    @Mock
+    private PaginationHandler pagination;
+
     @Before
     public void init() {
-        ItemController itemController = new ItemController(itemService);
+        ItemController itemController = new ItemController(itemService, pagination);
         mockMvc = MockMvcBuilders.standaloneSetup(itemController).build();
     }
 

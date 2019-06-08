@@ -6,9 +6,9 @@ import com.gmail.iikaliada.onlinemarket.repositorymodule.model.User;
 import com.gmail.iikaliada.onlinemarket.servicemodule.UserService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.converter.UserConverter;
 import com.gmail.iikaliada.onlinemarket.servicemodule.exception.NotValidUserException;
+import com.gmail.iikaliada.onlinemarket.servicemodule.model.AuthenticatedUserDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.LoginDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserDTO;
-import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForArticleDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -49,9 +50,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserForArticleDTO getUserForArticle(String username) {
+    public AuthenticatedUserDTO getAuthenticatedUser(String username) {
         User user = userRepository.getUsersByUsername(username);
-        return userConverter.toUserForArticleDTO(user);
+        return userConverter.toAuthenticatedUserDTO(user);
     }
 
     @Override
@@ -67,10 +68,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void add(UserDTO userDTO) {
+    public void add(UserDTO userDTO){
         User user = userConverter.fromUserDTO(userDTO);
         String password = String.valueOf(UUID.randomUUID());
         user.setPassword(new BCryptPasswordEncoder().encode(password));
+        user.setDeleted(false);
         userRepository.persist(user);
     }
 
@@ -80,7 +82,7 @@ public class UserServiceImpl implements UserService {
         for (Long id : ids) {
             User user = userRepository.findById(id);
             validateUser(user);
-            userRepository.removeById(id);
+            userRepository.deleteUser(id);
         }
     }
 
@@ -117,6 +119,13 @@ public class UserServiceImpl implements UserService {
     public UserDTO getUserById(Long id) {
         User user = userRepository.findById(id);
         return userConverter.toUserDTO(user);
+    }
+
+    @Override
+    @Transactional
+    public List<UserDTO> getUsersForApi() {
+        List<User> users = userRepository.getAllEntity();
+        return users.stream().map(userConverter::toUserDTO).collect(Collectors.toList());
     }
 
     private int getPagesNumber(int totalEntities) {

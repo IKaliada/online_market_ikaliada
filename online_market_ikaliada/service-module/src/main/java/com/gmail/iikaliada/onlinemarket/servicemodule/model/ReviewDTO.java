@@ -1,10 +1,16 @@
 package com.gmail.iikaliada.onlinemarket.servicemodule.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 public class ReviewDTO {
 
     private Long id;
+    @NotNull
+    @Size(min = 10, max = 200, message = "{validation.size.message}")
+    @Pattern(regexp = "^[a-zA-Z0-9/.,;:\"'?! ]+$", message = "{letter.not.correct}")
     private String text;
     private Date date;
     private Boolean shown;

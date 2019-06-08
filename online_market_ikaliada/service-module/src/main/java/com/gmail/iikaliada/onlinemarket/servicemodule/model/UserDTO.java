@@ -1,9 +1,7 @@
 package com.gmail.iikaliada.onlinemarket.servicemodule.model;
 
-import com.gmail.iikaliada.onlinemarket.servicemodule.validator.EmailValidator;
-import com.gmail.iikaliada.onlinemarket.servicemodule.validator.LatinLetterValidator;
-
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class UserDTO {
@@ -11,18 +9,18 @@ public class UserDTO {
     private Long id;
     @NotNull
     @Size(min = 2, max = 20, message = "{validation.size.message}")
-    @LatinLetterValidator
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "{letter.not.correct}")
     private String name;
     @NotNull
     @Size(min = 2, max = 40, message = "{validation.size.message}")
-    @LatinLetterValidator
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "{letter.not.correct}")
     private String lastname;
     @NotNull
     @Size(min = 2, max = 40, message = "{validation.size.message}")
-    @LatinLetterValidator
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "{letter.not.correct}")
     private String middlename;
     @NotNull
-    @EmailValidator
+    @Pattern(regexp = "^[-[a-zA-Z0-9].]+@([A-z0-9][-A-z0-9]+\\.)+[A-z]{2,4}$", message = "{email.template.not.correct}")
     @Size(min = 2, max = 40, message = "{validation.size.message}")
     private String email;
     private String password;

@@ -8,6 +8,4 @@ import java.util.List;
 public interface CommentConverter {
 
     List<CommentDTO> toCommentDTO(List<Comment> comment);
-
-    List<Comment> fromCommentDTO(List<CommentDTO> comments);
 }

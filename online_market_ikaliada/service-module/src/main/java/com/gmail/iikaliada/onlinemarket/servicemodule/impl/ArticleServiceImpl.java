@@ -10,7 +10,7 @@ import com.gmail.iikaliada.onlinemarket.servicemodule.converter.ArticleConverter
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ArticleDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ArticleForNewsDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.ArticleForPageDTO;
-import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserForArticleDTO;
+import com.gmail.iikaliada.onlinemarket.servicemodule.model.AuthenticatedUserDTO;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -84,8 +84,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Transactional
-    public void add(ArticleDTO articleDTO) {
-        Article article = articleConverter.fromArticleDTO(articleDTO);
+    public void add(ArticleForNewsDTO articleForNewsDTO) {
+        Article article = articleConverter.fromArticleForNewsDTO(articleForNewsDTO);
+        article.setDate(new Date());
         articleRepository.persist(article);
     }
 
@@ -127,12 +128,18 @@ public class ArticleServiceImpl implements ArticleService {
     public void createNewArticle(ArticleForNewsDTO articleForNewsDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
-        UserForArticleDTO userForArticleDTO = userService.getUserForArticle(currentPrincipalName);
+        AuthenticatedUserDTO authenticatedUserDTO = userService.getAuthenticatedUser(currentPrincipalName);
         articleForNewsDTO.setDate(new Date());
-        articleForNewsDTO.setUserForArticleDTO(userForArticleDTO);
+        articleForNewsDTO.setAuthenticatedUserDTO(authenticatedUserDTO);
         Article article = articleConverter.fromArticleForNewsDTO(articleForNewsDTO);
         articleRepository.persist(article);
+    }
 
+    @Override
+    @Transactional
+    public List<ArticleDTO> getArticles() {
+        List<Article> articles = articleRepository.getAllEntity();
+        return articles.stream().map(articleConverter::toArticleDTO).collect(Collectors.toList());
     }
 
     private int getPagesNumber(int totalEntities) {

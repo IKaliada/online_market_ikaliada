@@ -4,8 +4,7 @@
 <head>
     <h1>Users</h1>
     <h3><a th:href="@{/private/users/add_user}">Add User</a>
-    </h3>
-    <h3><a th:href="@{/private/review}">Show Reviews</a></h3>
+   <a th:href="@{/private/reviews}">Show Reviews</a></h3>
     <div th:if="${emailError}" th:utext="${emailError}"></div>
     <div th:if="${notAllowedMessage}" th:utext="${notAllowedMessage}"></div>
     <div th:if="${passwordUpdatedMessage}" th:utext="${passwordUpdatedMessage}"></div>
@@ -35,28 +34,13 @@
             <td th:text="${user.middlename}"></td>
             <td th:text="${user.email}"></td>
             <td th:text="${user.role.name}"></td>
-            <td>
-                <form action="#" th:action="@{/private/users/{id}/update(id=${user.id})}" method="post">
-                    <label>
-                        <select th:field="${user.role.id}">
-                            <option th:each="role : ${roles}"
-                                    th:value="${role.id}"
-                                    th:text="${role.name}">DefaultName
-                            </option>
-                        </select>
-                    </label>
-                    <input type="submit" value="CHANGE ROLE"/>
-                </form>
-            </td>
-            <td>
-                <form action="#" th:action="@{/private/users/{id}/password(id=${user.id})}" method="post">
-                    <input type="submit" value="CHANGE PASSWORD"/>
-                </form>
-            </td>
         </tr>
         </tbody>
     </table>
     <input type="submit" value="DELETE"/>
+</form>
+<form action="#" th:action="@{/private/users/forward}" method="get">
+    <input type="submit" value="Change information"/>
 </form>
 <div class="pagination-div">
             <span th:if="${currentPage>1}">

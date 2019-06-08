@@ -9,4 +9,6 @@ public interface UserRepository extends GenericRepository<Long, User> {
     User getUsersByUsername(String username);
 
     List<User> getUsers(int offset, int limit);
+
+    void deleteUser(Long id);
 }

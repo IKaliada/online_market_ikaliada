@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Items
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation= "items_schema.xsd">
+    <Item>
+        <name>Milk</name>
+        <description>White</description>
+        <price>1.15</price>
+    </Item>
+    <Item>
+        <name>Bread</name>
+        <description>Brown</description>
+        <price>1.2</price>
+    </Item>
+    <Item>
+        <name>Beer</name>
+        <description>Black</description>
+        <price>1.8</price>
+    </Item>
+    <Item>
+        <name>Water</name>
+        <description>White</description>
+        <price>1.0</price>
+    </Item>
+</Items>

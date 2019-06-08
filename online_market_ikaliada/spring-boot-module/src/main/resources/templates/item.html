@@ -1,31 +1,55 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
->
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title><h1>Article</h1></title>
-    <h3><a th:href="@{/home}">Home</a>
-        <a th:href="@{/about}">About</a></h3>
+    <h3><a th:href="@{/about}">About</a></h3>
+    <div sec:authorize="hasAuthority('CUSTOMER_USER')">
+        <h3><a th:href="@{/private/orders/find}">Orders</a></h3>
+    </div>
 </head>
 <body>
-<table border="1" class='table table-sm responsive'>
-    <thead class='thead-default'>
-    <tr>
-        <th align="center" width="10%">Name</th>
-        <th align="center" width="10%">Price</th>
-        <th align="center" width="20%">Unique_number</th>
-        <th align="center" width="30%">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr align="center">
-        <td hidden th:text=" ${item.id}"></td>
-        <td th:text=" ${item.name}"></td>
-        <td th:text="${item.price}"></td>
-        <td th:text="${item.uniqueNumber}"></td>
-        <td th:text="${item.description}"></td>
-    </tr>
-    </tbody>
-</table>
+<form th:action="@{/private/orders/{id}/add(id=${item.id})}" method="post" th:object="${item}">
+    <table border="1" class='table table-sm responsive'>
+        <thead class='thead-default'>
+        <tr>
+            <th align="center" width="10%">Name</th>
+            <th align="center" width="10%">Price</th>
+            <th align="center" width="20%">Unique_number</th>
+            <th align="center" width="30%">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr align="center">
+            <td hidden th:text="*{id}"></td>
+            <td th:text="*{name}"></td>
+            <td th:text="*{price}"></td>
+            <td th:text="*{uniqueNumber}"></td>
+            <td th:text="*{description}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div sec:authorize="hasAuthority('CUSTOMER_USER')">
+        <td>Quantity:</td>
+        <td><label>
+            <input type="text" th:name="quantity" required pattern="^[0-9]+$" minlength="1" maxlength="4"/>
+        </label></td>
+        <input type="submit" value="Buy"/>
+    </div>
+</form>
+<div class="pagination-div">
+            <span th:if="${currentPage>1}">
+                <a th:href="@{/private/items(size=${totalPage},page=${previousPage})}">Previous</a>
+            </span>
+    <span th:each="pageNumber:${pages}">
+                <a th:href="@{/private/items(size=${totalPage},page=${pageNumber})}"
+                   th:text="${pageNumber}"
+                   th:class="${pageNumber==pageNumber + 1}">1</a>
+            </span>
+    <span th:if="${currentPage<totalPage}">
+                <a th:href="@{/private/items(size=${totalPage},page=${nextPage})}">Next</a>
+            </span>
+</div>
 <div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>

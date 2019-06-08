@@ -1,7 +1,9 @@
 package com.gmail.iikaliada.onlinemarket.springbootmodule.handler;
 
+import com.gmail.iikaliada.onlinemarket.springbootmodule.exception.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.DefaultRedirectStrategy;
@@ -18,9 +20,11 @@ import java.util.Set;
 
 import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.AuthoritiesConstants.ADMIN_AUTHORITY_CONSTANT;
 import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.AuthoritiesConstants.CUSTOMER_AUTHORITY_CONSTANT;
+import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.AuthoritiesConstants.SECURE_API_AUTHORITY_CONSTANT;
 import static com.gmail.iikaliada.onlinemarket.servicemodule.constant.AuthoritiesConstants.SELLER_AUTHORITY_CONSTANT;
 
 public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+
     private static Logger logger = LoggerFactory.getLogger(AppUrlAuthenticationSuccessHandler.class);
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
@@ -33,7 +37,9 @@ public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccess
         clearAuthenticationAttributes(httpServletRequest);
     }
 
-    protected void handle(final HttpServletRequest request, final HttpServletResponse response, final Authentication authentication) throws IOException {
+    protected void handle(final HttpServletRequest request,
+                          final HttpServletResponse response,
+                          final Authentication authentication) throws IOException {
         final String targetUrl = determineTargetUrl(authentication);
 
         if (response.isCommitted()) {
@@ -46,15 +52,18 @@ public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccess
     protected String determineTargetUrl(final Authentication authentication) {
         Set<String> authorities = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         if (authorities.contains(ADMIN_AUTHORITY_CONSTANT)) {
-            return "/home";
+            return "/private/users";
         }
         if (authorities.contains(SELLER_AUTHORITY_CONSTANT)) {
-            return "/home";
+            return "/private/items";
         }
         if (authorities.contains(CUSTOMER_AUTHORITY_CONSTANT)) {
-            return "/home";
+            return "/articles";
+        }
+        if (authorities.contains(SECURE_API_AUTHORITY_CONSTANT)) {
+            return "/denied";
         } else {
-            throw new IllegalStateException();
+            throw new CustomException(HttpStatus.BAD_REQUEST.toString(), "Something went wrong");
         }
     }
 

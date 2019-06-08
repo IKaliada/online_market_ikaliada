@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class LoginAccessDeniedHandler implements AccessDeniedHandler {
+
     private static Logger logger = LoggerFactory.getLogger(LoginAccessDeniedHandler.class);
     private static final String LOGGER_MESSAGE = "%s attempted to access the protected URL: %s";
 

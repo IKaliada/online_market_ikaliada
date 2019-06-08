@@ -2,10 +2,12 @@ package com.gmail.iikaliada.onlinemarket.springbootmodule.controller;
 
 import com.gmail.iikaliada.onlinemarket.servicemodule.RoleService;
 import com.gmail.iikaliada.onlinemarket.servicemodule.UserService;
+import com.gmail.iikaliada.onlinemarket.servicemodule.exception.NotValidUserException;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.RoleDTO;
 import com.gmail.iikaliada.onlinemarket.servicemodule.model.UserDTO;
 import com.gmail.iikaliada.onlinemarket.springbootmodule.handler.PaginationHandler;
 import com.gmail.iikaliada.onlinemarket.springbootmodule.validation.UserValidation;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
@@ -33,19 +35,25 @@ public class UserController {
     String emailInsertError;
     @Value("${not.allowed.message}")
     String notAllowedMessage;
+    @Value("${not.allowed.update.password.message}")
+    String notAllowedUpdatePasswordMessage;
     @Value("${success.update.password}")
     String passwordUpdatedMessage;
 
-    @Autowired
-    private PaginationHandler pagination;
+    private final PaginationHandler pagination;
     private final UserService userService;
     private final UserValidation userValidation;
     private final RoleService roleService;
 
-    public UserController(UserService userService, UserValidation userValidation, RoleService roleService) {
+    @Autowired
+    public UserController(UserService userService,
+                          UserValidation userValidation,
+                          RoleService roleService,
+                          PaginationHandler pagination) {
         this.userService = userService;
         this.userValidation = userValidation;
         this.roleService = roleService;
+        this.pagination = pagination;
     }
 
     @GetMapping("/private/users")
@@ -73,7 +81,7 @@ public class UserController {
         List<Long> collect = Arrays.stream(ids).collect(Collectors.toList());
         try {
             userService.deleteUserById(collect);
-        } catch (Exception e) {
+        } catch (NotValidUserException e) {
             getUsers(model, currentPage);
             model.addAttribute("notAllowedMessage", notAllowedMessage);
             return "users";
@@ -89,16 +97,32 @@ public class UserController {
         if (result.hasErrors()) {
             getUsersRole(model);
             attributes.addFlashAttribute("emailError", emailError);
-            return "redirect:/private/users";
+            return "redirect:/private/users/forward";
         }
         userService.updateUsersRole(id, user.getRole().getId());
-        return "redirect:/private/users";
+        return "redirect:/private/users/forward";
     }
 
     @GetMapping("/private/users/add_user")
     public String addUserPage(@ModelAttribute("userDTO") UserDTO userDTO, Model model) {
         getUsersRole(model);
         return "add_user";
+    }
+
+    @GetMapping("/private/users/forward")
+    public String getUserPageForChangeInformation(
+            Model model,
+            @RequestParam(name = "page", defaultValue = "1") Integer currentPage) {
+        model.addAttribute("currentPage", currentPage);
+        List<UserDTO> users = userService.getUsers(currentPage);
+        model.addAttribute("users", users);
+        getUsersRole(model);
+        UserDTO user = new UserDTO();
+        user.setRole(new RoleDTO());
+        model.addAttribute("user", user);
+        int totalPage = userService.getTotalPages();
+        pagination.getPagination(currentPage, model, totalPage);
+        return "users_update";
     }
 
     @PostMapping("/private/users/add_user")
@@ -110,7 +134,7 @@ public class UserController {
         }
         try {
             userService.add(userDTO);
-        } catch (Exception e) {
+        } catch (ConstraintViolationException e) {
             attributes.addFlashAttribute("emailInsertError", emailInsertError);
             return "redirect:/private/users/add_user";
         }
@@ -118,10 +142,16 @@ public class UserController {
     }
 
     @PostMapping("/private/users/{id}/password")
-    public String changePassword(@PathVariable("id") Long id, RedirectAttributes attributes) {
+    public String changePassword(@PathVariable("id") Long id, RedirectAttributes attributes, UserDTO user, BindingResult result, Model model) {
+        model.addAttribute("user", user);
+        userValidation.validate(id, result);
+        if (result.hasErrors()) {
+            attributes.addFlashAttribute("notAllowedUpdatePasswordMessage", notAllowedUpdatePasswordMessage);
+            return "redirect:/private/users/forward";
+        }
         userService.updateUserPassword(id);
         attributes.addFlashAttribute("passwordUpdatedMessage", passwordUpdatedMessage);
-        return "redirect:/private/users";
+        return "redirect:/private/users/forward";
     }
 
     private void getUsersRole(Model model) {

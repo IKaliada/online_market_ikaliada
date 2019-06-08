@@ -50,16 +50,13 @@ public class ArticleApiControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content("{\"article\":\"New Article\"\n" +
                         ",\"description\":\"I don't now what i'm doing\"\n" +
-                        ", \"date\":\"2019-05-19T14:42:31+03:00\"\n" +
-                        ", \"userForUiDT\":{\"name\":\"Igar\"\n" +
-                        ", \"lastname\": \"Qwerty\"}}"))
+                        ", \"authenticatedUserDTO\":{\"id\":1}}"))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void shouldGetStatus200ForArticleApiWhenGetArticle() throws Exception {
         mvc.perform(get("/api/v1/articles/article/1")
-
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content("{\"article\": \"New Article\",\n" +
                         "\"description\": \"I don't now what i'm doing\",\n" +
@@ -76,7 +73,7 @@ public class ArticleApiControllerIntegrationTest {
 
     @Test
     public void shouldGetStatusOkAfterDeletingArticle() throws Exception {
-        mvc.perform(delete("/api/v1/articles/article/1"))
+        mvc.perform(delete("/api/v1/articles/article/2"))
                 .andExpect(status().isOk());
     }
 }

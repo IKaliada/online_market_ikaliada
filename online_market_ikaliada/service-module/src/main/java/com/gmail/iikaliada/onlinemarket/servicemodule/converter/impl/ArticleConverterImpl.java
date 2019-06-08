@@ -45,24 +45,13 @@ public class ArticleConverterImpl implements ArticleConverter {
     }
 
     @Override
-    public Article fromArticleDTO(ArticleDTO articleDTO) {
-        Article article = new Article();
-        article.setId(articleDTO.getId());
-        article.setArticle(articleDTO.getArticle());
-        article.setDescription(articleDTO.getDescription());
-        article.setDate(articleDTO.getDate());
-        article.setUser(userConverter.fromUserForUiDTO(articleDTO.getUserForUiDTO()));
-        return article;
-    }
-
-    @Override
     public Article fromArticleForNewsDTO(ArticleForNewsDTO articleForNewsDTO) {
         Article article = new Article();
         article.setId(articleForNewsDTO.getId());
         article.setArticle(articleForNewsDTO.getArticle());
         article.setDescription(articleForNewsDTO.getDescription());
         article.setDate(articleForNewsDTO.getDate());
-        article.setUser(userConverter.fromUserForArticleDTO(articleForNewsDTO.getUserForArticleDTO()));
+        article.setUser(userConverter.fromUserForArticleDTO(articleForNewsDTO.getAuthenticatedUserDTO()));
         return article;
     }
 }

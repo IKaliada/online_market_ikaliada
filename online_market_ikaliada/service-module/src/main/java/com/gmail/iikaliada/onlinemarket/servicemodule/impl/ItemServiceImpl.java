@@ -8,6 +8,7 @@ import com.gmail.iikaliada.onlinemarket.servicemodule.model.ItemDTO;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -45,7 +46,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public void add(ItemDTO itemDTO) {
+    public void add(ItemDTO itemDTO){
         itemDTO.setUniqueNumber(UUID.randomUUID().toString());
         itemRepository.persist(itemConverter.fromItemDTO(itemDTO));
     }
@@ -66,7 +67,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public void copyItemById(Long id) {
+    public void copyItemById(Long id){
         Item item = itemRepository.findById(id);
         ItemDTO itemDTO = new ItemDTO();
         itemDTO.setName(item.getName());

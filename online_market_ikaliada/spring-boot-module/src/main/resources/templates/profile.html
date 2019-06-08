@@ -4,7 +4,7 @@
     <title>
         <h3>Profile</h3>
     </title>
-    <h3><a th:href="@{/home}">Home</a> <a th:href="@{/about}">About</a></h3>
+    <h3><a th:href="@{/about}">About</a></h3>
 </head>
 <body>
 <h3>Profile</h3>
@@ -27,7 +27,7 @@
             <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</td>
         </tr>
         <tr>
-            <td>Name:</td>
+            <td>Middlename:</td>
             <td><label>
                 <input type="text" th:field="*{middlename}" th:placeholder="*{middlename}"/>
             </label></td>

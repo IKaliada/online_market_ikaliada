@@ -33,11 +33,6 @@ public class GenericRepositoryImpl<I, T> implements GenericRepository<I, T> {
     }
 
     @Override
-    public void remove(T entity) {
-        entityManager.remove(entity);
-    }
-
-    @Override
     public T findById(I id) {
         return entityManager.find(entityClass, id);
     }

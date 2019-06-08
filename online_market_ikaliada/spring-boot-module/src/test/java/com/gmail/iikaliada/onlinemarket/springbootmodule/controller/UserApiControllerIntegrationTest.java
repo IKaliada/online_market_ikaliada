@@ -41,11 +41,12 @@ public class UserApiControllerIntegrationTest {
     public void shouldSaveSucceedWith200ForUserApi() throws Exception {
         mvc.perform(post("/api/v1/private/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content("[{'name':'username'" +
-                        ",'middlename':'middlename'" +
-                        ", 'lastname':'lastname'" +
-                        ", 'email':'email@email.com'" +
-                        ", 'password':'123456'" +
-                        ", 'role':['name':'name']}]"));
+                .content("{\"name\":\"username\"" +
+                        ",\"middlename\":\"middlename\"" +
+                        ", \"lastname\":\"lastname\"" +
+                        ", \"email\":\"emailTest@email.com\"" +
+                        ", \"password\":\"123456\"" +
+                        ", \"role\":{\"id\":2}}"))
+                .andExpect(status().isOk());
     }
 }

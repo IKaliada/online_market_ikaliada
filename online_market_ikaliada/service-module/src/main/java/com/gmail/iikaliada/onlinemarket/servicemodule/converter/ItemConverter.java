@@ -8,4 +8,5 @@ public interface ItemConverter {
     ItemDTO toItemDTO(Item item);
 
     Item fromItemDTO(ItemDTO itemDTO);
+
 }
